@@ -77,16 +77,12 @@ public class MTDialog {
 
     public void init() {
         // die Dialoge werden beim Programmstart angelegt
-        Platform.runLater(() -> {
-            initDialog();
-        });
+        Platform.runLater(this::initDialog);
     }
 
     public void init(Pane pane) {
         // die Dialoge werden beim Programmstart angelegt
-        Platform.runLater(() -> {
-            init(pane, false);
-        });
+        Platform.runLater(() -> init(pane, false));
     }
 
     public void init(boolean show) {

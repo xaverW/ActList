@@ -42,9 +42,7 @@ public class MLBandwidthTokenBucket {
         this.bandwidthValue = bandwidthValue;
 
         setBucketCapacity(getBandwidth());
-        this.bandwidthValue.addListener(l -> {
-            setBucketCapacity(getBandwidth());
-        });
+        this.bandwidthValue.addListener(l -> setBucketCapacity(getBandwidth()));
     }
 
     /**

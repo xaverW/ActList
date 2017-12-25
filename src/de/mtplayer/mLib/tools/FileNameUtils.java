@@ -209,71 +209,133 @@ public class FileNameUtils {
                 r += "ß";
             } else // Buchstaben
             {
-                if (c == 'Â' || c == 'À' || c == 'Å' || c == 'Á') {
-                    r += "A";
-                } else if (c == 'å' || c == 'á' || c == 'à' || c == 'â') {
-                    r += "a";
-                } else if (c == 'Č') {
-                    r += "C";
-                } else if (c == 'ć' || c == 'č' || c == 'ç') {
-                    r += "c";
-                } else if (c == 'Đ') {
-                    r += "D";
-                } else if (c == 'É' || c == 'È') {
-                    r += "E";
-                } else if (c == 'é' || c == 'è' || c == 'ê' || c == 'ě' || c == 'ë') {
-                    r += "e";
-                } else if (c == 'í') {
-                    r += "i";
-                } else if (c == 'ñ') {
-                    r += "n";
-                } else if (c == 'ó' || c == 'ô' || c == 'ø') {
-                    r += "o";
-                } else if (c == 'Š') {
-                    r += "S";
-                } else if (c == 'ś' || c == 'š' || c == 'ş') {
-                    r += "s";
-                } else if (c == 'ł' || c == 'Ł') {
-                    r += "t";
-                } else if (c == 'û' || c == 'ù') {
-                    r += "u";
-                } else if (c == 'ý') {
-                    r += "y";
-                } else if (c == 'Ž' || c == 'Ź') {
-                    r += "Z";
-                } else if (c == 'ž' || c == 'ź') {
-                    r += "z";
-                } else if (c == 'æ') {
-                    r += "ae";
-                } else if (c == '–') {
-                    r += "-";
-                } else if (c == '„') {
-                    r += "\"";
-                } else if (c == '”' || c == '“' || c == '«' || c == '»') {
-                    r += "\"";
-                } else if (c == '?') {
-                    r += "?";
-                } else if (c == '°' || c == '™') {
-                } else if (c == '…') {
-                    r += "...";
-                } else if (c == '€') {
-                    r += "€";
-                } else if (c == '´' || c == '’' || c == '‘' || c == '¿') {
-                    r += "'";
-                } else if (c == '\u003F') {
-                    r += "?";
-                } else if (c == '\u0096') {
-                    r += "-";
-                } else if (c == '\u0085') {
-                } else if (c == '\u0080') {
-                } else if (c == '\u0084') {
-                } else if (c == '\u0092') {
-                } else if (c == '\u0093') {
-                } else if (c == '\u0091') {
-                    r += "-";
-                } else if (c == '\n') {
-                } else {
-                    r += "_";
+                switch (c) {
+                    case 'Â':
+                    case 'À':
+                    case 'Å':
+                    case 'Á':
+                        r += "A";
+                        break;
+                    case 'å':
+                    case 'á':
+                    case 'à':
+                    case 'â':
+                        r += "a";
+                        break;
+                    case 'Č':
+                        r += "C";
+                        break;
+                    case 'ć':
+                    case 'č':
+                    case 'ç':
+                        r += "c";
+                        break;
+                    case 'Đ':
+                        r += "D";
+                        break;
+                    case 'É':
+                    case 'È':
+                        r += "E";
+                        break;
+                    case 'é':
+                    case 'è':
+                    case 'ê':
+                    case 'ě':
+                    case 'ë':
+                        r += "e";
+                        break;
+                    case 'í':
+                        r += "i";
+                        break;
+                    case 'ñ':
+                        r += "n";
+                        break;
+                    case 'ó':
+                    case 'ô':
+                    case 'ø':
+                        r += "o";
+                        break;
+                    case 'Š':
+                        r += "S";
+                        break;
+                    case 'ś':
+                    case 'š':
+                    case 'ş':
+                        r += "s";
+                        break;
+                    case 'ł':
+                    case 'Ł':
+                        r += "t";
+                        break;
+                    case 'û':
+                    case 'ù':
+                        r += "u";
+                        break;
+                    case 'ý':
+                        r += "y";
+                        break;
+                    case 'Ž':
+                    case 'Ź':
+                        r += "Z";
+                        break;
+                    case 'ž':
+                    case 'ź':
+                        r += "z";
+                        break;
+                    case 'æ':
+                        r += "ae";
+                        break;
+                    case '–':
+                        r += "-";
+                        break;
+                    case '„':
+                        r += "\"";
+                        break;
+                    case '”':
+                    case '“':
+                    case '«':
+                    case '»':
+                        r += "\"";
+                        break;
+                    case '?':
+                        r += "?";
+                        break;
+                    case '°':
+                    case '™':
+                        break;
+                    case '…':
+                        r += "...";
+                        break;
+                    case '€':
+                        r += "€";
+                        break;
+                    case '´':
+                    case '’':
+                    case '‘':
+                    case '¿':
+                        r += "'";
+                        break;
+                    case '\u0096':
+                        r += "-";
+                        break;
+                    case '\u0085':
+                        break;
+                    case '\u0080':
+                        break;
+                    case '\u0084':
+                        break;
+                    case '\u0092':
+                        break;
+                    case '\u0093':
+                        break;
+                    case '\u0091':
+                        r += "-";
+                        break;
+                    case '\n':
+                        break;
+                    default:
+                        r += "_";
+                        break;
                 }
             }
         }

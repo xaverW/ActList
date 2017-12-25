@@ -54,9 +54,7 @@ public class Daten {
         loadFilmList = new LoadFilmList(this);
 
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(1000), ae -> {
-            Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName());
-        }));
+                Duration.millis(1000), ae -> Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName())));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.setDelay(Duration.seconds(5));
         timeline.play();

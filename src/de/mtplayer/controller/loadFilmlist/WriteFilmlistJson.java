@@ -122,22 +122,26 @@ public class WriteFilmlistJson {
                     jg.writeArrayFieldStart(FilmXml.TAG_JSON_LIST);
                     for (int i = 0; i < FilmXml.JSON_NAMES.length; ++i) {
                         int m = FilmXml.JSON_NAMES[i];
-                        if (m == FilmXml.FILM_SENDER) {
-                            if (datenFilm.arr[m].equals(sender)) {
-                                jg.writeString("");
-                            } else {
-                                sender = datenFilm.arr[m];
+                        switch (m) {
+                            case FilmXml.FILM_SENDER:
+                                if (datenFilm.arr[m].equals(sender)) {
+                                    jg.writeString("");
+                                } else {
+                                    sender = datenFilm.arr[m];
+                                    jg.writeString(datenFilm.arr[m]);
+                                }
+                                break;
+                            case FilmXml.FILM_THEMA:
+                                if (datenFilm.arr[m].equals(thema)) {
+                                    jg.writeString("");
+                                } else {
+                                    thema = datenFilm.arr[m];
+                                    jg.writeString(datenFilm.arr[m]);
+                                }
+                                break;
+                            default:
                                 jg.writeString(datenFilm.arr[m]);
-                            }
-                        } else if (m == FilmXml.FILM_THEMA) {
-                            if (datenFilm.arr[m].equals(thema)) {
-                                jg.writeString("");
-                            } else {
-                                thema = datenFilm.arr[m];
-                                jg.writeString(datenFilm.arr[m]);
-                            }
-                        } else {
-                            jg.writeString(datenFilm.arr[m]);
+                                break;
                         }
                     }
                     jg.writeEndArray();

@@ -92,7 +92,7 @@ public class Listener implements EventListener {
 
     private void pingen() {
         try {
-            Platform.runLater(() -> ping());
+            Platform.runLater(this::ping);
         } catch (final Exception ex) {
             Log.errorLog(698989743, ex);
         }

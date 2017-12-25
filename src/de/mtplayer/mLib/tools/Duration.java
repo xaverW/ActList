@@ -188,7 +188,7 @@ public class Duration {
         System.out.println("DURATION " + sum++ + ":  " + text + "  [" + roundDuration(sekunden) + "]");
         System.out.println("   Klasse:  " + klasse);
         if (pingText != null && !pingText.isEmpty()) {
-            pingText.stream().forEach(s -> System.out.println(s));
+            pingText.stream().forEach(System.out::println);
         }
         if (!extra.isEmpty()) {
             System.out.println("   " + extra);
