@@ -19,6 +19,7 @@ package de.mtplayer.gui;
 import de.mtplayer.controller.config.Config;
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.data.Icons;
+import de.mtplayer.controller.loadFilmlist.SearchFilmListUrls;
 import de.mtplayer.gui.dialog.MTAlert;
 import de.mtplayer.gui.tools.HelpText;
 import de.mtplayer.mLib.tools.DirFileChooser;
@@ -46,6 +47,7 @@ public class FilmPaneController extends AnchorPane {
     private final Slider slDays = new Slider();
     private final Label lblDays = new Label("");
     private final int FILTER_DAYS_MAX = 150;
+    private final TextArea textArea = new TextArea("");
 
     BooleanProperty accordionProp = Config.CONFIG_DIALOG_ACCORDION.getBooleanProperty();
     IntegerProperty propDay = Config.SYSTEM_ANZ_TAGE_FILMLISTE.getIntegerProperty();
@@ -91,8 +93,9 @@ public class FilmPaneController extends AnchorPane {
 
     private Collection<TitledPane> createPanes() {
         Collection<TitledPane> result = new ArrayList<TitledPane>();
-        makeConfig(result);
         makeLoadManuel(result);
+        makeConfig(result);
+        makeInfo(result);
 
         return result;
     }
@@ -172,6 +175,7 @@ public class FilmPaneController extends AnchorPane {
     }
 
     private void makeLoadManuel(Collection<TitledPane> result) {
+
         final GridPane gridPane = new GridPane();
         gridPane.setHgap(15);
         gridPane.setVgap(15);
@@ -181,6 +185,28 @@ public class FilmPaneController extends AnchorPane {
         result.add(tpConfig);
 
         TextField txtUrl = new TextField("");
+
+
+        final ComboBox<String> cbUrl = new ComboBox<>();
+        cbUrl.getItems().addAll(daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls());
+        cbUrl.setOnAction(a -> {
+            String str = cbUrl.getSelectionModel().getSelectedItem();
+            txtUrl.setText(str == null ? "" : str);
+        });
+        final Button btnAuto = new Button();
+        btnAuto.setOnAction(event -> {
+            ArrayList<String> al = daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls();
+            textArea.setText(textArea.getText() + "\n" + al.size() + " URL’s eingetragen");
+            cbUrl.getItems().clear();
+            cbUrl.getItems().addAll(al);
+        });
+        btnAuto.setGraphic(new Icons().ICON_BUTTON_FILE_OPEN);
+        final Button btnHelpUrl = new Button("");
+        btnHelpUrl.setGraphic(new Icons().ICON_BUTTON_HELP);
+        btnHelpUrl.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
+                HelpText.LOAD_FILMLIST_URL));
+
+
         txtUrl.textProperty().bindBidirectional(propUrl);
 
         final Button btnFile = new Button();
@@ -194,26 +220,62 @@ public class FilmPaneController extends AnchorPane {
         btnHelp.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
                 HelpText.LOAD_FILMLIST_MANUEL));
 
+
         Button btnLoad = new Button("Filmliste jetzt laden");
         btnLoad.disableProperty().bind(txtUrl.textProperty().isEmpty());
         btnLoad.setOnAction(event -> daten.loadFilmList.loadFilmlist(txtUrl.getText()));
 
+
+        gridPane.add(new Label("URL’s:"), 0, 0);
+        gridPane.add(cbUrl, 1, 0);
+        gridPane.add(btnAuto, 2, 0);
+        gridPane.add(btnHelpUrl, 3, 0);
+
+
+        gridPane.add(new Label("URL/Datei:"), 0, 1);
+        gridPane.add(txtUrl, 1, 1);
+        gridPane.add(btnFile, 2, 1);
+        gridPane.add(btnHelp, 3, 1);
+
+
+        gridPane.add(btnLoad, 0, 2, 3, 1);
+
         GridPane.setMargin(btnLoad, new Insets(20, 0, 0, 0));
-
-        gridPane.add(new Label("URL/Datei:"), 0, 0);
-        gridPane.add(txtUrl, 1, 0);
-
-        gridPane.add(btnFile, 2, 0);
-        gridPane.add(btnHelp, 3, 0);
-
-        GridPane.setMargin(btnLoad, new Insets(20, 0, 0, 0));
-        gridPane.add(btnLoad, 0, 1, 3, 1);
 
         final ColumnConstraints ccTxt = new ColumnConstraints();
         ccTxt.setFillWidth(true);
         ccTxt.setMinWidth(Region.USE_COMPUTED_SIZE);
         ccTxt.setHgrow(Priority.ALWAYS);
         gridPane.getColumnConstraints().addAll(new ColumnConstraints(), ccTxt);
+    }
+
+    private String getFilmListUrl() {
+        final ArrayList<String> versuchteUrls = new ArrayList<>();
+        return new SearchFilmListUrls().suchenAkt(versuchteUrls);
+    }
+
+    private void makeInfo(Collection<TitledPane> result) {
+        final GridPane gridPane = new GridPane();
+        gridPane.setHgap(15);
+        gridPane.setVgap(15);
+        gridPane.setPadding(new Insets(20, 20, 20, 20));
+
+        TitledPane tpConfig = new TitledPane("Infos", gridPane);
+        result.add(tpConfig);
+
+        Button btnClear = new Button("löschen");
+        btnClear.setOnAction(event -> {
+            textArea.setText("");
+        });
+
+        gridPane.add(textArea, 0, 0);
+        gridPane.add(btnClear, 1, 0);
+
+        final ColumnConstraints ccTxt = new ColumnConstraints();
+        ccTxt.setFillWidth(true);
+        ccTxt.setMinWidth(Region.USE_COMPUTED_SIZE);
+        ccTxt.setHgrow(Priority.ALWAYS);
+        gridPane.getColumnConstraints().addAll(ccTxt);
     }
 
 }

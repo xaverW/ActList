@@ -311,6 +311,9 @@ public class HelpText {
             "Neuladen einer Filmliste verwendet. Ist nichts angegeben, wird die Filmliste auf herkömmliche " +
             "Art geladen und die URL dafür wird automatisch gewählt.";
 
+    public static final String LOAD_FILMLIST_URL = "Die Download-URL’s für die Filmliste" +
+            "werden aktualisiert.";
+
     public static final String ABOS_SOFRT_SUCHEN = "Nach dem Neuladen einer Filmliste wird dann " +
             "sofort nach neuen Abos gesucht. Ansonsten muss man " +
             "im Tab Download auf \"Downloads aktualisieren\" klicken.";

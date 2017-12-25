@@ -45,6 +45,13 @@ public class FilmListUrlList extends LinkedList<FilmlistUrlData> {
         }
     }
 
+    public ArrayList<String> getUrls() {
+        ArrayList<String> ret = new ArrayList<>();
+        ret.add("");
+        this.stream().forEach(filmlistUrlData -> ret.add(filmlistUrlData.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_URL_NR]));
+        return ret;
+    }
+
     public String getRand(ArrayList<String> bereitsGebraucht) {
         // gibt nur noch akt.xml und diff.xml und da sind alle Listen
         // aktuell, Prio: momentan sind alle Listen gleich gewichtet
