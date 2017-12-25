@@ -16,7 +16,6 @@
 
 package de.mtplayer.controller.data.film;
 
-import de.mtplayer.controller.config.Config;
 import de.mtplayer.mLib.tools.Datum;
 import de.mtplayer.mLib.tools.DatumFilm;
 import de.mtplayer.mLib.tools.Log;
@@ -51,7 +50,7 @@ public class FilmProps extends FilmXml {
     }
 
     public void setGeoBlocked() {
-        geoBlocked = !getGeo().isEmpty() && !getGeo().contains(Config.SYSTEM_GEO_HOME_PLACE.get());
+        geoBlocked = false;
     }
 
     public boolean isInFuture() {

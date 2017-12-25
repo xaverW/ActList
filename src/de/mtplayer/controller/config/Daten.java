@@ -33,7 +33,6 @@ public class Daten {
 
     // flags
     public static boolean debug = false; // Debugmodus
-    public static boolean reset = false; // Programm auf Starteinstellungen zurücksetzen
 
     // Infos
     public static String configDir; // Verzeichnis zum Speichern der Programmeinstellungen
@@ -68,6 +67,5 @@ public class Daten {
     public static final Daten getInstance() {
         return instance == null ? instance = new Daten() : instance;
     }
-
 
 }

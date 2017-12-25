@@ -307,11 +307,11 @@ public class HelpText {
             "Differenzlisten geladen (enthalten " +
             "die neuen Filme).";
 
-    public static final String LOAD_FILMLIST_MANUEL = "Die angegebene Datei/URL wird beim " +
+    public static final String LOAD_FILMLIST_MANUEL = "Die angegebene URL wird beim " +
             "Neuladen einer Filmliste verwendet. Ist nichts angegeben, wird die Filmliste auf herkömmliche " +
             "Art geladen und die URL dafür wird automatisch gewählt.";
 
-    public static final String LOAD_FILMLIST_URL = "Die Download-URL’s für die Filmliste" +
+    public static final String LOAD_FILMLIST_URL = "Die Download-URL’s für die Filmliste " +
             "werden aktualisiert.";
 
     public static final String ABOS_SOFRT_SUCHEN = "Nach dem Neuladen einer Filmliste wird dann " +

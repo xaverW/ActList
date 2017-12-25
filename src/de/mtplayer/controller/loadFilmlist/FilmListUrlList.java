@@ -47,7 +47,6 @@ public class FilmListUrlList extends LinkedList<FilmlistUrlData> {
 
     public ArrayList<String> getUrls() {
         ArrayList<String> ret = new ArrayList<>();
-        ret.add("");
         this.stream().forEach(filmlistUrlData -> ret.add(filmlistUrlData.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_URL_NR]));
         return ret;
     }

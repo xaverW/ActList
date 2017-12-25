@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
-import java.util.ArrayList;
 
 public class ProgInfos {
 
@@ -34,7 +33,7 @@ public class ProgInfos {
             "Bitte prüfen Sie die Dateirechte.";
 
     public static String getUserAgent() {
-        return Config.SYSTEM_PARAMETER_USERAGENT.get();
+        return "";
     }
 
 
@@ -135,17 +134,4 @@ public class ProgInfos {
         return getSettingsDirectory().toString();
     }
 
-    /**
-     * Return the path to "mtplayer.xml_copy_" first copy exists
-     *
-     * @param xmlFilePath Path to file.
-     */
-    public void getMTPlayerXmlCopyFilePath(ArrayList<Path> xmlFilePath) {
-        for (int i = 1; i <= Const.MAX_COPY_BACKUPFILE; ++i) {
-            final Path path = ProgInfos.getSettingsDirectory().resolve(Const.CONFIG_FILE_COPY + i);
-            if (Files.exists(path)) {
-                xmlFilePath.add(path);
-            }
-        }
-    }
 }

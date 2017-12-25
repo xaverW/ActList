@@ -22,13 +22,14 @@ import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.config.ProgInfos;
 import de.mtplayer.controller.loadFilmlist.ListenerFilmListLoadEvent;
 import de.mtplayer.controller.loadFilmlist.ReadFilmlist;
-import de.mtplayer.gui.dialog.MTAlert;
 import de.mtplayer.mLib.MLInit;
-import de.mtplayer.mLib.tools.*;
+import de.mtplayer.mLib.tools.Duration;
+import de.mtplayer.mLib.tools.Log;
+import de.mtplayer.mLib.tools.StringFormatters;
+import de.mtplayer.mLib.tools.SysMsg;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static de.mtplayer.mLib.tools.Log.LILNE;
@@ -131,54 +132,7 @@ public class ProgStart {
             ex.printStackTrace();
         }
 
-        // versuchen das Backup zu laden
-        if (loadBackup()) {
-            ret = true;
-        }
         return ret;
     }
 
-    private boolean loadBackup() {
-        Daten daten = Daten.getInstance();
-        boolean ret = false;
-        final ArrayList<Path> path = new ArrayList<>();
-        new ProgInfos().getMTPlayerXmlCopyFilePath(path);
-        if (path.isEmpty()) {
-            SysMsg.sysMsg("Es gibt kein Backup");
-            return false;
-        }
-
-        // dann gibts ein Backup
-        SysMsg.sysMsg("Es gibt ein Backup");
-
-
-        if (MLAlert.BUTTON.YES != new MTAlert().showAlert_yes_no("Gesicherte Einstellungen laden?",
-                "Die Einstellungen sind beschädigt\n" +
-                        "und können nicht geladen werden.",
-                "Soll versucht werden, mit gesicherten\n"
-                        + "Einstellungen zu starten?\n\n"
-                        + "(ansonsten startet das Programm mit\n"
-                        + "Standardeinstellungen)")) {
-
-            SysMsg.sysMsg("User will kein Backup laden.");
-            return false;
-        }
-
-        for (final Path p : path) {
-            // teils geladene Reste entfernen
-            clearKonfig();
-            SysMsg.sysMsg(new String[]{"Versuch Backup zu laden:", p.toString()});
-            try (IoXmlLesen reader = new IoXmlLesen(daten)) {
-                if (reader.readConfiguration(p)) {
-                    SysMsg.sysMsg(new String[]{"Backup hat geklappt:", p.toString()});
-                    ret = true;
-                    break;
-                }
-            } catch (final Exception ex) {
-                ex.printStackTrace();
-            }
-
-        }
-        return ret;
-    }
 }

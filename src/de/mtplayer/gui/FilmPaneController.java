@@ -22,7 +22,6 @@ import de.mtplayer.controller.data.Icons;
 import de.mtplayer.controller.loadFilmlist.SearchFilmListUrls;
 import de.mtplayer.gui.dialog.MTAlert;
 import de.mtplayer.gui.tools.HelpText;
-import de.mtplayer.mLib.tools.DirFileChooser;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
@@ -48,6 +47,7 @@ public class FilmPaneController extends AnchorPane {
     private final Label lblDays = new Label("");
     private final int FILTER_DAYS_MAX = 150;
     private final TextArea textArea = new TextArea("");
+    TextField txtUrl = new TextField("");
 
     BooleanProperty accordionProp = Config.CONFIG_DIALOG_ACCORDION.getBooleanProperty();
     IntegerProperty propDay = Config.SYSTEM_ANZ_TAGE_FILMLISTE.getIntegerProperty();
@@ -181,40 +181,36 @@ public class FilmPaneController extends AnchorPane {
         gridPane.setVgap(15);
         gridPane.setPadding(new Insets(20, 20, 20, 20));
 
-        TitledPane tpConfig = new TitledPane("Filmliste manuell auswählen", gridPane);
+        TitledPane tpConfig = new TitledPane("Filmliste auswählen", gridPane);
         result.add(tpConfig);
 
-        TextField txtUrl = new TextField("");
-
-
-        final ComboBox<String> cbUrl = new ComboBox<>();
-        cbUrl.getItems().addAll(daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls());
-        cbUrl.setOnAction(a -> {
-            String str = cbUrl.getSelectionModel().getSelectedItem();
-            txtUrl.setText(str == null ? "" : str);
+        final ListView<String> lv = new ListView<>();
+        lv.setPrefHeight(150);
+        lv.getItems().addAll(daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls());
+        lv.setOnMouseClicked(a -> {
+            String str = lv.getSelectionModel().getSelectedItem();
+            if (str != null && !str.isEmpty()) {
+                txtUrl.setText(str);
+            }
         });
-        final Button btnAuto = new Button();
-        btnAuto.setOnAction(event -> {
+        final Button btnGetUrls = new Button();
+        btnGetUrls.setOnAction(event -> {
             ArrayList<String> al = daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls();
             textArea.setText(textArea.getText() + "\n" + al.size() + " URL’s eingetragen");
-            cbUrl.getItems().clear();
-            cbUrl.getItems().addAll(al);
+            lv.getItems().clear();
+            lv.getItems().addAll(al);
         });
-        btnAuto.setGraphic(new Icons().ICON_BUTTON_FILE_OPEN);
+        btnGetUrls.setGraphic(new Icons().ICON_BUTTON_RESET);
         final Button btnHelpUrl = new Button("");
         btnHelpUrl.setGraphic(new Icons().ICON_BUTTON_HELP);
         btnHelpUrl.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
                 HelpText.LOAD_FILMLIST_URL));
-
+        VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.getChildren().addAll(btnGetUrls, btnHelpUrl);
+        GridPane.setValignment(vBox, VPos.TOP);
 
         txtUrl.textProperty().bindBidirectional(propUrl);
-
-        final Button btnFile = new Button();
-        btnFile.setOnAction(event -> {
-            DirFileChooser.FileChooser(Daten.getInstance().primaryStage, txtUrl);
-        });
-        btnFile.setGraphic(new Icons().ICON_BUTTON_FILE_OPEN);
-
         final Button btnHelp = new Button("");
         btnHelp.setGraphic(new Icons().ICON_BUTTON_HELP);
         btnHelp.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
@@ -227,19 +223,14 @@ public class FilmPaneController extends AnchorPane {
 
 
         gridPane.add(new Label("URL’s:"), 0, 0);
-        gridPane.add(cbUrl, 1, 0);
-        gridPane.add(btnAuto, 2, 0);
-        gridPane.add(btnHelpUrl, 3, 0);
+        gridPane.add(lv, 1, 0);
+        gridPane.add(vBox, 2, 0);
 
-
-        gridPane.add(new Label("URL/Datei:"), 0, 1);
         gridPane.add(txtUrl, 1, 1);
-        gridPane.add(btnFile, 2, 1);
-        gridPane.add(btnHelp, 3, 1);
+        gridPane.add(btnHelp, 2, 1);
 
 
-        gridPane.add(btnLoad, 0, 2, 3, 1);
-
+        gridPane.add(btnLoad, 1, 2);
         GridPane.setMargin(btnLoad, new Insets(20, 0, 0, 0));
 
         final ColumnConstraints ccTxt = new ColumnConstraints();

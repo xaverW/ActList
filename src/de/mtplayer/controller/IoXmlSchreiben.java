@@ -57,8 +57,6 @@ public class IoXmlSchreiben implements AutoCloseable {
             xmlSchreibenStart();
 
             writer.writeCharacters("\n\n");
-            writer.writeComment(Config.PARAMETER_INFO);
-            writer.writeCharacters("\n\n");
             writer.writeComment("Programmeinstellungen");
             writer.writeCharacters("\n");
             xmlSchreibenConfig(Config.SYSTEM, Config.getAll());

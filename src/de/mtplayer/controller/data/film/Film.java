@@ -72,16 +72,6 @@ public class Film extends FilmProps {
         return arr[FilmXml.FILM_URL];
     }
 
-    public String getUrlFlvstreamerFuerAufloesung(String aufloesung) {
-        if (aufloesung.equals(AUFLOESUNG_KLEIN)) {
-            return getUrlFlvstreamerKlein();
-        }
-        if (aufloesung.equals(AUFLOESUNG_HD)) {
-            return getUrlFlvstreamerHd();
-        }
-        return getUrlFlvstreamer();
-    }
-
     public String getIndex() {
         // liefert einen eindeutigen Index für die Filmliste (update der Filmliste mit Diff-Liste)
         // URL beim KiKa und ORF ändern sich laufend!
@@ -229,61 +219,6 @@ public class Film extends FilmProps {
         return arr[FilmXml.FILM_URL];
     }
 
-    private String getUrlFlvstreamer() {
-        String ret;
-        if (!arr[FilmXml.FILM_URL_RTMP].isEmpty()) {
-            ret = arr[FilmXml.FILM_URL_RTMP];
-        } else if (arr[FilmXml.FILM_URL].startsWith(Const.RTMP_PRTOKOLL)) {
-            ret = Const.RTMP_FLVSTREAMER + arr[FilmXml.FILM_URL];
-        } else {
-            ret = arr[FilmXml.FILM_URL];
-        }
-        return ret;
-    }
-
-    private String getUrlFlvstreamerKlein() {
-        // liefert die kleine flvstreamer URL
-        String ret;
-        if (!arr[FilmXml.FILM_URL_RTMP_KLEIN].isEmpty()) {
-            // es gibt eine kleine RTMP
-            try {
-                final int i =
-                        Integer.parseInt(arr[FilmXml.FILM_URL_RTMP_KLEIN].substring(0, arr[FilmXml.FILM_URL_RTMP_KLEIN].indexOf('|')));
-                return arr[FilmXml.FILM_URL_RTMP].substring(0, i)
-                        + arr[FilmXml.FILM_URL_RTMP_KLEIN].substring(arr[FilmXml.FILM_URL_RTMP_KLEIN].indexOf('|') + 1);
-            } catch (final Exception ignored) {
-            }
-        }
-        // es gibt keine kleine RTMP
-        if (!arr[FilmXml.FILM_URL_RTMP].isEmpty()) {
-            // dann gibts keine kleine
-            ret = arr[FilmXml.FILM_URL_RTMP];
-        } else {
-            // dann gibts überhaupt nur die normalen URLs
-            ret = getUrlNormalKlein();
-            // und jetzt noch "-r" davorsetzten wenn nötig
-            if (ret.startsWith(Const.RTMP_PRTOKOLL)) {
-                ret = Const.RTMP_FLVSTREAMER + ret;
-            }
-        }
-        return ret;
-    }
-
-    private String getUrlFlvstreamerHd() {
-        // liefert die HD flvstreamer URL
-        if (!arr[FilmXml.FILM_URL_RTMP_HD].isEmpty()) {
-            // es gibt eine HD RTMP
-            try {
-                final int i =
-                        Integer.parseInt(arr[FilmXml.FILM_URL_RTMP_HD].substring(0, arr[FilmXml.FILM_URL_RTMP_HD].indexOf('|')));
-                return arr[FilmXml.FILM_URL_RTMP].substring(0, i)
-                        + arr[FilmXml.FILM_URL_RTMP_HD].substring(arr[FilmXml.FILM_URL_RTMP_HD].indexOf('|') + 1);
-            } catch (final Exception ignored) {
-            }
-        }
-        // es gibt keine HD RTMP
-        return getUrlFlvstreamer();
-    }
 
     public Film getCopy() {
         final Film ret = new Film();
