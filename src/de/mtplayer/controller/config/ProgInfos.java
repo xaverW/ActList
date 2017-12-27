@@ -76,7 +76,7 @@ public class ProgInfos {
      *
      * @return Path object to mtplayer.xml file
      */
-    public Path getXmlFilePath() {
+    public static Path getXmlFilePath() {
         return ProgInfos.getSettingsDirectory().resolve(Const.CONFIG_FILE);
     }
 

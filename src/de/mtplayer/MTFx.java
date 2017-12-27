@@ -123,15 +123,9 @@ public class MTFx extends Application {
     }
 
     private void loadData() {
-
-        if (!progStart.allesLaden()) {
-
-            // konnte nicht geladen werden
-            Duration.staticPing("Erster Start");
-
-            Config.loadSystemParameter();
-        }
-
+        Duration.staticPing("Start");
+        Config.loadSystemParameter();
+        progStart.allesLaden();
     }
 
     private String readPfadFromArguments(final String[] aArguments) {

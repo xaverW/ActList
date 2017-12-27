@@ -32,10 +32,10 @@ public class Config extends MLConfig {
     public static MLConfigs SYSTEM_LOAD_FILME_START = addNewKey("system-load-filme-start", Boolean.TRUE.toString());
     public static MLConfigs SYSTEM_LOAD_FILME_MANUELL = addNewKey("system-load-filme-manuell", "");
     public static MLConfigs SYSTEM_ANZ_TAGE_FILMLISTE = addNewKey("system-anz-tage-filmilste", "0"); //es werden nur die x letzten Tage geladen
-
-    public static MLConfigs CONFIG_DIALOG_ACCORDION = addNewKey("Config_Dialog-accordion", Boolean.FALSE.toString());
+    public static MLConfigs SYSTEM_DEST_PATH = addNewKey("system-dest-path", ProgInfos.getSettingsDirectory_String());
 
     public static void loadSystemParameter() {
+        // auch wenn leer, sonst sind die Configs nicht geladen
     }
 
 }

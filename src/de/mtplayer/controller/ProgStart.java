@@ -20,7 +20,6 @@ import de.mtplayer.controller.config.Config;
 import de.mtplayer.controller.config.Const;
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.config.ProgInfos;
-import de.mtplayer.controller.loadFilmlist.ListenerFilmListLoadEvent;
 import de.mtplayer.controller.loadFilmlist.ReadFilmlist;
 import de.mtplayer.mLib.MLInit;
 import de.mtplayer.mLib.tools.Duration;
@@ -74,16 +73,16 @@ public class ProgStart {
             SysMsg.sysMsg("  erstellt am: " + daten.filmList.genDate());
             SysMsg.sysMsg("  Anzahl Filme: " + daten.filmList.size());
 
-            if (daten.filmList.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
-                SysMsg.sysMsg("Filmliste zu alt, neue Filmliste laden");
-                daten.loadFilmList.loadFilmlist("", false);
-
-            } else {
-                // beim Neuladen wird es dann erst gemacht
-                daten.loadFilmList.notifyStart(new ListenerFilmListLoadEvent("", "", 0, 0, 0, false/* Fehler */));
-                daten.loadFilmList.afterFilmlistLoad();
-                daten.loadFilmList.notifyFertig(new ListenerFilmListLoadEvent("", "", 0, 0, 0, false/* Fehler */));
-            }
+//            if (daten.filmList.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
+//                SysMsg.sysMsg("Filmliste zu alt, neue Filmliste laden");
+//                daten.loadFilmList.loadFilmlist("", false);
+//
+//            } else {
+//                // beim Neuladen wird es dann erst gemacht
+//                daten.loadFilmList.notifyStart(new ListenerFilmListLoadEvent("", "", 0, 0, 0, false/* Fehler */));
+//                daten.loadFilmList.afterFilmlistLoad();
+//                daten.loadFilmList.notifyFertig(new ListenerFilmListLoadEvent("", "", 0, 0, 0, false/* Fehler */));
+//            }
         }
 
     }

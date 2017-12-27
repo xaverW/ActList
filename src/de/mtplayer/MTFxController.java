@@ -17,11 +17,14 @@
 package de.mtplayer;
 
 import de.mtplayer.controller.config.Daten;
-import de.mtplayer.gui.FilmPaneController;
+import de.mtplayer.gui.GuiPack;
 import de.mtplayer.gui.StatusBarController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.controlsfx.control.MaskerPane;
 
 public class MTFxController extends StackPane {
@@ -30,7 +33,7 @@ public class MTFxController extends StackPane {
     StackPane stackPaneCont = new StackPane();
     private MaskerPane maskerPane = new MaskerPane();
     private StatusBarController statusBarController;
-    private FilmPaneController filmPaneController;
+    private GuiPack guiPack;
 
     private final Daten daten;
 
@@ -42,37 +45,25 @@ public class MTFxController extends StackPane {
 
     private void init() {
         try {
-            // Top
-            this.setPadding(new Insets(0));
-
-            HBox hBoxTop = new HBox();
-            hBoxTop.setPadding(new Insets(10));
-            hBoxTop.setSpacing(20);
-            hBoxTop.setAlignment(Pos.CENTER);
-            HBox.setHgrow(hBoxTop, Priority.ALWAYS);
-
-            filmPaneController = new FilmPaneController();
-            stackPaneCont.getChildren().addAll(filmPaneController);
+            guiPack = new GuiPack();
+            guiPack.pack();
+            stackPaneCont.getChildren().addAll(guiPack);
 
             statusBarController = new StatusBarController(daten);
-
-            VBox.setVgrow(hBoxTop, Priority.NEVER);
             VBox.setVgrow(statusBarController, Priority.NEVER);
 
-            borderPane.setTop(hBoxTop);
             borderPane.setCenter(stackPaneCont);
             borderPane.setBottom(statusBarController);
 
             this.setPadding(new Insets(0));
-            maskerPane.setPadding(new Insets(3, 1, 1, 1));
             this.getChildren().addAll(borderPane, maskerPane);
+
             StackPane.setAlignment(maskerPane, Pos.CENTER);
+            maskerPane.setPadding(new Insets(3, 1, 1, 1));
             maskerPane.toFront();
             maskerPane.setVisible(false);
 
-
-            filmPaneController.toFront();
-
+            guiPack.toFront();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
