@@ -62,7 +62,7 @@ public class UrlPaneController extends AnchorPane {
     private void makeLoadManuel() {
         final ListView<String> lv = new ListView<>();
         GridPane.setVgrow(lv, Priority.ALWAYS);
-        lv.getItems().addAll(daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls());
+        daten.loadFilmList.updateDownloadUrlsFilmlisten();
         lv.setOnMouseClicked(a -> {
             String str = lv.getSelectionModel().getSelectedItem();
             if (str != null && !str.isEmpty()) {
@@ -72,6 +72,7 @@ public class UrlPaneController extends AnchorPane {
 
         final Button btnGetUrls = new Button();
         btnGetUrls.setOnAction(event -> {
+            daten.loadFilmList.updateDownloadUrlsFilmlisten();
             ArrayList<String> al = daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls();
             Log.sysLog(al.size() + " URL’s eingetragen");
             lv.getItems().clear();
@@ -96,8 +97,9 @@ public class UrlPaneController extends AnchorPane {
         btnHelp.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
                 HelpText.LOAD_FILMLIST_MANUEL));
 
-
-        gridPane.add(new Label("URL’s:"), 0, 0);
+        Label lblTxt = new Label("URL’s:");
+        GridPane.setValignment(lblTxt, VPos.TOP);
+        gridPane.add(lblTxt, 0, 0);
         gridPane.add(lv, 1, 0);
         gridPane.add(vBox, 2, 0);
 
