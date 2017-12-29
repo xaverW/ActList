@@ -37,6 +37,8 @@ public class GuiPack extends AnchorPane {
     Daten daten;
     private final FilmPaneController filmPaneController;
     private final UrlPaneController urlPaneController;
+    private final SenderPaneController senderPaneController;
+
     private final ComboBox<String> cbPath = new ComboBox<>();
     private final String[] storedPath = Config.SYSTEM_DEST_PATH.get().split("<>");
     private final Button btnDest = new Button("");
@@ -45,6 +47,7 @@ public class GuiPack extends AnchorPane {
         daten = Daten.getInstance();
         filmPaneController = new FilmPaneController();
         urlPaneController = new UrlPaneController();
+        senderPaneController = new SenderPaneController();
     }
 
 
@@ -55,6 +58,11 @@ public class GuiPack extends AnchorPane {
         Tab tab = new Tab("Filme");
         tab.setClosable(false);
         tab.setContent(filmPaneController);
+        tabPane.getTabs().addAll(tab);
+
+        tab = new Tab("Sender");
+        tab.setClosable(false);
+        tab.setContent(senderPaneController);
         tabPane.getTabs().addAll(tab);
 
         tab = new Tab("Filmliste");

@@ -52,6 +52,12 @@ public class Film extends FilmProps {
         setFilmTime();
     }
 
+    public void initDate() {
+        // ================================
+        // Datum
+        setDatum();
+    }
+
     private void setFilmTime() {
         if (!arr[FilmXml.FILM_ZEIT].isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");

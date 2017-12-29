@@ -18,6 +18,7 @@
 package de.mtplayer.controller.loadFilmlist;
 
 import com.fasterxml.jackson.core.*;
+import de.mtplayer.controller.config.Config;
 import de.mtplayer.controller.config.Const;
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.config.ProgInfos;
@@ -118,6 +119,7 @@ public class ReadWriteFilmlist {
         JsonToken jsonToken;
         String sender = "", thema = "";
         final Film film = new Film();
+        ArrayList aListSender = new ArrayList(Arrays.asList(Config.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
 
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             throw new IllegalStateException("Expected data to start with an Object");
@@ -152,30 +154,30 @@ public class ReadWriteFilmlist {
             }
             if (jp.isExpectedStartArrayToken()) {
 
-                //Arrays.fill(film.arr, null);
-                Arrays.stream(film.arr).forEach(s -> s = "");
+//                Arrays.fill(film.arr, "");
+//                Arrays.stream(film.arr).forEach(s -> s = "");
 
                 for (int i = 0; i < FilmXml.JSON_NAMES.length; ++i) {
                     film.arr[FilmXml.JSON_NAMES[i]] = jp.nextTextValue();
-
-                    /// für die Entwicklungszeit
-                    if (film.arr[FilmXml.JSON_NAMES[i]] == null) {
-                        film.arr[FilmXml.JSON_NAMES[i]] = "";
-                    }
                 }
+
                 if (film.arr[FilmXml.FILM_SENDER].isEmpty()) {
                     film.arr[FilmXml.FILM_SENDER] = sender;
-                } else {
+                } else if (!sender.equals(film.arr[FilmXml.FILM_SENDER])) {
+                    // spart ein paar Byte
                     sender = film.arr[FilmXml.FILM_SENDER];
                 }
+
                 if (film.arr[FilmXml.FILM_THEMA].isEmpty()) {
                     film.arr[FilmXml.FILM_THEMA] = thema;
-                } else {
+                } else if (!thema.equals(film.arr[FilmXml.FILM_THEMA])) {
                     thema = film.arr[FilmXml.FILM_THEMA];
                 }
 
-                // Filme wieder schreiben
-                writeFilm(jg, film);
+                if (aListSender.isEmpty() || !aListSender.contains(film.arr[FilmXml.FILM_SENDER])) {
+                    // Filme wieder schreiben
+                    writeFilm(jg, film);
+                }
 
             }
         }
@@ -192,7 +194,7 @@ public class ReadWriteFilmlist {
     }
 
     private void writeFilm(JsonGenerator jg, Film film) throws IOException {
-        film.init();
+        film.initDate();
         if (checkDate(film)) {
             jg.writeArrayFieldStart(FilmXml.TAG_JSON_LIST);
             for (int i = 0; i < FilmXml.JSON_NAMES.length; ++i) {

@@ -31,6 +31,7 @@ public class Config extends MLConfig {
     // Einstellungen Filmliste
     public static MLConfigs SYSTEM_LOAD_FILME_START = addNewKey("system-load-filme-start", Boolean.TRUE.toString());
     public static MLConfigs SYSTEM_LOAD_FILME_MANUELL = addNewKey("system-load-filme-manuell", "");
+    public static MLConfigs SYSTEM_LOAD_NOT_SENDER = addNewKey("system-load-not-sender", "");
     public static MLConfigs SYSTEM_ANZ_TAGE_FILMLISTE = addNewKey("system-anz-tage-filmilste", "0"); //es werden nur die x letzten Tage geladen
     public static MLConfigs SYSTEM_DEST_PATH = addNewKey("system-dest-path", ProgInfos.getSettingsDirectory_String());
 
