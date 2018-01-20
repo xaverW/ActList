@@ -7,4 +7,3 @@ Das Programm **AktList** ermöglicht die Nutzung von MediathekView auf einem alt
 # Links
 - [Webseite von MediathekView](https://mediathekview.de)
 
-# [Entwicklung](https://github.com/xaverW/AktList)
