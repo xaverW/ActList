@@ -134,4 +134,11 @@ public class ProgInfos {
         return getSettingsDirectory().toString();
     }
 
+    public static String getDirectory_mtplayer_mv() {
+        final Path baseDirMtplayer = Paths.get(System.getProperty("user.home"), Const.DIR_MTPLAYER);
+        final Path baseDirMV = Paths.get(System.getProperty("user.home"), Const.DIR_MEDIATHEKVIEW);
+
+        return baseDirMtplayer.toString() + Const.DIR_FILMLIST_SEPARATOR + baseDirMV.toString();
+    }
+
 }

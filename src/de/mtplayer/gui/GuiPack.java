@@ -40,7 +40,7 @@ public class GuiPack extends AnchorPane {
     private final SenderPaneController senderPaneController;
 
     private final ComboBox<String> cbPath = new ComboBox<>();
-    private final String[] storedPath = Config.SYSTEM_DEST_PATH.get().split("<>");
+    private final String[] storedPath = Config.SYSTEM_DEST_PATH.get().split(Const.DIR_FILMLIST_SEPARATOR);
     private final Button btnDest = new Button("");
 
     public GuiPack() {
@@ -139,7 +139,7 @@ public class GuiPack extends AnchorPane {
             s = pfade2.get(0);
             for (int i = 1; i < Const.MAX_PFADE_DIALOG_DOWNLOAD && i < pfade2.size(); ++i) {
                 if (!pfade2.get(i).isEmpty()) {
-                    s += "<>" + pfade2.get(i);
+                    s += Const.DIR_FILMLIST_SEPARATOR + pfade2.get(i);
                 }
             }
         }

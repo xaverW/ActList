@@ -27,6 +27,7 @@ public class Const {
     public static final int ALTER_FILMLISTE_SEKUNDEN_FUER_AUTOUPDATE = 4 * 60 * 60; // beim Start des Programms wir die Liste geladen wenn sie älter ist als ..
     public static final String TIME_MAX_AGE_FOR_DIFF = "09"; // Uhrzeit ab der die Diffliste alle Änderungen abdeckt, die Filmliste darf also nicht vor xx erstellt worden sein
     public static final int MAX_PFADE_DIALOG_DOWNLOAD = 15;
+    public static final String DIR_FILMLIST_SEPARATOR = "<>";
 
     // MediathekView URLs
     public static final String ADRESSE_FILMLISTEN_SERVER_DIFF = "http://res.mediathekview.de/diff.xml";
@@ -34,13 +35,15 @@ public class Const {
 
 
     // Dateien/Verzeichnisse
+    public static final String DIR_MTPLAYER = ".mtplayer";
+    public static final String DIR_MEDIATHEKVIEW = ".mediathek3";
+
     public static final String VERZEICHNIS_PROGRAMM_ICONS = "Icons/Programm"; // Unterverzeichnis im Programmverzeichnis
     public static final String VERZEICHNIS_SENDER_ICONS = "Icons/Sender"; // Unterverzeichnis im Programmverzeichnis
     public static final String VERZEICHNIS_EINSTELLUNGEN = ".aktlist"; // im Homeverzeichnis
     public static final String JSON_DATEI_FILME = "filme.json";
 
     public static final String XML_START = "Mediathek";
-    public final static int MAX_COPY_BACKUPFILE = 5; // Maximum number of backup files to be stored.
 
     public static final String DREISAT = "3Sat";
     public static final String ARD = "ARD";

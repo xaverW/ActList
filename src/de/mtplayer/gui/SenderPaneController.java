@@ -23,6 +23,7 @@ import de.mtplayer.controller.data.Icons;
 import de.mtplayer.gui.dialog.MTAlert;
 import de.mtplayer.gui.tools.HelpText;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
@@ -79,19 +80,15 @@ public class SenderPaneController extends AnchorPane {
             });
         }
 
-        final Button btnHelpUrl = new Button("");
-        btnHelpUrl.setGraphic(new Icons().ICON_BUTTON_HELP);
-        btnHelpUrl.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
-                HelpText.LOAD_FILMLIST_URL));
-
         final Button btnHelp = new Button("");
         btnHelp.setGraphic(new Icons().ICON_BUTTON_HELP);
         btnHelp.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
-                HelpText.LOAD_FILMLIST_MANUEL));
+                HelpText.LOAD_FILMLIST_SENDER));
 
         gridPane.add(new Label("Sender nicht laden"), 0, 0);
         gridPane.add(lv, 0, 1);
         GridPane.setValignment(btnHelp, VPos.TOP);
+        GridPane.setHalignment(btnHelp, HPos.RIGHT);
         gridPane.add(btnHelp, 1, 1);
 
         final ColumnConstraints ccTxt = new ColumnConstraints();
