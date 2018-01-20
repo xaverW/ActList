@@ -18,8 +18,8 @@ package de.mtplayer.gui.dialog;
 
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.data.Icons;
-import de.mtplayer.mLib.tools.DirFileChooser;
-import de.mtplayer.mLib.tools.MLAlert;
+import de.mtplayer.tools.DirFileChooser;
+import de.mtplayer.tools.MLAlert;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;

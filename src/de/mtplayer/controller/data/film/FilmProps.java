@@ -16,9 +16,9 @@
 
 package de.mtplayer.controller.data.film;
 
-import de.mtplayer.mLib.tools.Datum;
-import de.mtplayer.mLib.tools.DatumFilm;
-import de.mtplayer.mLib.tools.Log;
+import de.mtplayer.tools.Datum;
+import de.mtplayer.tools.DatumFilm;
+import de.mtplayer.tools.Log;
 
 public class FilmProps extends FilmXml {
 

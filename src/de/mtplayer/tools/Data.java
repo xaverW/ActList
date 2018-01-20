@@ -14,13 +14,39 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.mtplayer.mLib.tools;
+package de.mtplayer.tools;
 
-/**
- * User: Christian F.
- * Date: 15.06.16
- * Time: 14:05
- */
-public interface InputStreamProgressMonitor {
-    void progress(long bytesRead, long size);
+public class Data<E> implements Comparable<E> {
+
+    public static String TAG;
+    public static String[] COLUMN_NAMES;
+    public static String[] XML_NAMES;
+    public static int MAX_ELEM;
+
+    public String[] arr;
+
+    public static GermanStringSorter sorter = GermanStringSorter.getInstance();
+
+    public Data() {
+    }
+
+    public String[] makeArr(int max) {
+        final String[] a = new String[max];
+        for (int i = 0; i < max; ++i) {
+            a[i] = "";
+        }
+        return a;
+    }
+
+    public void setPropsFromXml() {
+    }
+
+    public void setXmlFromProps() {
+    }
+
+    @Override
+    public int compareTo(E o) {
+        return 0;
+    }
+
 }

@@ -21,17 +21,13 @@ import de.mtplayer.controller.config.Const;
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.config.ProgInfos;
 import de.mtplayer.controller.loadFilmlist.ReadFilmlist;
-import de.mtplayer.mLib.MLInit;
-import de.mtplayer.mLib.tools.Duration;
-import de.mtplayer.mLib.tools.Log;
-import de.mtplayer.mLib.tools.StringFormatters;
-import de.mtplayer.mLib.tools.SysMsg;
+import de.mtplayer.tools.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 
-import static de.mtplayer.mLib.tools.Log.LILNE;
+import static de.mtplayer.tools.Log.LILNE;
 
 public class ProgStart {
     Daten daten;

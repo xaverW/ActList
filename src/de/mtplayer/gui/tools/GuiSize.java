@@ -16,7 +16,7 @@
 
 package de.mtplayer.gui.tools;
 
-import de.mtplayer.mLib.tools.MLConfigs;
+import de.mtplayer.tools.MLConfigs;
 import javafx.stage.Stage;
 
 public class GuiSize {

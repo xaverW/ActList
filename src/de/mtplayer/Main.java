@@ -18,9 +18,9 @@ package de.mtplayer;
 import de.mtplayer.controller.ProgStart;
 import de.mtplayer.controller.config.Const;
 import de.mtplayer.controller.config.Daten;
-import de.mtplayer.mLib.tools.Log;
-import de.mtplayer.mLib.tools.SysMsg;
-import de.mtplayer.mLib.tools.SystemInfo;
+import de.mtplayer.tools.Log;
+import de.mtplayer.tools.SysMsg;
+import de.mtplayer.tools.SystemInfo;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -65,15 +65,15 @@ public class Main {
         }
     }
 
-  /*
-   * Aufruf: java -jar mtplayer [Pfad zur Konfigdatei, sonst homeverzeichnis] [Schalter]
-   *
-   * Programmschalter:
-   *
-   * -d debug
-   * -v Programmversion
-   *
-   */
+    /*
+     * Aufruf: java -jar mtplayer [Pfad zur Konfigdatei, sonst homeverzeichnis] [Schalter]
+     *
+     * Programmschalter:
+     *
+     * -d debug
+     * -v Programmversion
+     *
+     */
 
     /**
      * @param args the command line arguments
