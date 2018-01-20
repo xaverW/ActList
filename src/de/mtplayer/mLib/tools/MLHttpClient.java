@@ -14,7 +14,7 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.mtplayer.tools;
+package de.mtplayer.mLib.tools;
 
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;

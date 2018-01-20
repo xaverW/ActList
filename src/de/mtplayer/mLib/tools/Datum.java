@@ -14,7 +14,7 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.mtplayer.tools;
+package de.mtplayer.mLib.tools;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 

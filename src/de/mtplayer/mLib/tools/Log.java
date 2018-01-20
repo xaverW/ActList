@@ -14,7 +14,9 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.mtplayer.tools;
+package de.mtplayer.mLib.tools;
+
+import de.mtplayer.mLib.MLConst;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

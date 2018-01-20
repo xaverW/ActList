@@ -17,8 +17,8 @@
 package de.mtplayer.controller.config;
 
 import de.mtplayer.Main;
-import de.mtplayer.tools.FileUtils;
-import de.mtplayer.tools.SystemInfo;
+import de.mtplayer.mLib.tools.FileUtils;
+import de.mtplayer.mLib.tools.SystemInfo;
 
 import java.io.File;
 import java.io.IOException;

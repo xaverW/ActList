@@ -16,7 +16,7 @@
 
 package de.mtplayer.gui.tools;
 
-import de.mtplayer.tools.Log;
+import de.mtplayer.mLib.tools.Log;
 import javafx.application.Platform;
 
 import java.util.ArrayList;

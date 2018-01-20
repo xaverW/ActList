@@ -16,7 +16,7 @@
 
 package de.mtplayer.gui.dialog;
 
-import de.mtplayer.tools.MLConfigs;
+import de.mtplayer.mLib.tools.MLConfigs;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;

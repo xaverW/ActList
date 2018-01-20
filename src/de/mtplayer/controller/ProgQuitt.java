@@ -19,8 +19,8 @@ package de.mtplayer.controller;
 import de.mtplayer.controller.config.Config;
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.gui.tools.GuiSize;
-import de.mtplayer.tools.Duration;
-import de.mtplayer.tools.Log;
+import de.mtplayer.mLib.tools.Duration;
+import de.mtplayer.mLib.tools.Log;
 import javafx.application.Platform;
 
 public class ProgQuitt {
