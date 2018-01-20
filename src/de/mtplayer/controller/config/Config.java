@@ -17,8 +17,8 @@
 
 package de.mtplayer.controller.config;
 
-import de.mtplayer.mLib.tools.MLConfig;
-import de.mtplayer.mLib.tools.MLConfigs;
+import de.mtplayer.tools.MLConfig;
+import de.mtplayer.tools.MLConfigs;
 
 public class Config extends MLConfig {
 

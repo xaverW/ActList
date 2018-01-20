@@ -18,8 +18,8 @@ package de.mtplayer.controller.loadFilmlist;
 
 import de.mtplayer.controller.config.Const;
 import de.mtplayer.controller.config.ProgInfos;
-import de.mtplayer.mLib.tools.Functions;
-import de.mtplayer.mLib.tools.Log;
+import de.mtplayer.tools.Functions;
+import de.mtplayer.tools.Log;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;

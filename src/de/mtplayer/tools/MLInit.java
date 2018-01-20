@@ -14,11 +14,12 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.mtplayer.mLib;
+package de.mtplayer.tools;
 
-public class MLConst {
-
-    public static boolean debug = false; // Debugmodus
-    public static String userAgent = "";
-    public static String progName = "";
+public class MLInit {
+    public static void initLib(boolean debug, String progName, String userAgent) {
+        MLConst.debug = debug;
+        MLConst.progName = progName;
+        MLConst.userAgent = userAgent;
+    }
 }

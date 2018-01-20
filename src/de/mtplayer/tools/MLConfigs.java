@@ -15,7 +15,7 @@
  */
 
 
-package de.mtplayer.mLib.tools;
+package de.mtplayer.tools;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;

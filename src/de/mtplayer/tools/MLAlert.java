@@ -14,7 +14,7 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.mtplayer.mLib.tools;
+package de.mtplayer.tools;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;

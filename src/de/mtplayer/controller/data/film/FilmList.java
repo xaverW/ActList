@@ -17,8 +17,8 @@
 package de.mtplayer.controller.data.film;
 
 import de.mtplayer.controller.config.Const;
-import de.mtplayer.mLib.tools.Duration;
-import de.mtplayer.mLib.tools.Log;
+import de.mtplayer.tools.Duration;
+import de.mtplayer.tools.Log;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import org.apache.commons.lang3.time.FastDateFormat;

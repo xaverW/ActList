@@ -20,9 +20,9 @@ package de.mtplayer.controller;
 import de.mtplayer.controller.config.Config;
 import de.mtplayer.controller.config.Daten;
 import de.mtplayer.controller.loadFilmlist.FilmlistUrlData;
-import de.mtplayer.mLib.tools.Duration;
-import de.mtplayer.mLib.tools.Log;
-import de.mtplayer.mLib.tools.MLConfigs;
+import de.mtplayer.tools.Duration;
+import de.mtplayer.tools.Log;
+import de.mtplayer.tools.MLConfigs;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;

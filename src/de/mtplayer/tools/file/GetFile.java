@@ -16,7 +16,7 @@
 
 package de.mtplayer.tools.file;
 
-import de.mtplayer.mLib.tools.Log;
+import de.mtplayer.tools.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
