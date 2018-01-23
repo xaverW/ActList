@@ -147,6 +147,8 @@ public class ReadWriteFilmlist {
             }
         }
 
+        // jetzt ist das Datum der Filmliste gesetzt und kann geschrieben werden
+        startWrite(jg, filmList);
 
         while (!Daten.getInstance().loadFilmList.getStop() && (jsonToken = jp.nextToken()) != null) {
             if (jsonToken == JsonToken.END_OBJECT) {
@@ -263,7 +265,6 @@ public class ReadWriteFilmlist {
                         try (FileOutputStream fos = new FileOutputStream(dest);
                              JsonGenerator jg = getJsonGenerator(fos)) {
 
-                            startWrite(jg, filmList);
                             readData(jp, jg, filmList);
                             endWrite(jg);
 
