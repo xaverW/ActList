@@ -26,10 +26,8 @@ import de.mtplayer.controller.data.film.Film;
 import de.mtplayer.controller.data.film.FilmList;
 import de.mtplayer.controller.data.film.FilmListXml;
 import de.mtplayer.controller.data.film.FilmXml;
-import de.mtplayer.tools.InputStreamProgressMonitor;
-import de.mtplayer.tools.Log;
-import de.mtplayer.tools.MLHttpClient;
-import de.mtplayer.tools.ProgressMonitorInputStream;
+import de.mtplayer.tools.*;
+import javafx.application.Platform;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -37,10 +35,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.tukaani.xz.XZInputStream;
 
 import javax.swing.event.EventListenerList;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -61,20 +56,36 @@ public class ReadWriteFilmlist {
         listeners.add(ListenerFilmListLoad.class, listener);
     }
 
-    public void readWriteFilmListe(String source, String dest, final FilmList filmList, int days) {
+    public boolean readWriteFilmListe(String source, String dest, final FilmList filmList, int days) {
+        this.dest = dest;
+
         if (dest.isEmpty()) {
-            return;
+            Log.sysLog("Ziel ist kein Verzeichnis!");
+            return false;
         }
+
+        File fileDestDir = new File(dest);
+        File destDir = fileDestDir.getParentFile();
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+
+        if (!destDir.isDirectory()) {
+            Log.sysLog("Ziel ist kein Verzeichnis!");
+            new MLAlert().showErrorAlert("Filmliste speichern", "Das Zielverzeichnis der Filmliste " +
+                    "existiert nicht und lässt sich auch nicht anlegen.");
+            return false;
+        }
+
 
         Daten.getInstance().loadFilmList.setStop(false);
         new Thread(() -> {
-            readWrite(source, dest, filmList, days);
+            readWrite(source, filmList, days);
         }).start();
-
+        return true;
     }
 
-    private void readWrite(String source, String dest, final FilmList filmList, int days) {
-        this.dest = dest;
+    private void readWrite(String source, final FilmList filmList, int days) {
 
         try {
             Log.sysLog("Liste Filme lesen von: " + source);
@@ -274,6 +285,9 @@ public class ReadWriteFilmlist {
             }
         } catch (final Exception ex) {
             Log.errorLog(945123641, ex, "FilmListe: " + source);
+            Platform.runLater(() -> new MLAlert().showErrorAlert("Filmliste speichern",
+                    "Die Filmliste konnte nicht geladen werden: \n\n" +
+                            ex.getMessage()));
             filmList.clear();
         }
     }

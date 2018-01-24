@@ -122,58 +122,12 @@ public class LoadFilmList {
             // nicht doppelt starten
             setPropListSearching(true);
 
-            readWriteFilmlist.readWriteFilmListe(source, dest, filmList, days);
-
+            if (!readWriteFilmlist.readWriteFilmListe(source, dest, filmList, days)) {
+                // konnte dann nicht richtig gestartet werden
+                setPropListSearching(false);
+            }
         }
     }
-
-//    public void loadFilmlist(String dateiUrl, boolean immerNeuLaden) {
-//        // damit wird die Filmliste geladen UND auch gleich im Konfig-Ordner gespeichert
-//
-//        System.out.println("--------> LOADFILMLIST");
-//
-//        if (!dateiUrl.isEmpty()) {
-//            // der Benutzer hat eine Datei vorgegeben, es wird diese Liste NEU geladen
-//            immerNeuLaden = true;
-//        } else if (dateiUrl.isEmpty() && !Config.SYSTEM_LOAD_FILME_MANUELL.get().isEmpty()) {
-//            // der Benutzer hat eine Datei vorgegeben, es wird diese Liste NEU geladen
-//            dateiUrl = Config.SYSTEM_LOAD_FILME_MANUELL.get();
-//            immerNeuLaden = true;
-//        }
-//
-//
-//        Duration.staticPing("Filme laden, start");
-//        SysMsg.sysMsg("");
-//        SysMsg.sysMsg("Alte Liste erstellt am: " + Daten.getInstance().filmList.genDate());
-//        SysMsg.sysMsg("  Anzahl Filme: " + daten.filmList.size());
-//
-//        if (!getPropListSearching()) {
-//            // nicht doppelt starten
-//            setPropListSearching(true);
-//            // Hash mit URLs füllen
-//            hashSet.clear();
-//            fillHash(daten.filmList);
-//            if (immerNeuLaden) {
-//                // dann die alte löschen, damit immer komplett geladen wird, aber erst nach dem Hash!!
-//                // sonst wird eine "zu kurze" Liste wieder nur mit einer Diff-Liste aufgefüllt, wenn das
-//                // Alter noch passt
-//                daten.filmList.clear();
-//            }
-//            if (dateiUrl.isEmpty()) {
-//                // Filme als Liste importieren, Url automatisch ermitteln
-//                SysMsg.sysMsg("Filmliste laden (auto)");
-//                importFilmliste.filmeImportierenAuto(daten.filmList,
-//                        diffListe, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
-//            } else {
-//                // Filme als Liste importieren, feste URL/Datei
-//                SysMsg.sysMsg("Filmliste laden von: " + dateiUrl);
-//                daten.filmList.clear();
-//                importFilmliste.filmeImportierenDatei(dateiUrl,
-//                        daten.filmList, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
-//            }
-//        }
-//        System.out.println("--------> LOADFILMLIST-->fertig");
-//    }
 
     public void afterFilmlistLoad() {
         notifyProgress(new ListenerFilmListLoadEvent("", "doppelte URLs suchen",
