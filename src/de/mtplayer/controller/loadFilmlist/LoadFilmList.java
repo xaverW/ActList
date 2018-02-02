@@ -202,7 +202,7 @@ public class LoadFilmList {
             SysMsg.sysMsg("  Anzahl Filme: " + daten.filmList.size());
         }
 
-        if (event.fehler) {
+        if (event.isFehler()) {
             SysMsg.sysMsg("");
             SysMsg.sysMsg("Filmliste laden war fehlerhaft, alte Liste wird wieder geladen");
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));

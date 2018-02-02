@@ -37,6 +37,7 @@ public class StatusBarController extends AnchorPane {
     StackPane stackPane = new StackPane();
 
     // loadPane
+    Label lblLeftLoad = new Label("");
     Label lblProgress = new Label();
     ProgressBar progress = new ProgressBar();
     Button btnStop = new Button("");
@@ -53,7 +54,7 @@ public class StatusBarController extends AnchorPane {
 
     private final Daten daten;
     private boolean stopTimer = false;
-    private static final String TRENNER = "  ||  ";
+    private int countFoundFilms = -1;
 
     public StatusBarController(Daten daten) {
         this.daten = daten;
@@ -73,8 +74,10 @@ public class StatusBarController extends AnchorPane {
         nonePane.setStyle("-fx-background-color: -fx-background ;");
 
         hBox = getHbox();
+        lblLeftLoad.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(lblLeftLoad, Priority.ALWAYS);
         btnStop.setGraphic(new Icons().ICON_BUTTON_STOP);
-        hBox.getChildren().addAll(lblProgress, progress, btnStop);
+        hBox.getChildren().addAll(lblLeftLoad, lblProgress, progress, btnStop);
         progress.setPrefWidth(200);
         loadPane.getChildren().add(hBox);
         loadPane.setStyle("-fx-background-color: -fx-background ;");
@@ -115,11 +118,13 @@ public class StatusBarController extends AnchorPane {
             @Override
             public void start(ListenerFilmListLoadEvent event) {
                 loadList = true;
+                countFoundFilms = -1;
                 setStatusbar();
             }
 
             @Override
             public void progress(ListenerFilmListLoadEvent event) {
+                countFoundFilms = event.getCount();
                 updateProgressBar(event);
             }
 
@@ -127,6 +132,7 @@ public class StatusBarController extends AnchorPane {
             public void fertig(ListenerFilmListLoadEvent event) {
                 stopTimer = false;
                 loadList = false;
+                countFoundFilms = event.getCount();
                 setStatusbar();
             }
         });
@@ -145,7 +151,7 @@ public class StatusBarController extends AnchorPane {
         btnStop.setOnAction(a -> daten.loadFilmList.setStop(true));
     }
 
-    public void setStatusbar() {
+    private void setStatusbar() {
         if (loadList) {
             loadPane.toFront();
             return;
@@ -158,28 +164,18 @@ public class StatusBarController extends AnchorPane {
 
     private void updateProgressBar(ListenerFilmListLoadEvent event) {
         stopTimer = true;
-        progress.setProgress(event.progress);
-        lblProgress.setText(event.text);
+        progress.setProgress(event.getProgress());
+        lblProgress.setText(event.getText());
+        if (event.getCount() >= 0) {
+            lblLeftLoad.setText("Filme gefunden: " + event.getCount());
+        }
     }
 
 
     private void setTextNone() {
-        final int anzAll = daten.filmList.size();
-        lblLeftNone.setText("Anzahl Filme: " + anzAll);
-    }
-
-    private void setInfoFilme() {
-        String textLinks;
-        final int gesamt = daten.filmList.size();
-
-        // Anzahl der Filme
-        if (gesamt == 1) {
-            textLinks = "1 Film";
-        } else {
-            textLinks = gesamt + " Filme";
+        if (countFoundFilms >= 0) {
+            lblLeftNone.setText("Anzahl Filme: " + countFoundFilms);
         }
-
-        lblLeftNone.setText(textLinks);
     }
 
     private void setTextForRightDisplay() {

@@ -18,12 +18,12 @@ package de.mtplayer.controller.loadFilmlist;
 
 public class ListenerFilmListLoadEvent {
 
-    public String senderUrl = "";
-    public String text = "";
-    public double max = 0;
-    public double progress = 0;
-    public boolean fehler = false;
-    public int count = 0;
+    private String senderUrl = "";
+    private String text = "";
+    private double max = 0;
+    private double progress = 0;
+    private boolean fehler = false;
+    private int count = 0;
 
     public ListenerFilmListLoadEvent(String ssender, String ttext, double mmax, double pprogress, int ccount, boolean ffehler) {
         senderUrl = ssender;
@@ -32,5 +32,53 @@ public class ListenerFilmListLoadEvent {
         progress = pprogress;
         count = ccount;
         fehler = ffehler;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getSenderUrl() {
+        return senderUrl;
+    }
+
+    public void setSenderUrl(String senderUrl) {
+        this.senderUrl = senderUrl;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public double getMax() {
+        return max;
+    }
+
+    public void setMax(double max) {
+        this.max = max;
+    }
+
+    public double getProgress() {
+        return progress;
+    }
+
+    public void setProgress(double progress) {
+        this.progress = progress;
+    }
+
+    public boolean isFehler() {
+        return fehler;
+    }
+
+    public void setFehler(boolean fehler) {
+        this.fehler = fehler;
     }
 }
