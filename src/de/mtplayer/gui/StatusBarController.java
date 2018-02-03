@@ -32,6 +32,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class StatusBarController extends AnchorPane {
 
     StackPane stackPane = new StackPane();
@@ -170,21 +173,30 @@ public class StatusBarController extends AnchorPane {
         stopTimer = true;
         progress.setProgress(event.getProgress());
         lblProgress.setText(event.getText());
+
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY);
+        String count = numberFormat.format(event.getCount());
+        String max = numberFormat.format(event.getMax());
+
         if (event.getCount() >= 0) {
             if (event.getCount() != event.getMax()) {
-                lblLeftLoad.setText("Filme gefunden: " + event.getCount() + " von insgesamt: " + event.getMax());
+                lblLeftLoad.setText("Filme gefunden: " + count + " von insgesamt: " + max);
             } else {
-                lblLeftLoad.setText("Filme gefunden: " + event.getCount());
+                lblLeftLoad.setText("Filme gefunden: " + count);
             }
         }
     }
 
 
     private void setTextNone() {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY);
+        String count = numberFormat.format(countFoundFilms);
+        String max = numberFormat.format(maxFilms);
+
         if (countFoundFilms >= 0 && maxFilms == countFoundFilms) {
-            lblLeftNone.setText("Anzahl Filme: " + countFoundFilms);
+            lblLeftNone.setText("Anzahl Filme: " + count);
         } else if (countFoundFilms >= 0) {
-            lblLeftNone.setText("Anzahl Filme: " + countFoundFilms + " von insgesamt: " + maxFilms);
+            lblLeftNone.setText("Anzahl Filme: " + count + " von insgesamt: " + max);
         }
     }
 
