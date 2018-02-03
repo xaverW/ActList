@@ -131,23 +131,23 @@ public class LoadFilmList {
 
     public void afterFilmlistLoad() {
         notifyProgress(new ListenerFilmListLoadEvent("", "doppelte URLs suchen",
-                ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
+                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
         SysMsg.sysMsg("doppelte URLs suchen");
 
 
         notifyProgress(new ListenerFilmListLoadEvent("", "Themen suchen",
-                ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
+                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
         SysMsg.sysMsg("Themen suchen");
         daten.filmList.themenLaden();
 
 
         notifyProgress(new ListenerFilmListLoadEvent("", "Blacklist filtern",
-                ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
+                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
         SysMsg.sysMsg("Blacklist filtern");
 
 
         notifyProgress(new ListenerFilmListLoadEvent("", "Filme in Downloads eintragen",
-                ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
+                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
         SysMsg.sysMsg("Filme in Downloads eintragen");
     }
 

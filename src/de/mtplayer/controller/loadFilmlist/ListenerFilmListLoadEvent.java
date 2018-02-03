@@ -20,12 +20,12 @@ public class ListenerFilmListLoadEvent {
 
     private String senderUrl = "";
     private String text = "";
-    private double max = 0;
+    private int max = 0;
     private double progress = 0;
     private boolean fehler = false;
     private int count = 0;
 
-    public ListenerFilmListLoadEvent(String ssender, String ttext, double mmax, double pprogress, int ccount, boolean ffehler) {
+    public ListenerFilmListLoadEvent(String ssender, String ttext, int mmax, double pprogress, int ccount, boolean ffehler) {
         senderUrl = ssender;
         text = ttext;
         max = mmax;
@@ -58,11 +58,11 @@ public class ListenerFilmListLoadEvent {
         this.text = text;
     }
 
-    public double getMax() {
+    public int getMax() {
         return max;
     }
 
-    public void setMax(double max) {
+    public void setMax(int max) {
         this.max = max;
     }
 

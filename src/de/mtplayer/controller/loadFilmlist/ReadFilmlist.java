@@ -50,7 +50,7 @@ import java.util.zip.ZipInputStream;
 public class ReadFilmlist {
 
     private final EventListenerList listeners = new EventListenerList();
-    private double max = 0;
+    private int max = 0;
     private double progress = 0;
     private long milliseconds = 0;
 
@@ -63,7 +63,7 @@ public class ReadFilmlist {
         try {
             Log.sysLog("Liste Filme lesen von: " + source);
             filmList.clear();
-            notifyStart(source, ListenerFilmListLoad.PROGRESS_MAX); // für die Progressanzeige
+            notifyStart(source, max); // für die Progressanzeige
 
             checkDays(days);
 
@@ -81,7 +81,7 @@ public class ReadFilmlist {
             ex.printStackTrace();
         }
 
-        notifyFertig(source, filmList);
+        notifyFertig(source, filmList, max);
         System.out.println("--------> READFILMLIST --> fertig");
     }
 
@@ -169,7 +169,7 @@ public class ReadFilmlist {
      * @param filmList the list to read to
      */
     private void processFromFile(String source, FilmList filmList) {
-        notifyProgress(source, ListenerFilmListLoad.PROGRESS_MAX);
+        notifyProgress(source, ListenerFilmListLoad.PROGRESS_MAX, max);
         try (InputStream in = selectDecompressor(source, new FileInputStream(source));
              JsonParser jp = new JsonFactory().createParser(in)) {
             readData(jp, filmList);
@@ -209,7 +209,7 @@ public class ReadFilmlist {
                 final int iProgress = (int) (bytesRead * 100/* zum Runden */ / size);
                 if (iProgress != oldProgress) {
                     oldProgress = iProgress;
-                    notifyProgress(source.toString(), 1.0 * iProgress / 100);
+                    notifyProgress(source.toString(), 1.0 * iProgress / 100, max);
                 }
             }
         };
@@ -244,15 +244,14 @@ public class ReadFilmlist {
         return true;
     }
 
-    private void notifyStart(String url, double mmax) {
-        max = mmax;
+    private void notifyStart(String url, int mmax) {
         progress = 0;
         for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
-            l.start(new ListenerFilmListLoadEvent(url, "", max, 0, 0, false));
+            l.start(new ListenerFilmListLoadEvent(url, "", mmax, 0, 0, false));
         }
     }
 
-    private void notifyProgress(String url, double iProgress) {
+    private void notifyProgress(String url, double iProgress, int max) {
         progress = iProgress;
         if (progress > max) {
             progress = max;
@@ -262,7 +261,7 @@ public class ReadFilmlist {
         }
     }
 
-    private void notifyFertig(String url, FilmList liste) {
+    private void notifyFertig(String url, FilmList liste, int max) {
         Log.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
         Log.sysLog("  erstellt am: " + liste.genDate());
         Log.sysLog("  Anzahl Filme: " + liste.size());

@@ -55,6 +55,7 @@ public class StatusBarController extends AnchorPane {
     private final Daten daten;
     private boolean stopTimer = false;
     private int countFoundFilms = -1;
+    private int maxFilms = -1;
 
     public StatusBarController(Daten daten) {
         this.daten = daten;
@@ -119,12 +120,14 @@ public class StatusBarController extends AnchorPane {
             public void start(ListenerFilmListLoadEvent event) {
                 loadList = true;
                 countFoundFilms = -1;
+                maxFilms = -1;
                 setStatusbar();
             }
 
             @Override
             public void progress(ListenerFilmListLoadEvent event) {
                 countFoundFilms = event.getCount();
+                maxFilms = event.getMax();
                 updateProgressBar(event);
             }
 
@@ -133,6 +136,7 @@ public class StatusBarController extends AnchorPane {
                 stopTimer = false;
                 loadList = false;
                 countFoundFilms = event.getCount();
+                maxFilms = event.getMax();
                 setStatusbar();
             }
         });
@@ -167,14 +171,20 @@ public class StatusBarController extends AnchorPane {
         progress.setProgress(event.getProgress());
         lblProgress.setText(event.getText());
         if (event.getCount() >= 0) {
-            lblLeftLoad.setText("Filme gefunden: " + event.getCount());
+            if (event.getCount() != event.getMax()) {
+                lblLeftLoad.setText("Filme gefunden: " + event.getCount() + " von insgesamt: " + event.getMax());
+            } else {
+                lblLeftLoad.setText("Filme gefunden: " + event.getCount());
+            }
         }
     }
 
 
     private void setTextNone() {
-        if (countFoundFilms >= 0) {
+        if (countFoundFilms >= 0 && maxFilms == countFoundFilms) {
             lblLeftNone.setText("Anzahl Filme: " + countFoundFilms);
+        } else if (countFoundFilms >= 0) {
+            lblLeftNone.setText("Anzahl Filme: " + countFoundFilms + " von insgesamt: " + maxFilms);
         }
     }
 
