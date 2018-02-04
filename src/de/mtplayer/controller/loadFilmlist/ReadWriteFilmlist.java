@@ -91,9 +91,11 @@ public class ReadWriteFilmlist {
         try {
             Log.sysLog("Liste Filme lesen von: " + source);
             filmList.clear();
-            notifyStart(source, max); // für die Progressanzeige
 
             countFoundFilms = 0;
+            max = 0;
+
+            notifyStart(source, max); // für die Progressanzeige
             checkDays(days);
 
             if (source.isEmpty() || !source.startsWith("http")) {
