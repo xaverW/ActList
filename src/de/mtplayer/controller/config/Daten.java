@@ -20,12 +20,8 @@ package de.mtplayer.controller.config;
 import de.mtplayer.MTFxController;
 import de.mtplayer.controller.data.film.FilmList;
 import de.mtplayer.controller.loadFilmlist.LoadFilmList;
-import de.mtplayer.gui.tools.Listener;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+
 
 public class Daten {
 
@@ -52,11 +48,23 @@ public class Daten {
         filmList = new FilmList();
         loadFilmList = new LoadFilmList(this);
 
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(1000), ae -> Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName())));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.setDelay(Duration.seconds(5));
-        timeline.play();
+//        Timer timer = new Timer(1000, e -> Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName()));
+//        timer.setInitialDelay(5000); // damit auch alles geladen ist
+//        timer.start();
+
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName());
+//            }
+//        }, 5000L, 1000L);
+
+//        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae ->
+//                Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName())));
+//        timeline.setCycleCount(Animation.INDEFINITE);
+//        timeline.setDelay(Duration.seconds(5));
+//        timeline.play();
     }
 
     public static final Daten getInstance(String dir) {

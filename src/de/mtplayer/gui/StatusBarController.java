@@ -158,6 +158,7 @@ public class StatusBarController extends AnchorPane {
         btnStop.setOnAction(a -> daten.loadFilmList.setStop(true));
     }
 
+
     private void setStatusbar() {
         if (loadList) {
             loadPane.toFront();
