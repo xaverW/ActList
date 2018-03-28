@@ -16,15 +16,15 @@
 
 package de.mtplayer.actList.controller.data.film;
 
-import de.mtplayer.mLib.tools.Datum;
-import de.mtplayer.mLib.tools.DatumFilm;
+import de.mtplayer.mLib.tools.FilmDate;
 import de.mtplayer.mLib.tools.Log;
+import de.mtplayer.mLib.tools.MDate;
 
 public class FilmProps extends FilmXml {
 
     public int nr;
     public FilmSize filmSize = new FilmSize(); // Dateigröße in MByte
-    public DatumFilm datumFilm = new DatumFilm(0);
+    public FilmDate filmDate = new FilmDate(0);
 
     public long dauerL = 0; // Sekunden
     public int filmtime = 0; // Zeit -> Minuten ab 0:00 Uhr
@@ -63,7 +63,7 @@ public class FilmProps extends FilmXml {
 
     public void setInFuture() {
         try {
-            if (datumFilm.getTime() > System.currentTimeMillis()) {
+            if (filmDate.getTime() > System.currentTimeMillis()) {
                 inFuture = true;
             } else {
                 inFuture = false;
@@ -98,8 +98,8 @@ public class FilmProps extends FilmXml {
         return arr[FILM_TITEL];
     }
 
-    public Datum getDate() {
-        return datumFilm;
+    public MDate getDate() {
+        return filmDate;
     }
 
     public String getTime() {

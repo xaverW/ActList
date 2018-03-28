@@ -17,7 +17,7 @@
 package de.mtplayer.actList.controller.data.film;
 
 import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.mLib.tools.DatumFilm;
+import de.mtplayer.mLib.tools.FilmDate;
 import de.mtplayer.mLib.tools.Log;
 
 import java.time.LocalTime;
@@ -180,18 +180,18 @@ public class Film extends FilmProps {
             try {
                 if (arr[FILM_DATUM_LONG].isEmpty()) {
                     if (arr[FILM_ZEIT].isEmpty()) {
-                        datumFilm = new DatumFilm(sdf_datum.parse(arr[FILM_DATUM]).getTime());
+                        filmDate = new FilmDate(sdf_datum.parse(arr[FILM_DATUM]).getTime());
                     } else {
-                        datumFilm = new DatumFilm(sdf_datum_zeit.parse(arr[FILM_DATUM] + arr[FILM_ZEIT]).getTime());
+                        filmDate = new FilmDate(sdf_datum_zeit.parse(arr[FILM_DATUM] + arr[FILM_ZEIT]).getTime());
                     }
-                    arr[FILM_DATUM_LONG] = String.valueOf(datumFilm.getTime() / 1000);
+                    arr[FILM_DATUM_LONG] = String.valueOf(filmDate.getTime() / 1000);
                 } else {
                     final long l = Long.parseLong(arr[FILM_DATUM_LONG]);
-                    datumFilm = new DatumFilm(l * 1000 /* sind SEKUNDEN!! */);
+                    filmDate = new FilmDate(l * 1000 /* sind SEKUNDEN!! */);
                 }
             } catch (final Exception ex) {
                 Log.errorLog(915236701, ex, new String[]{"Datum: " + arr[FILM_DATUM], "Zeit: " + arr[FILM_ZEIT]});
-                datumFilm = new DatumFilm(0);
+                filmDate = new FilmDate(0);
                 arr[FILM_DATUM] = "";
                 arr[FILM_ZEIT] = "";
             }
@@ -229,7 +229,7 @@ public class Film extends FilmProps {
     public Film getCopy() {
         final Film ret = new Film();
         System.arraycopy(arr, 0, ret.arr, 0, arr.length);
-        ret.datumFilm = datumFilm;
+        ret.filmDate = filmDate;
         ret.nr = nr;
         ret.filmSize = filmSize;
         ret.dauerL = dauerL;

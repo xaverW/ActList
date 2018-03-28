@@ -303,8 +303,8 @@ public class ReadWriteFilmlist {
     private boolean checkDate(Film film) {
         // true wenn der Film angezeigt werden kann!
         try {
-            if (film.datumFilm.getTime() != 0) {
-                if (film.datumFilm.getTime() < milliseconds) {
+            if (film.filmDate.getTime() != 0) {
+                if (film.filmDate.getTime() < milliseconds) {
                     return false;
                 }
             }

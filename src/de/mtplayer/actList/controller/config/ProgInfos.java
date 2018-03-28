@@ -17,8 +17,6 @@
 package de.mtplayer.actList.controller.config;
 
 import de.mtplayer.actList.Main;
-import de.mtplayer.mLib.tools.FileUtils;
-import de.mtplayer.mLib.tools.SystemInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,20 +84,7 @@ public class ProgInfos {
      * @return Den Pfad als String
      */
     public static String getFilmListFile() {
-        String strFile;
-
-        if (SystemInfo.isMacOSX()) {
-            // place filmlist into OS X user cache directory in order not to backup it all the time in
-            // TimeMachine...
-            strFile = FileUtils.getHomePath() + File.separator
-                    + "Library/Caches/MTPlayer"
-                    + File.separator
-                    + Const.JSON_DATEI_FILME;
-        } else {
-            strFile = ProgInfos.getSettingsDirectory_String() + File.separator + Const.JSON_DATEI_FILME;
-        }
-
-        return strFile;
+        return ProgInfos.getSettingsDirectory_String() + File.separator + Const.JSON_DATEI_FILME;
     }
 
     /**

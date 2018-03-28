@@ -20,7 +20,6 @@ import de.mtplayer.actList.controller.ProgSave;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.data.film.Film;
 import de.mtplayer.actList.controller.data.film.FilmList;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.mLib.tools.Duration;
@@ -33,13 +32,11 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import javax.swing.event.EventListenerList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class LoadFilmList {
 
-    private final HashSet<String> hashSet = new HashSet<>();
+    //    private final HashSet<String> hashSet = new HashSet<>();
     private final FilmList diffListe;
 
     // private
@@ -227,9 +224,9 @@ public class LoadFilmList {
         notifyFertig(event);
     }
 
-    private void fillHash(FilmList filmList) {
-        hashSet.addAll(filmList.stream().map(Film::getUrlHistory).collect(Collectors.toList()));
-    }
+//    private void fillHash(FilmList filmList) {
+//        hashSet.addAll(filmList.stream().map(Film::getUrlHistory).collect(Collectors.toList()));
+//    }
 
     public void notifyStart(ListenerFilmListLoadEvent event) {
         final ListenerFilmListLoadEvent e = event;

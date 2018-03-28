@@ -67,7 +67,7 @@ public class FilmList extends SimpleListProperty<Film> {
         // in eine vorhandene Liste soll eine andere Filmliste einsortiert werden
         // es werden nur Filme die noch nicht vorhanden sind, einsortiert
         // "ersetzen": true: dann werden gleiche (index/URL) in der Liste durch neue ersetzt
-        final HashSet<String> hash = new HashSet<>(listeEinsortieren.size() + 1, 1);
+        final HashSet<String> hash = new HashSet<>(listeEinsortieren.size() + 1, 0.75F);
 
         if (ersetzen) {
             listeEinsortieren.forEach((Film f) -> addHash(f, hash, index));
