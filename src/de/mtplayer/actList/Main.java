@@ -18,9 +18,9 @@ package de.mtplayer.actList;
 import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.mLib.tools.Log;
-import de.mtplayer.mLib.tools.SysMsg;
 import de.mtplayer.mLib.tools.SystemInfo;
+import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.SysMsg;
 import javafx.application.Application;
 import javafx.application.Platform;
 

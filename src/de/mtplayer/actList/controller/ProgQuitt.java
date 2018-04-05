@@ -19,8 +19,8 @@ package de.mtplayer.actList.controller;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.gui.tools.GuiSize;
-import de.mtplayer.mLib.tools.Duration;
-import de.mtplayer.mLib.tools.Log;
+import de.p2tools.p2Lib.tools.Duration;
+import de.p2tools.p2Lib.tools.Log;
 import javafx.application.Platform;
 
 public class ProgQuitt {

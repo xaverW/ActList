@@ -27,9 +27,9 @@ import de.mtplayer.actList.controller.data.film.FilmList;
 import de.mtplayer.actList.controller.data.film.FilmListXml;
 import de.mtplayer.actList.controller.data.film.FilmXml;
 import de.mtplayer.mLib.tools.InputStreamProgressMonitor;
-import de.mtplayer.mLib.tools.Log;
 import de.mtplayer.mLib.tools.MLHttpClient;
 import de.mtplayer.mLib.tools.ProgressMonitorInputStream;
+import de.p2tools.p2Lib.tools.Log;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -59,9 +59,8 @@ public class ReadFilmlist {
     }
 
     public void readFilmListe(String source, final FilmList filmList, int days) {
-        System.out.println("--------> READFILMLIST");
         try {
-            Log.sysLog("Liste Filme lesen von: " + source);
+            Log.sysLog("Filme lesen von: " + source);
             filmList.clear();
             notifyStart(source, max); // für die Progressanzeige
 
@@ -74,7 +73,7 @@ public class ReadFilmlist {
             }
 
             if (Daten.getInstance().loadFilmList.getStop()) {
-                Log.sysLog("--> Abbruch");
+                Log.sysLog("Filme lesen --> Abbruch");
                 filmList.clear();
             }
         } catch (final MalformedURLException ex) {
@@ -82,7 +81,7 @@ public class ReadFilmlist {
         }
 
         notifyFertig(source, filmList, max);
-        System.out.println("--------> READFILMLIST --> fertig");
+        Log.sysLog("Filme lesen --> fertig");
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {

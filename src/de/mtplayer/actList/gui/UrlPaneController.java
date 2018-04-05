@@ -21,7 +21,7 @@ import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.actList.gui.tools.HelpText;
-import de.mtplayer.mLib.tools.Log;
+import de.p2tools.p2Lib.tools.Log;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;

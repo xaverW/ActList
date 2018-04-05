@@ -18,7 +18,7 @@ package de.mtplayer.actList.controller.data.film;
 
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.mLib.tools.FilmDate;
-import de.mtplayer.mLib.tools.Log;
+import de.p2tools.p2Lib.tools.Log;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

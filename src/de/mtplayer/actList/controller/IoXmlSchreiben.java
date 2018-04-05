@@ -21,8 +21,8 @@ import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.actList.controller.loadFilmlist.FilmlistUrlData;
-import de.mtplayer.mLib.tools.Log;
-import de.mtplayer.mLib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.SysMsg;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;

@@ -22,10 +22,10 @@ import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.actList.controller.loadFilmlist.ReadFilmlist;
 import de.mtplayer.mLib.MLInit;
-import de.mtplayer.mLib.tools.Duration;
-import de.mtplayer.mLib.tools.Log;
 import de.mtplayer.mLib.tools.StringFormatters;
-import de.mtplayer.mLib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.Duration;
+import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.SysMsg;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -17,8 +17,8 @@
 package de.mtplayer.actList.controller.data.film;
 
 import de.mtplayer.mLib.tools.FilmDate;
-import de.mtplayer.mLib.tools.Log;
 import de.mtplayer.mLib.tools.MDate;
+import de.p2tools.p2Lib.tools.Log;
 
 public class FilmProps extends FilmXml {
 
