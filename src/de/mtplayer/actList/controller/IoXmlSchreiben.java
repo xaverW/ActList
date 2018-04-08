@@ -21,8 +21,7 @@ import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.actList.controller.loadFilmlist.FilmlistUrlData;
-import de.p2tools.p2Lib.tools.Log;
-import de.p2tools.p2Lib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.log.PLog;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -48,7 +47,7 @@ public class IoXmlSchreiben implements AutoCloseable {
 
     public synchronized void datenSchreiben() {
         xmlFilePath = new ProgInfos().getXmlFilePath();
-        SysMsg.sysMsg("Daten Schreiben nach: " + xmlFilePath.toString());
+        PLog.userLog("Daten Schreiben nach: " + xmlFilePath.toString());
         xmlDatenSchreiben();
     }
 
@@ -70,12 +69,12 @@ public class IoXmlSchreiben implements AutoCloseable {
             writer.writeCharacters("\n\n");
             xmlSchreibenEnde();
         } catch (final Exception ex) {
-            Log.errorLog(656328109, ex);
+            PLog.errorLog(656328109, ex);
         }
     }
 
     private void xmlSchreibenStart() throws IOException, XMLStreamException {
-        SysMsg.sysMsg("Start Schreiben nach: " + xmlFilePath.toAbsolutePath());
+        PLog.userLog("Start Schreiben nach: " + xmlFilePath.toAbsolutePath());
         os = Files.newOutputStream(xmlFilePath);
         out = new OutputStreamWriter(os, StandardCharsets.UTF_8);
 
@@ -136,7 +135,7 @@ public class IoXmlSchreiben implements AutoCloseable {
             writer.writeEndElement();
             writer.writeCharacters("\n"); // neue Zeile
         } catch (final Exception ex) {
-            Log.errorLog(198325017, ex);
+            PLog.errorLog(198325017, ex);
         }
     }
 
@@ -158,7 +157,7 @@ public class IoXmlSchreiben implements AutoCloseable {
             writer.writeEndElement();
             writer.writeCharacters("\n"); // neue Zeile
         } catch (final Exception ex) {
-            Log.errorLog(951230478, ex);
+            PLog.errorLog(951230478, ex);
         }
     }
 
@@ -167,7 +166,7 @@ public class IoXmlSchreiben implements AutoCloseable {
         writer.writeEndDocument();
         writer.flush();
 
-        SysMsg.sysMsg("geschrieben!");
+        PLog.userLog("geschrieben!");
     }
 
     @Override

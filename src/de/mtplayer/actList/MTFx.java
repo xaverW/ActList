@@ -27,8 +27,8 @@ import de.mtplayer.actList.gui.tools.GuiSize;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.actList.res.GetIcon;
 import de.mtplayer.mLib.tools.Functions;
-import de.p2tools.p2Lib.tools.Duration;
-import de.p2tools.p2Lib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -151,13 +151,13 @@ public class MTFx extends Application {
     }
 
     private void printArguments(final String[] aArguments) {
-        SysMsg.sysMsg("");
-        SysMsg.sysMsg(TEXT_LINE);
+        PLog.sysLog("");
+        PLog.sysLog(TEXT_LINE);
         for (final String argument : aArguments) {
-            SysMsg.sysMsg(String.format(LOG_TEXT_STARTPARAMETER_PATTERN, argument));
+            PLog.sysLog(String.format(LOG_TEXT_STARTPARAMETER_PATTERN, argument));
         }
-        SysMsg.sysMsg(TEXT_LINE);
-        SysMsg.sysMsg("");
+        PLog.sysLog(TEXT_LINE);
+        PLog.sysLog("");
     }
 
     private void addListener() {

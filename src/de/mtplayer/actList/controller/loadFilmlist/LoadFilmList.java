@@ -23,9 +23,8 @@ import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.actList.controller.data.film.FilmList;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.mLib.tools.StringFormatters;
-import de.p2tools.p2Lib.tools.Duration;
-import de.p2tools.p2Lib.tools.Log;
-import de.p2tools.p2Lib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -113,7 +112,6 @@ public class LoadFilmList {
         // damit wird die Filmliste geladen UND sofort gespeichert
 
         Duration.staticPing("Filme laden, start");
-        SysMsg.sysMsg("");
 
         if (!getPropListSearching()) {
             // nicht doppelt starten
@@ -129,23 +127,23 @@ public class LoadFilmList {
     public void afterFilmlistLoad() {
         notifyProgress(new ListenerFilmListLoadEvent("", "doppelte URLs suchen",
                 (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-        SysMsg.sysMsg("doppelte URLs suchen");
+        PLog.sysLog("doppelte URLs suchen");
 
 
         notifyProgress(new ListenerFilmListLoadEvent("", "Themen suchen",
                 (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-        SysMsg.sysMsg("Themen suchen");
+        PLog.sysLog("Themen suchen");
         daten.filmList.themenLaden();
 
 
         notifyProgress(new ListenerFilmListLoadEvent("", "Blacklist filtern",
                 (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-        SysMsg.sysMsg("Blacklist filtern");
+        PLog.sysLog("Blacklist filtern");
 
 
         notifyProgress(new ListenerFilmListLoadEvent("", "Filme in Downloads eintragen",
                 (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-        SysMsg.sysMsg("Filme in Downloads eintragen");
+        PLog.sysLog("Filme in Downloads eintragen");
     }
 
     // #######################################
@@ -181,27 +179,27 @@ public class LoadFilmList {
         // Abos eintragen in der gesamten Liste vor Blacklist da das nur beim Ändern der Filmliste oder
         // beim Ändern von Abos gemacht wird
 
-        SysMsg.sysMsg("");
+        PLog.userLog("");
 
         // wenn nur ein Update
         if (!diffListe.isEmpty()) {
-            SysMsg.sysMsg("Liste Diff gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            SysMsg.sysMsg("  Liste Diff erstellt am: " + diffListe.genDate());
-            SysMsg.sysMsg("  Anzahl Filme: " + diffListe.size());
+            PLog.userLog("Liste Diff gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
+            PLog.userLog("  Liste Diff erstellt am: " + diffListe.genDate());
+            PLog.userLog("  Anzahl Filme: " + diffListe.size());
 
             daten.filmList.updateListe(diffListe, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
             daten.filmList.metaDaten = diffListe.metaDaten;
             daten.filmList.sort(); // jetzt sollte alles passen
             diffListe.clear();
         } else {
-            SysMsg.sysMsg("Liste Kompl. gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            SysMsg.sysMsg("  Liste Kompl erstellt am: " + daten.filmList.genDate());
-            SysMsg.sysMsg("  Anzahl Filme: " + daten.filmList.size());
+            PLog.userLog("Liste Kompl. gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
+            PLog.userLog("  Liste Kompl erstellt am: " + daten.filmList.genDate());
+            PLog.userLog("  Anzahl Filme: " + daten.filmList.size());
         }
 
         if (event.isFehler()) {
-            SysMsg.sysMsg("");
-            SysMsg.sysMsg("Filmliste laden war fehlerhaft, alte Liste wird wieder geladen");
+            PLog.userLog("");
+            PLog.userLog("Filmliste laden war fehlerhaft, alte Liste wird wieder geladen");
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));
 
             // dann die alte Liste wieder laden
@@ -209,14 +207,14 @@ public class LoadFilmList {
             setStop(false);
             new ReadFilmlist().readFilmListe(ProgInfos.getFilmListFile(),
                     daten.filmList, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
-            SysMsg.sysMsg("");
+            PLog.userLog("");
         } else {
             new ProgSave().filmlisteSpeichern();
         }
-        SysMsg.sysMsg("");
-        SysMsg.sysMsg("Jetzige Liste erstellt am: " + daten.filmList.genDate());
-        SysMsg.sysMsg("  Anzahl Filme: " + daten.filmList.size());
-        SysMsg.sysMsg("");
+        PLog.userLog("");
+        PLog.userLog("Jetzige Liste erstellt am: " + daten.filmList.genDate());
+        PLog.userLog("  Anzahl Filme: " + daten.filmList.size());
+        PLog.userLog("");
 
         afterFilmlistLoad();
 
@@ -238,7 +236,7 @@ public class LoadFilmList {
 
             });
         } catch (final Exception ex) {
-            Log.errorLog(765213654, ex);
+            PLog.errorLog(765213654, ex);
         }
     }
 
@@ -251,7 +249,7 @@ public class LoadFilmList {
 
             });
         } catch (final Exception ex) {
-            Log.errorLog(201020369, ex);
+            PLog.errorLog(201020369, ex);
         }
     }
 
@@ -270,7 +268,7 @@ public class LoadFilmList {
             });
 
         } catch (final Exception ex) {
-            Log.errorLog(912045120, ex);
+            PLog.errorLog(912045120, ex);
         }
     }
 

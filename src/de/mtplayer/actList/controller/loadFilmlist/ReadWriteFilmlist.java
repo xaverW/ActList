@@ -30,7 +30,7 @@ import de.mtplayer.mLib.tools.InputStreamProgressMonitor;
 import de.mtplayer.mLib.tools.MLAlert;
 import de.mtplayer.mLib.tools.MLHttpClient;
 import de.mtplayer.mLib.tools.ProgressMonitorInputStream;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -65,7 +65,7 @@ public class ReadWriteFilmlist {
         this.dest = dest;
 
         if (dest.isEmpty()) {
-            Log.sysLog("Ziel ist kein Verzeichnis!");
+            PLog.sysLog("Ziel ist kein Verzeichnis!");
             return false;
         }
 
@@ -76,7 +76,7 @@ public class ReadWriteFilmlist {
         }
 
         if (!destDir.isDirectory()) {
-            Log.sysLog("Ziel ist kein Verzeichnis!");
+            PLog.sysLog("Ziel ist kein Verzeichnis!");
             new MLAlert().showErrorAlert("Filmliste speichern", "Das Zielverzeichnis der Filmliste " +
                     "existiert nicht und lässt sich auch nicht anlegen.");
             return false;
@@ -93,7 +93,7 @@ public class ReadWriteFilmlist {
     private void readWrite(String source, final FilmList filmList, int days) {
 
         try {
-            Log.sysLog("Liste Filme lesen von: " + source);
+            PLog.userLog("Liste Filme lesen von: " + source);
             filmList.clear();
 
             countFoundFilms = 0;
@@ -112,7 +112,7 @@ public class ReadWriteFilmlist {
             processFromWeb(new URL(source), filmList);
 
             if (Daten.getInstance().loadFilmList.getStop()) {
-                Log.sysLog("Filme lesen --> Abbruch");
+                PLog.userLog("Filme lesen --> Abbruch");
                 filmList.clear();
             }
         } catch (final MalformedURLException ex) {
@@ -120,7 +120,7 @@ public class ReadWriteFilmlist {
         }
 
         notifyFertig(source, filmList, max);
-        Log.sysLog("Filme lesen --> fertig");
+        PLog.userLog("Filme lesen --> fertig");
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {
@@ -231,8 +231,8 @@ public class ReadWriteFilmlist {
 
 
     private void startWrite(JsonGenerator jg, FilmList filmList) throws IOException {
-        Log.sysLog("Filme schreiben (" + filmList.size() + " Filme) :");
-        Log.sysLog("   --> Start Schreiben nach: " + dest);
+        PLog.sysLog("Filme schreiben (" + filmList.size() + " Filme) :");
+        PLog.sysLog("   --> Start Schreiben nach: " + dest);
         jg.writeStartObject();
         // Infos zur Filmliste
         jg.writeArrayFieldStart(FilmListXml.FILMLISTE);
@@ -250,7 +250,7 @@ public class ReadWriteFilmlist {
 
     private void endWrite(JsonGenerator jg) throws IOException {
         jg.writeEndObject();
-        Log.sysLog("   --> geschrieben!");
+        PLog.sysLog("   --> geschrieben!");
 
     }
 
@@ -296,7 +296,7 @@ public class ReadWriteFilmlist {
                 }
             }
         } catch (final Exception ex) {
-            Log.errorLog(945123641, ex, "FilmListe: " + source);
+            PLog.errorLog(945123641, ex, "FilmListe: " + source);
             Platform.runLater(() -> new MLAlert().showErrorAlert("Filmliste speichern",
                     "Die Filmliste konnte nicht geladen werden: \n\n" +
                             ex.getMessage()));
@@ -313,7 +313,7 @@ public class ReadWriteFilmlist {
                 }
             }
         } catch (final Exception ex) {
-            Log.errorLog(495623014, ex);
+            PLog.errorLog(495623014, ex);
         }
         return true;
     }
@@ -336,9 +336,9 @@ public class ReadWriteFilmlist {
     }
 
     private void notifyFertig(String url, FilmList liste, int max) {
-        Log.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
-        Log.sysLog("  erstellt am: " + liste.genDate());
-        Log.sysLog("  Anzahl Filme: " + liste.size());
+        PLog.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
+        PLog.sysLog("  erstellt am: " + liste.genDate());
+        PLog.sysLog("  Anzahl Filme: " + liste.size());
         for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
             l.fertig(new ListenerFilmListLoadEvent(url, "", max, progress, countFoundFilms, false));
         }

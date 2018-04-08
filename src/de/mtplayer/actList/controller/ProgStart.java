@@ -23,9 +23,8 @@ import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.actList.controller.loadFilmlist.ReadFilmlist;
 import de.mtplayer.mLib.MLInit;
 import de.mtplayer.mLib.tools.StringFormatters;
-import de.p2tools.p2Lib.tools.Duration;
-import de.p2tools.p2Lib.tools.Log;
-import de.p2tools.p2Lib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PLog;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,13 +46,13 @@ public class ProgStart {
     }
 
     public static void startMeldungen() {
-        Log.versionMsg(Const.PROGRAMMNAME);
-        SysMsg.sysMsg("Programmpfad: " + ProgInfos.getPathJar());
-        SysMsg.sysMsg("Verzeichnis Einstellungen: " + ProgInfos.getSettingsDirectory_String());
-        SysMsg.sysMsg("");
-        SysMsg.sysMsg(Log.LILNE);
-        SysMsg.sysMsg("");
-        SysMsg.sysMsg("");
+        PLog.versionMsg(Const.PROGRAMMNAME);
+        PLog.sysLog("Programmpfad: " + ProgInfos.getPathJar());
+        PLog.sysLog("Verzeichnis Einstellungen: " + ProgInfos.getSettingsDirectory_String());
+        PLog.sysLog("");
+        PLog.sysLog(PLog.LILNE1);
+        PLog.sysLog("");
+        PLog.sysLog("");
     }
 
     private class loadFilmlistProgStart_ implements Runnable {
@@ -67,12 +66,12 @@ public class ProgStart {
             new ReadFilmlist().readFilmListe(ProgInfos.getFilmListFile(),
                     daten.filmList, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
 
-            SysMsg.sysMsg("Liste Filme gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            SysMsg.sysMsg("  erstellt am: " + daten.filmList.genDate());
-            SysMsg.sysMsg("  Anzahl Filme: " + daten.filmList.size());
+            PLog.userLog("Liste Filme gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
+            PLog.userLog("  erstellt am: " + daten.filmList.genDate());
+            PLog.userLog("  Anzahl Filme: " + daten.filmList.size());
 
 //            if (daten.filmList.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
-//                SysMsg.sysMsg("Filmliste zu alt, neue Filmliste laden");
+//                PLog.sysLog("Filmliste zu alt, neue Filmliste laden");
 //                daten.loadFilmList.loadFilmlist("", false);
 //
 //            } else {
@@ -93,12 +92,12 @@ public class ProgStart {
      */
     public boolean allesLaden() {
         if (!load()) {
-            SysMsg.sysMsg("Weder Konfig noch Backup konnte geladen werden!");
+            PLog.sysLog("Weder Konfig noch Backup konnte geladen werden!");
             // teils geladene Reste entfernen
             clearKonfig();
             return false;
         }
-        SysMsg.sysMsg("Konfig wurde gelesen!");
+        PLog.sysLog("Konfig wurde gelesen!");
         MLInit.initLib(Daten.debug, Const.PROGRAMMNAME, ProgInfos.getUserAgent());
         return true;
     }
@@ -119,11 +118,11 @@ public class ProgStart {
                     return true;
                 } else {
                     // dann hat das Laden nicht geklappt
-                    SysMsg.sysMsg("Konfig konnte nicht gelesen werden!");
+                    PLog.sysLog("Konfig konnte nicht gelesen werden!");
                 }
             } else {
                 // dann hat das Laden nicht geklappt
-                SysMsg.sysMsg("Konfig existiert nicht!");
+                PLog.sysLog("Konfig existiert nicht!");
             }
         } catch (final Exception ex) {
             ex.printStackTrace();

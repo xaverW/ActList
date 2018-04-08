@@ -21,8 +21,8 @@ import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.loadFilmlist.FilmlistUrlData;
 import de.mtplayer.mLib.tools.MLConfigs;
-import de.p2tools.p2Lib.tools.Duration;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PLog;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -85,7 +85,7 @@ public class IoXmlLesen implements AutoCloseable {
                 ret = true;
             } catch (final Exception ex) {
                 ret = false;
-                Log.errorLog(392840096, ex);
+                PLog.errorLog(392840096, ex);
             } finally {
                 try {
                     if (parser != null) {
@@ -132,7 +132,7 @@ public class IoXmlLesen implements AutoCloseable {
             }
         } catch (final Exception ex) {
             ret = false;
-            Log.errorLog(739530149, ex);
+            PLog.errorLog(739530149, ex);
         }
         return ret;
     }
@@ -158,7 +158,7 @@ public class IoXmlLesen implements AutoCloseable {
             }
         } catch (final Exception ex) {
             ret = false;
-            Log.errorLog(945120369, ex);
+            PLog.errorLog(945120369, ex);
         }
         return ret;
     }

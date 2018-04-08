@@ -21,7 +21,7 @@ import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.actList.gui.tools.HelpText;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -74,7 +74,7 @@ public class UrlPaneController extends AnchorPane {
         btnGetUrls.setOnAction(event -> {
             daten.loadFilmList.updateDownloadUrlsFilmlisten();
             ArrayList<String> al = daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls();
-            Log.sysLog(al.size() + " URL’s eingetragen");
+            PLog.sysLog(al.size() + " URL’s eingetragen");
             lv.getItems().clear();
             lv.getItems().addAll(al);
         });

@@ -18,7 +18,7 @@ package de.mtplayer.actList.controller.data.film;
 
 import de.mtplayer.mLib.tools.FilmDate;
 import de.mtplayer.mLib.tools.MDate;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.PLog;
 
 public class FilmProps extends FilmXml {
 
@@ -69,7 +69,7 @@ public class FilmProps extends FilmXml {
                 inFuture = false;
             }
         } catch (final Exception ex) {
-            Log.errorLog(915236478, ex);
+            PLog.errorLog(915236478, ex);
             inFuture = false;
         }
     }

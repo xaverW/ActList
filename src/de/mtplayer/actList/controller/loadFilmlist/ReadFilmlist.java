@@ -29,7 +29,7 @@ import de.mtplayer.actList.controller.data.film.FilmXml;
 import de.mtplayer.mLib.tools.InputStreamProgressMonitor;
 import de.mtplayer.mLib.tools.MLHttpClient;
 import de.mtplayer.mLib.tools.ProgressMonitorInputStream;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.PLog;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -60,7 +60,7 @@ public class ReadFilmlist {
 
     public void readFilmListe(String source, final FilmList filmList, int days) {
         try {
-            Log.sysLog("Filme lesen von: " + source);
+            PLog.sysLog("Filme lesen von: " + source);
             filmList.clear();
             notifyStart(source, max); // für die Progressanzeige
 
@@ -73,7 +73,7 @@ public class ReadFilmlist {
             }
 
             if (Daten.getInstance().loadFilmList.getStop()) {
-                Log.sysLog("Filme lesen --> Abbruch");
+                PLog.sysLog("Filme lesen --> Abbruch");
                 filmList.clear();
             }
         } catch (final MalformedURLException ex) {
@@ -81,7 +81,7 @@ public class ReadFilmlist {
         }
 
         notifyFertig(source, filmList, max);
-        Log.sysLog("Filme lesen --> fertig");
+        PLog.sysLog("Filme lesen --> fertig");
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {
@@ -173,10 +173,10 @@ public class ReadFilmlist {
              JsonParser jp = new JsonFactory().createParser(in)) {
             readData(jp, filmList);
         } catch (final FileNotFoundException ex) {
-            Log.errorLog(894512369, "FilmListe existiert nicht: " + source);
+            PLog.errorLog(894512369, "FilmListe existiert nicht: " + source);
             filmList.clear();
         } catch (final Exception ex) {
-            Log.errorLog(945123641, ex, "FilmListe: " + source);
+            PLog.errorLog(945123641, ex, "FilmListe: " + source);
             filmList.clear();
         }
     }
@@ -224,7 +224,7 @@ public class ReadFilmlist {
                 }
             }
         } catch (final Exception ex) {
-            Log.errorLog(945123641, ex, "FilmListe: " + source);
+            PLog.errorLog(945123641, ex, "FilmListe: " + source);
             filmList.clear();
         }
     }
@@ -238,7 +238,7 @@ public class ReadFilmlist {
                 }
             }
         } catch (final Exception ex) {
-            Log.errorLog(495623014, ex);
+            PLog.errorLog(495623014, ex);
         }
         return true;
     }
@@ -261,9 +261,9 @@ public class ReadFilmlist {
     }
 
     private void notifyFertig(String url, FilmList liste, int max) {
-        Log.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
-        Log.sysLog("  erstellt am: " + liste.genDate());
-        Log.sysLog("  Anzahl Filme: " + liste.size());
+        PLog.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
+        PLog.sysLog("  erstellt am: " + liste.genDate());
+        PLog.sysLog("  Anzahl Filme: " + liste.size());
         for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
             l.fertig(new ListenerFilmListLoadEvent(url, "", max, progress, 0, false));
         }

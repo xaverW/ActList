@@ -19,8 +19,7 @@ import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.mLib.tools.SystemInfo;
-import de.p2tools.p2Lib.tools.Log;
-import de.p2tools.p2Lib.tools.SysMsg;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -128,7 +127,7 @@ public class Main {
                 case ProgramArguments.STARTUPMODE_VERBOSE:
                     EventQueue.invokeLater(() -> {
                         ProgStart.startMeldungen();
-                        Log.endMsg();
+                        PLog.endMsg();
                         System.exit(0);
                     });
                     break;
@@ -153,15 +152,15 @@ public class Main {
                         return authenticator;
                     }
                 });
-                SysMsg.sysMsg(String.format(LOG_TEXT_PROXY_AUTHENTICATION_SUCESSFUL, prxUser));
+                PLog.sysLog(String.format(LOG_TEXT_PROXY_AUTHENTICATION_SUCESSFUL, prxUser));
             } else if (prxUser != null && prxPassword == null) {
-                SysMsg.sysMsg(LOG_TEXT_PROXY_PASSWORD_NOT_SET);
+                PLog.sysLog(LOG_TEXT_PROXY_PASSWORD_NOT_SET);
             } else {
-                SysMsg.sysMsg(LOG_TEXT_PROXY_AUTHENTICATION_NOT_CONFIGURED);
+                PLog.sysLog(LOG_TEXT_PROXY_AUTHENTICATION_NOT_CONFIGURED);
             }
 
         } catch (final SecurityException se) {
-            SysMsg.sysMsg(LOG_TEXT_PROXY_AUTHENTICATION_CANNOT_ACCESS_PROXY_USER_PROXY_PW + se.toString());
+            PLog.sysLog(LOG_TEXT_PROXY_AUTHENTICATION_CANNOT_ACCESS_PROXY_USER_PROXY_PW + se.toString());
         }
     }
 }

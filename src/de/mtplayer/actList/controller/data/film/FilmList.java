@@ -17,8 +17,8 @@
 package de.mtplayer.actList.controller.data.film;
 
 import de.mtplayer.actList.controller.config.Const;
-import de.p2tools.p2Lib.tools.Duration;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -247,7 +247,7 @@ public class FilmList extends SimpleListProperty<Film> {
     public boolean isOlderThan(int sekunden) {
         final int ret = getAge();
         if (ret != 0) {
-            Log.sysLog("Die Filmliste ist " + ret / 60 + " Minuten alt");
+            PLog.sysLog("Die Filmliste ist " + ret / 60 + " Minuten alt");
         }
         return ret > sekunden;
     }

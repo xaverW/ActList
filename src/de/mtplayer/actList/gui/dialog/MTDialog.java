@@ -20,7 +20,7 @@ import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.gui.tools.GuiSize;
 import de.mtplayer.mLib.tools.MLConfigs;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
@@ -140,7 +140,7 @@ public class MTDialog {
             }
 
         } catch (final Exception exc) {
-            Log.errorLog(152030145, exc);
+            PLog.errorLog(152030145, exc);
         }
     }
 

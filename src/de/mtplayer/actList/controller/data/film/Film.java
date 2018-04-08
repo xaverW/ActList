@@ -18,7 +18,7 @@ package de.mtplayer.actList.controller.data.film;
 
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.mLib.tools.FilmDate;
-import de.p2tools.p2Lib.tools.Log;
+import de.p2tools.p2Lib.tools.log.PLog;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -94,21 +94,21 @@ public class Film extends FilmProps {
                 final String online = "/online/";
                 url = uurl.substring(uurl.indexOf(online) + online.length());
                 if (!url.contains("/")) {
-                    Log.errorLog(915230478, "Url: " + uurl);
+                    PLog.errorLog(915230478, "Url: " + uurl);
                     return "";
                 }
                 url = url.substring(url.indexOf('/') + 1);
                 if (!url.contains("/")) {
-                    Log.errorLog(915230478, "Url: " + uurl);
+                    PLog.errorLog(915230478, "Url: " + uurl);
                     return "";
                 }
                 url = url.substring(url.indexOf('/') + 1);
                 if (url.isEmpty()) {
-                    Log.errorLog(915230478, "Url: " + uurl);
+                    PLog.errorLog(915230478, "Url: " + uurl);
                     return "";
                 }
             } catch (final Exception ex) {
-                Log.errorLog(915230478, ex, "Url: " + uurl);
+                PLog.errorLog(915230478, ex, "Url: " + uurl);
             }
             return Const.ORF + "----" + url;
         } else {
@@ -170,7 +170,7 @@ public class Film extends FilmProps {
             }
         } catch (final Exception ex) {
             dauerL = 0;
-            Log.errorLog(468912049, "Dauer: " + arr[FILM_DAUER]);
+            PLog.errorLog(468912049, "Dauer: " + arr[FILM_DAUER]);
         }
     }
 
@@ -190,7 +190,7 @@ public class Film extends FilmProps {
                     filmDate = new FilmDate(l * 1000 /* sind SEKUNDEN!! */);
                 }
             } catch (final Exception ex) {
-                Log.errorLog(915236701, ex, new String[]{"Datum: " + arr[FILM_DATUM], "Zeit: " + arr[FILM_ZEIT]});
+                PLog.errorLog(915236701, ex, new String[]{"Datum: " + arr[FILM_DATUM], "Zeit: " + arr[FILM_ZEIT]});
                 filmDate = new FilmDate(0);
                 arr[FILM_DATUM] = "";
                 arr[FILM_ZEIT] = "";
