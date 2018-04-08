@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipInputStream;
@@ -261,12 +262,16 @@ public class ReadFilmlist {
     }
 
     private void notifyFertig(String url, FilmList liste, int max) {
-        PLog.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
-        PLog.sysLog("  erstellt am: " + liste.genDate());
-        PLog.sysLog("  Anzahl Filme: " + liste.size());
+        ArrayList<String> list = new ArrayList<>();
+        list.add(PLog.LILNE3);
+        list.add("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
+        list.add("  erstellt am: " + liste.genDate());
+        list.add("  Anzahl Filme: " + liste.size());
         for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
             l.fertig(new ListenerFilmListLoadEvent(url, "", max, progress, 0, false));
         }
+        list.add(PLog.LILNE3);
+        PLog.sysLog(list);
     }
 
 }

@@ -91,9 +91,9 @@ public class ReadWriteFilmlist {
     }
 
     private void readWrite(String source, final FilmList filmList, int days) {
-
+        ArrayList<String> list = new ArrayList<>();
         try {
-            PLog.userLog("Liste Filme lesen von: " + source);
+            list.add("Liste Filme lesen von: " + source);
             filmList.clear();
 
             countFoundFilms = 0;
@@ -112,7 +112,7 @@ public class ReadWriteFilmlist {
             processFromWeb(new URL(source), filmList);
 
             if (Daten.getInstance().loadFilmList.getStop()) {
-                PLog.userLog("Filme lesen --> Abbruch");
+                list.add("Filme lesen --> Abbruch");
                 filmList.clear();
             }
         } catch (final MalformedURLException ex) {
@@ -120,7 +120,8 @@ public class ReadWriteFilmlist {
         }
 
         notifyFertig(source, filmList, max);
-        PLog.userLog("Filme lesen --> fertig");
+        list.add("Filme lesen --> fertig");
+        PLog.userLog(list);
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {
@@ -135,7 +136,6 @@ public class ReadWriteFilmlist {
     }
 
     private void readData(JsonParser jp, JsonGenerator jg, FilmList filmList) throws IOException {
-        System.out.println("Start read");
         JsonToken jsonToken;
         String sender = "", thema = "";
         final Film film = new Film();
@@ -336,12 +336,16 @@ public class ReadWriteFilmlist {
     }
 
     private void notifyFertig(String url, FilmList liste, int max) {
-        PLog.sysLog("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
-        PLog.sysLog("  erstellt am: " + liste.genDate());
-        PLog.sysLog("  Anzahl Filme: " + liste.size());
+        ArrayList<String> list = new ArrayList<>();
+        list.add(PLog.LILNE3);
+        list.add("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
+        list.add("  erstellt am: " + liste.genDate());
+        list.add("  Anzahl Filme: " + liste.size());
         for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
             l.fertig(new ListenerFilmListLoadEvent(url, "", max, progress, countFoundFilms, false));
         }
+        list.add(PLog.LILNE3);
+        PLog.sysLog(list);
     }
 
 
