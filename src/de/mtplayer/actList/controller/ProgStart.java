@@ -25,6 +25,7 @@ import de.mtplayer.mLib.MLInit;
 import de.mtplayer.mLib.tools.StringFormatters;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
+import de.p2tools.p2Lib.tools.log.PLogger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,18 +48,13 @@ public class ProgStart {
     }
 
     public static void startMeldungen() {
-        PLog.versionMsg(Const.PROGRAMMNAME);
 
         ArrayList<String> list = new ArrayList<>();
-        list.add(PLog.LILNE2);
         list.add("Verzeichnisse:");
         list.add("Programmpfad: " + ProgInfos.getPathJar());
         list.add("Verzeichnis Einstellungen: " + ProgInfos.getSettingsDirectory_String());
-        list.add(PLog.LILNE2);
 
-        PLog.emptyLine();
-        PLog.userLog(list);
-        PLog.emptyLine();
+        PLog.versionMsg(Const.PROGRAMMNAME, list);
     }
 
     private class loadFilmlistProgStart_ implements Runnable {
@@ -101,7 +97,10 @@ public class ProgStart {
      * @return
      */
     public boolean allesLaden() {
-        if (!load()) {
+        boolean load = load();
+        PLogger.setFileHandler(ProgInfos.getLogDirectory_String());
+
+        if (!load) {
             PLog.sysLog("Weder Konfig noch Backup konnte geladen werden!");
             // teils geladene Reste entfernen
             clearKonfig();

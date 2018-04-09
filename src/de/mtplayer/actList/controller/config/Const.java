@@ -42,6 +42,7 @@ public class Const {
     public static final String VERZEICHNIS_SENDER_ICONS = "Icons/Sender"; // Unterverzeichnis im Programmverzeichnis
     public static final String VERZEICHNIS_EINSTELLUNGEN = ".actlist"; // im Homeverzeichnis
     public static final String JSON_DATEI_FILME = "filme.json";
+    public static final String LOG_DIR = "Log";
 
     public static final String XML_START = "Mediathek";
 

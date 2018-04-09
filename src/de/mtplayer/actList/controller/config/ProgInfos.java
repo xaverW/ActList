@@ -119,6 +119,16 @@ public class ProgInfos {
         return getSettingsDirectory().toString();
     }
 
+    public static String getLogDirectory_String() {
+        final String logDir;
+        if (Config.SYSTEM_LOG_DIR.get().isEmpty()) {
+            logDir = Paths.get(getSettingsDirectory_String(), Const.LOG_DIR).toString();
+        } else {
+            logDir = Config.SYSTEM_LOG_DIR.get();
+        }
+        return logDir;
+    }
+
     public static String getDirectory_mtplayer_mv() {
         final Path baseDirMtplayer = Paths.get(System.getProperty("user.home"), Const.DIR_MTPLAYER);
         final Path baseDirMV = Paths.get(System.getProperty("user.home"), Const.DIR_MEDIATHEKVIEW);
