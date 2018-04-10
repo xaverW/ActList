@@ -47,7 +47,7 @@ public class IoXmlSchreiben implements AutoCloseable {
 
     public synchronized void datenSchreiben() {
         xmlFilePath = new ProgInfos().getXmlFilePath();
-        PLog.userLog("Daten Schreiben nach: " + xmlFilePath.toString());
+        PLog.sysLog("Daten Schreiben nach: " + xmlFilePath.toString());
         xmlDatenSchreiben();
     }
 
@@ -74,7 +74,7 @@ public class IoXmlSchreiben implements AutoCloseable {
     }
 
     private void xmlSchreibenStart() throws IOException, XMLStreamException {
-        PLog.userLog("Start Schreiben nach: " + xmlFilePath.toAbsolutePath());
+        PLog.sysLog("Start Schreiben nach: " + xmlFilePath.toAbsolutePath());
         os = Files.newOutputStream(xmlFilePath);
         out = new OutputStreamWriter(os, StandardCharsets.UTF_8);
 
@@ -166,7 +166,7 @@ public class IoXmlSchreiben implements AutoCloseable {
         writer.writeEndDocument();
         writer.flush();
 
-        PLog.userLog("geschrieben!");
+        PLog.sysLog("geschrieben!");
     }
 
     @Override

@@ -24,6 +24,7 @@ import de.mtplayer.actList.controller.loadFilmlist.ReadFilmlist;
 import de.mtplayer.mLib.MLInit;
 import de.mtplayer.mLib.tools.StringFormatters;
 import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.LogMsg;
 import de.p2tools.p2Lib.tools.log.PLog;
 import de.p2tools.p2Lib.tools.log.PLogger;
 
@@ -54,7 +55,7 @@ public class ProgStart {
         list.add("Programmpfad: " + ProgInfos.getPathJar());
         list.add("Verzeichnis Einstellungen: " + ProgInfos.getSettingsDirectory_String());
 
-        PLog.versionMsg(Const.PROGRAMMNAME, list);
+        LogMsg.startMsg(Const.PROGRAMMNAME, list);
     }
 
     private class loadFilmlistProgStart_ implements Runnable {
@@ -74,7 +75,7 @@ public class ProgStart {
             list.add("  erstellt am: " + daten.filmList.genDate());
             list.add("  Anzahl Filme: " + daten.filmList.size());
             list.add(PLog.LILNE3);
-            PLog.userLog(list);
+            PLog.sysLog(list);
 
 //            if (daten.filmList.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
 //                PLog.sysLog("Filmliste zu alt, neue Filmliste laden");
@@ -98,7 +99,9 @@ public class ProgStart {
      */
     public boolean allesLaden() {
         boolean load = load();
-        PLogger.setFileHandler(ProgInfos.getLogDirectory_String());
+        if (Daten.debug) {
+            PLogger.setFileHandler(ProgInfos.getLogDirectory_String());
+        }
 
         if (!load) {
             PLog.sysLog("Weder Konfig noch Backup konnte geladen werden!");

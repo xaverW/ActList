@@ -121,7 +121,7 @@ public class ReadWriteFilmlist {
 
         notifyFertig(source, filmList, max);
         list.add("Filme lesen --> fertig");
-        PLog.userLog(list);
+        PLog.sysLog(list);
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {

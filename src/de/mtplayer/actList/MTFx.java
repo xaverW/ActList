@@ -49,11 +49,9 @@ public class MTFx extends Application {
     private static final int ICON_HEIGHT = 58;
 
     private static final String LOG_TEXT_PROGRAMMSTART = "***Programmstart***";
-    private static final String LOG_TEXT_ERSTER_START = "Erster Start";
     private static final String ARGUMENT_PREFIX = "-";
     private static final String TITLE_TEXT_PROGRAMMVERSION_IST_AKTUELL = "Programmversion ist aktuell";
     private static final String TITLE_TEXT_EIN_PROGRAMMUPDATE_IST_VERFUEGBAR = "Ein Programmupdate ist verfügbar";
-    private static final String LOG_TEXT_CHECK_UPDATE = "CheckUpdate";
 
     protected Daten daten;
     ProgStart progStart;
