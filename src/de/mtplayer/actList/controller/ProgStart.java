@@ -48,7 +48,7 @@ public class ProgStart {
         new Thread(new loadFilmlistProgStart_()).start();
     }
 
-    public static void startMeldungen() {
+    public static void startMsg() {
 
         ArrayList<String> list = new ArrayList<>();
         list.add("Verzeichnisse:");

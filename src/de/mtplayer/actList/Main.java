@@ -15,11 +15,9 @@
  */
 package de.mtplayer.actList;
 
-import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.mLib.tools.SystemInfo;
-import de.p2tools.p2Lib.tools.log.LogMsg;
+import de.p2tools.p2Lib.tools.log.PLog;
 import de.p2tools.p2Lib.tools.net.Proxy;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -27,11 +25,6 @@ import javafx.application.Platform;
 import java.awt.*;
 
 public class Main {
-
-    private final class ProgramArguments {
-        private static final String STARTUPMODE_DEBUG = "-d";
-        private static final String STARTUPMODE_VERBOSE = "-v";
-    }
 
     private static final String JAVAFX_CLASSNAME_APPLICATION_PLATFORM = "javafx.application.Platform";
     private static final String X11_AWT_APP_CLASS_NAME = "awtAppClassName";
@@ -45,14 +38,12 @@ public class Main {
      */
     private static boolean hasJavaFx() {
         try {
+
             Class.forName(JAVAFX_CLASSNAME_APPLICATION_PLATFORM);
             return true;
 
         } catch (final ClassNotFoundException e) {
-            System.out.println(TEXT_LINE);
-            System.out.printf(ERROR_NO_JAVAFX_INSTALLED);
-            System.out.println(TEXT_LINE);
-
+            PLog.errorLog(736980145, new String[]{TEXT_LINE, ERROR_NO_JAVAFX_INSTALLED, TEXT_LINE});
             return false;
         }
     }
@@ -78,11 +69,9 @@ public class Main {
         if (hasJavaFx()) {
 
             Proxy.proxyAuthentication();
-
-            if (args != null) {
-                processArgs(args);
-            }
+            new AppParameter().processArgs(args);
             startGuiFxMode(args);
+
         }
     }
 
@@ -95,7 +84,7 @@ public class Main {
             setupX11WindowManagerClassName();
         }
 
-        Application.launch(MTFx.class, args);
+        Application.launch(ActList.class, args);
     }
 
     /**
@@ -113,23 +102,4 @@ public class Main {
         }
     }
 
-    private void processArgs(final String... aArguments) {
-        for (String argument : aArguments) {
-            argument = argument.toLowerCase();
-            switch (argument) {
-                case ProgramArguments.STARTUPMODE_VERBOSE:
-                    EventQueue.invokeLater(() -> {
-                        ProgStart.startMeldungen();
-                        LogMsg.endMsg();
-                        System.exit(0);
-                    });
-                    break;
-
-                case ProgramArguments.STARTUPMODE_DEBUG:
-                    Daten.debug = true;
-                    break;
-
-            }
-        }
-    }
 }

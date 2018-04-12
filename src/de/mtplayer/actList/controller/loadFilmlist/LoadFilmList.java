@@ -125,25 +125,10 @@ public class LoadFilmList {
     }
 
     public void afterFilmlistLoad() {
-//        notifyProgress(new ListenerFilmListLoadEvent("", "doppelte URLs suchen",
-//                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-//        PLog.sysLog("doppelte URLs suchen");
-
-
         notifyProgress(new ListenerFilmListLoadEvent("", "Themen suchen",
                 (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
         PLog.sysLog("Themen suchen");
         daten.filmList.themenLaden();
-
-
-//        notifyProgress(new ListenerFilmListLoadEvent("", "Blacklist filtern",
-//                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-//        PLog.sysLog("Blacklist filtern");
-
-
-//        notifyProgress(new ListenerFilmListLoadEvent("", "Filme in Downloads eintragen",
-//                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
-//        PLog.sysLog("Filme in Downloads eintragen");
     }
 
     // #######################################

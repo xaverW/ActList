@@ -20,7 +20,7 @@ public class Const {
 
     public static final String PROGRAMMNAME = "ActList";
     public static final String CONFIG_FILE = "mtplayer.xml";
-    public static final String CSS_FILE = "/de/mtplayer/actList/mtfx.css";
+    public static final String CSS_FILE = "/de/mtplayer/actList/actList.css";
 
     public static final String FORMAT_ZIP = ".zip";
     public static final String FORMAT_XZ = ".xz";

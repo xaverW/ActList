@@ -17,7 +17,7 @@
 
 package de.mtplayer.actList.controller.config;
 
-import de.mtplayer.actList.MTFxController;
+import de.mtplayer.actList.ActListController;
 import de.mtplayer.actList.controller.data.film.FilmList;
 import de.mtplayer.actList.controller.loadFilmlist.LoadFilmList;
 import de.mtplayer.actList.gui.tools.Listener;
@@ -36,14 +36,14 @@ public class Daten {
     public static boolean debug = false; // Debugmodus
 
     // Infos
-    public static String configDir; // Verzeichnis zum Speichern der Programmeinstellungen
+    public static String configDir = ""; // Verzeichnis zum Speichern der Programmeinstellungen
 
     // zentrale Klassen
     public LoadFilmList loadFilmList; // erledigt das updaten der Filmliste
 
     // Gui
     public Stage primaryStage = null;
-    public MTFxController mtFxController = null;
+    public ActListController actListController = null;
 
     // Programmdaten
     public FilmList filmList = null; // ist die komplette Filmliste
@@ -61,7 +61,9 @@ public class Daten {
     }
 
     public static final Daten getInstance(String dir) {
-        configDir = dir;
+        if (!dir.isEmpty()) {
+            configDir = dir;
+        }
         return getInstance();
     }
 

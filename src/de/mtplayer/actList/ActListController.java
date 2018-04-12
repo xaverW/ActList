@@ -27,7 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.MaskerPane;
 
-public class MTFxController extends StackPane {
+public class ActListController extends StackPane {
 
     BorderPane borderPane = new BorderPane();
     StackPane stackPaneCont = new StackPane();
@@ -38,7 +38,7 @@ public class MTFxController extends StackPane {
     private final Daten daten;
 
 
-    public MTFxController() {
+    public ActListController() {
         daten = Daten.getInstance();
         init();
     }

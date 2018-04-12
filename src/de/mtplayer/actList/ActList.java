@@ -28,28 +28,21 @@ import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.actList.res.GetIcon;
 import de.mtplayer.mLib.tools.Functions;
 import de.p2tools.p2Lib.tools.log.Duration;
-import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.util.List;
-
-public class MTFx extends Application {
+public class ActList extends Application {
 
     private Stage primaryStage;
-    private MTFxController root;
+    private ActListController root;
 
-    private static final String TEXT_LINE = "==========================================";
-    private static final String LOG_TEXT_STARTPARAMETER_PATTERN = "Startparameter: %s";
     private static final String ICON_NAME = "Icon.png";
     private static final String ICON_PATH = "/de/mtplayer/actList/res/";
     private static final int ICON_WIDTH = 58;
     private static final int ICON_HEIGHT = 58;
 
     private static final String LOG_TEXT_PROGRAMMSTART = "***Programmstart***";
-    private static final String ARGUMENT_PREFIX = "-";
     private static final String TITLE_TEXT_PROGRAMMVERSION_IST_AKTUELL = "Programmversion ist aktuell";
     private static final String TITLE_TEXT_EIN_PROGRAMMUPDATE_IST_VERFUEGBAR = "Ein Programmupdate ist verfügbar";
 
@@ -65,12 +58,8 @@ public class MTFx extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        final Parameters parameters = getParameters();
-        final List<String> rawArguments = parameters.getRaw();
-        final String pfad = readPfadFromArguments(rawArguments.toArray(new String[]{}));
-
         Duration.counterStart(LOG_TEXT_PROGRAMMSTART);
-        daten = Daten.getInstance(pfad);
+        daten = Daten.getInstance();
         daten.primaryStage = primaryStage;
         progStart = new ProgStart(daten);
 
@@ -81,8 +70,8 @@ public class MTFx extends Application {
 
     private void initRootLayout() {
         try {
-            root = new MTFxController();
-            daten.mtFxController = root;
+            root = new ActListController();
+            daten.actListController = root;
             scene = new Scene(root,
                     GuiSize.getWidth(Config.SYSTEM_GROESSE_GUI),
                     GuiSize.getHeight(Config.SYSTEM_GROESSE_GUI));
@@ -108,7 +97,7 @@ public class MTFx extends Application {
         Duration.counterStop(LOG_TEXT_PROGRAMMSTART);
         primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
 
-        progStart.startMeldungen();
+        progStart.startMsg();
 
         Duration.staticPing("Erster Start");
         setOrgTitel();
@@ -126,55 +115,20 @@ public class MTFx extends Application {
         progStart.allesLaden();
     }
 
-    private String readPfadFromArguments(final String[] aArguments) {
-        String pfad;
-        if (aArguments == null) {
-            pfad = "";
-        } else {
-            printArguments(aArguments);
-            if (aArguments.length > 0) {
-                if (!aArguments[0].startsWith(ARGUMENT_PREFIX)) {
-                    if (!aArguments[0].endsWith(File.separator)) {
-                        aArguments[0] += File.separator;
-                    }
-                    pfad = aArguments[0];
-                } else {
-                    pfad = "";
-                }
-            } else {
-                pfad = "";
-            }
-        }
-        return pfad;
-    }
-
-    private void printArguments(final String[] aArguments) {
-        if (aArguments.length == 0) {
-            return;
-        }
-        PLog.sysLog("");
-        PLog.sysLog(TEXT_LINE);
-        for (final String argument : aArguments) {
-            PLog.sysLog(String.format(LOG_TEXT_STARTPARAMETER_PATTERN, argument));
-        }
-        PLog.sysLog(TEXT_LINE);
-        PLog.sysLog("");
-    }
-
     private void addListener() {
-        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_ORG_TITEL, MTFx.class.getSimpleName()) {
+        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_ORG_TITEL, ActList.class.getSimpleName()) {
             @Override
             public void ping() {
                 setOrgTitel();
             }
         });
-        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_PROGRAMM_AKTUELL, MTFx.class.getSimpleName()) {
+        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_PROGRAMM_AKTUELL, ActList.class.getSimpleName()) {
             @Override
             public void ping() {
                 primaryStage.setTitle(TITLE_TEXT_PROGRAMMVERSION_IST_AKTUELL);
             }
         });
-        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_UPDATE_VERFUEGBAR, MTFx.class.getSimpleName()) {
+        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_UPDATE_VERFUEGBAR, ActList.class.getSimpleName()) {
             @Override
             public void ping() {
                 primaryStage.setTitle(TITLE_TEXT_EIN_PROGRAMMUPDATE_IST_VERFUEGBAR);
