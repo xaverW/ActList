@@ -17,40 +17,40 @@
 package de.mtplayer.actList.controller.loadFilmlist;
 
 import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.controller.data.film.FilmList;
+import de.mtplayer.actList.controller.data.film.Filmlist;
 import de.p2tools.p2Lib.tools.log.PLog;
 
 import javax.swing.event.EventListenerList;
 import java.util.ArrayList;
 
-public class ImportFilmList {
+public class ImportFilmlist {
 
     private final EventListenerList eventListenerList;
     private final ReadFilmlist readFilmlist;
-    public SearchFilmListUrls searchFilmListUrls;
+    public SearchFilmlistUrls searchFilmlistUrls;
 
-    public ImportFilmList() {
+    public ImportFilmlist() {
         eventListenerList = new EventListenerList();
         readFilmlist = new ReadFilmlist();
-        searchFilmListUrls = new SearchFilmListUrls();
-        readFilmlist.addAdListener(new ListenerFilmListLoad() {
+        searchFilmlistUrls = new SearchFilmlistUrls();
+        readFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public synchronized void start(ListenerFilmListLoadEvent event) {
-                for (final ListenerFilmListLoad l : eventListenerList.getListeners(ListenerFilmListLoad.class)) {
+            public synchronized void start(ListenerFilmlistLoadEvent event) {
+                for (final ListenerFilmlistLoad l : eventListenerList.getListeners(ListenerFilmlistLoad.class)) {
                     l.start(event);
                 }
             }
 
             @Override
-            public synchronized void progress(ListenerFilmListLoadEvent event) {
-                for (final ListenerFilmListLoad l : eventListenerList.getListeners(ListenerFilmListLoad.class)) {
+            public synchronized void progress(ListenerFilmlistLoadEvent event) {
+                for (final ListenerFilmlistLoad l : eventListenerList.getListeners(ListenerFilmlistLoad.class)) {
                     l.progress(event);
 
                 }
             }
 
             @Override
-            public synchronized void fertig(ListenerFilmListLoadEvent event) {
+            public synchronized void fertig(ListenerFilmlistLoadEvent event) {
             }
         });
     }
@@ -58,9 +58,9 @@ public class ImportFilmList {
     // #########################################################
     // Filmeliste importieren, URL automatisch wählen
     // #########################################################
-    public void filmImportAuto(FilmList filmList, FilmList filmListDiff, int days) {
-        Daten.getInstance().loadFilmList.setStop(false);
-        Thread th = new Thread(new FilmeImportierenAutoThread(filmList, filmListDiff, days));
+    public void filmImportAuto(Filmlist filmlist, Filmlist filmlistDiff, int days) {
+        Daten.getInstance().loadFilmlist.setStop(false);
+        Thread th = new Thread(new FilmeImportierenAutoThread(filmlist, filmlistDiff, days));
         th.setName("filmImportAuto");
         th.start();
     }
@@ -70,54 +70,54 @@ public class ImportFilmList {
     }
 
     private class FilmeImportierenAutoThread implements Runnable {
-        private final FilmList filmList;
-        private final FilmList filmListDiff;
+        private final Filmlist filmlist;
+        private final Filmlist filmlistDiff;
         private STATE state;
         private final int days;
 
-        public FilmeImportierenAutoThread(FilmList filmList, FilmList filmListDiff, int days) {
-            this.filmList = filmList;
-            this.filmListDiff = filmListDiff;
+        public FilmeImportierenAutoThread(Filmlist filmlist, Filmlist filmlistDiff, int days) {
+            this.filmlist = filmlist;
+            this.filmlistDiff = filmlistDiff;
             this.days = days;
         }
 
         @Override
         public void run() {
             boolean ret;
-            if (filmList.isTooOldForDiff()) {
+            if (filmlist.isTooOldForDiff()) {
                 // dann eine komplette Liste laden
                 state = STATE.AKT;
-                filmList.clear();
-                ret = searchActList(filmList);
+                filmlist.clear();
+                ret = searchActList(filmlist);
             } else {
                 // nur ein Update laden
                 state = STATE.DIFF;
-                ret = searchActList(filmListDiff);
-                if (!ret || filmListDiff.isEmpty()) {
+                ret = searchActList(filmlistDiff);
+                if (!ret || filmlistDiff.isEmpty()) {
                     // wenn diff, dann nochmal mit einer kompletten Liste versuchen
                     state = STATE.AKT;
-                    filmList.clear();
-                    filmListDiff.clear();
-                    ret = searchActList(filmList);
+                    filmlist.clear();
+                    filmlistDiff.clear();
+                    ret = searchActList(filmlist);
                 }
             }
-            if (!ret /* filmList ist schon wieder null -> "FilmeLaden" */) {
+            if (!ret /* filmlist ist schon wieder null -> "FilmeLaden" */) {
                 PLog.errorLog(951235497, "Es konnten keine Filme geladen werden!");
             }
             fertigMelden(ret);
         }
 
-        private boolean searchActList(FilmList liste) {
+        private boolean searchActList(Filmlist liste) {
             boolean ret = false;
             final ArrayList<String> versuchteUrls = new ArrayList<>();
             String updateUrl = "";
 
             switch (state) {
                 case AKT:
-                    updateUrl = searchFilmListUrls.suchenAkt(versuchteUrls);
+                    updateUrl = searchFilmlistUrls.suchenAkt(versuchteUrls);
                     break;
                 case DIFF:
-                    updateUrl = searchFilmListUrls.suchenDiff(versuchteUrls);
+                    updateUrl = searchFilmlistUrls.suchenDiff(versuchteUrls);
                     break;
             }
 
@@ -144,16 +144,16 @@ public class ImportFilmList {
                 switch (state) {
                     case AKT:
                         // nächste Adresse in der Liste wählen
-                        updateUrl = searchFilmListUrls.filmListUrlList_akt.getRand(versuchteUrls);
+                        updateUrl = searchFilmlistUrls.filmlistUrlList_akt.getRand(versuchteUrls);
                         break;
                     case DIFF:
                         // nächste Adresse in der Liste wählen
-                        updateUrl = searchFilmListUrls.filmListUrlList_diff.getRand(versuchteUrls);
+                        updateUrl = searchFilmlistUrls.filmlistUrlList_diff.getRand(versuchteUrls);
                         break;
                 }
                 versuchteUrls.add(updateUrl);
                 // nur wenn nicht abgebrochen, weitermachen
-                if (Daten.getInstance().loadFilmList.getStop()) {
+                if (Daten.getInstance().loadFilmlist.getStop()) {
                     break;
                 }
 
@@ -165,9 +165,9 @@ public class ImportFilmList {
     // #######################################
     // Filmeliste importieren, mit fester URL/Pfad
     // #######################################
-    public void filmImportFile(String pfad, FilmList filmList, int days) {
-        Daten.getInstance().loadFilmList.setStop(false);
-        Thread th = new Thread(new FilmeImportierenDateiThread(pfad, filmList, days));
+    public void filmImportFile(String pfad, Filmlist filmlist, int days) {
+        Daten.getInstance().loadFilmlist.setStop(false);
+        Thread th = new Thread(new FilmeImportierenDateiThread(pfad, filmlist, days));
         th.setName("filmImportFile");
         th.start();
 
@@ -176,38 +176,38 @@ public class ImportFilmList {
     private class FilmeImportierenDateiThread implements Runnable {
 
         private final String pfad;
-        private final FilmList filmList;
+        private final Filmlist filmlist;
         private final int days;
 
-        public FilmeImportierenDateiThread(String pfad, FilmList filmList, int days) {
+        public FilmeImportierenDateiThread(String pfad, Filmlist filmlist, int days) {
             this.pfad = pfad;
-            this.filmList = filmList;
+            this.filmlist = filmlist;
             this.days = days;
         }
 
         @Override
         public void run() {
-            fertigMelden(urlLaden(pfad, filmList, days));
+            fertigMelden(urlLaden(pfad, filmlist, days));
         }
     }
 
     // #######################################
     // #######################################
-    public void addAdListener(ListenerFilmListLoad listener) {
-        eventListenerList.add(ListenerFilmListLoad.class, listener);
+    public void addAdListener(ListenerFilmlistLoad listener) {
+        eventListenerList.add(ListenerFilmlistLoad.class, listener);
     }
 
     public void updateDownloadUrlsFilmlisten(boolean akt) {
-        searchFilmListUrls.updateURLsFilmlisten(akt);
+        searchFilmlistUrls.updateURLsFilmlisten(akt);
     }
 
-    private boolean urlLaden(String dateiUrl, FilmList filmList, int days) {
+    private boolean urlLaden(String dateiUrl, Filmlist filmlist, int days) {
         boolean ret = false;
         try {
             if (!dateiUrl.isEmpty()) {
                 PLog.sysLog("Filmliste laden von: " + dateiUrl);
-                readFilmlist.readFilmListe(dateiUrl, filmList, days);
-                if (!filmList.isEmpty()) {
+                readFilmlist.readFilmlist(dateiUrl, filmlist, days);
+                if (!filmlist.isEmpty()) {
                     ret = true;
                 }
             }
@@ -219,8 +219,8 @@ public class ImportFilmList {
     }
 
     private synchronized void fertigMelden(boolean ok) {
-        for (final ListenerFilmListLoad l : eventListenerList.getListeners(ListenerFilmListLoad.class)) {
-            l.fertig(new ListenerFilmListLoadEvent("", "", 0, 0, 0, !ok));
+        for (final ListenerFilmlistLoad l : eventListenerList.getListeners(ListenerFilmlistLoad.class)) {
+            l.fertig(new ListenerFilmlistLoadEvent("", "", 0, 0, 0, !ok));
         }
     }
 }

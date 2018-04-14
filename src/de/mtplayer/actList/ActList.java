@@ -21,8 +21,8 @@ import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmListLoad;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmListLoadEvent;
+import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoad;
+import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.mtplayer.actList.gui.tools.GuiSize;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.actList.res.GetIcon;
@@ -141,19 +141,19 @@ public class ActList extends Application {
     }
 
     private void initProg() {
-        daten.loadFilmList.addAdListener(new ListenerFilmListLoad() {
+        daten.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public void start(ListenerFilmListLoadEvent event) {
+            public void start(ListenerFilmlistLoadEvent event) {
 
             }
 
             @Override
-            public void fertig(ListenerFilmListLoadEvent event) {
+            public void fertig(ListenerFilmlistLoadEvent event) {
                 new ProgSave().allesSpeichern(); // damit nichts verlorengeht
             }
 
             @Override
-            public void fertigOnlyOne(ListenerFilmListLoadEvent event) {
+            public void fertigOnlyOne(ListenerFilmlistLoadEvent event) {
             }
         });
 

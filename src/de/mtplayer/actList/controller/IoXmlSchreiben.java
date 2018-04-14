@@ -92,7 +92,7 @@ public class IoXmlSchreiben implements AutoCloseable {
         writer.writeComment("Akt-Filmliste");
         writer.writeCharacters("\n");
 
-        for (final FilmlistUrlData datenUrlFilmliste : daten.loadFilmList.getDownloadUrlsFilmlisten_akt()) {
+        for (final FilmlistUrlData datenUrlFilmliste : daten.loadFilmlist.getDownloadUrlsFilmlisten_akt()) {
             datenUrlFilmliste.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_ART_NR] = FilmlistUrlData.SERVER_ART_AKT;
             xmlSchreibenDaten(FilmlistUrlData.FILMLIST_UPDATE_SERVER,
                     FilmlistUrlData.FILMLIST_UPDATE_SERVER_COLUMN_NAMES,
@@ -103,7 +103,7 @@ public class IoXmlSchreiben implements AutoCloseable {
         writer.writeCharacters("\n");
         writer.writeComment("Diff-Filmliste");
         writer.writeCharacters("\n");
-        for (final FilmlistUrlData datenUrlFilmliste : daten.loadFilmList.getDownloadUrlsFilmlisten_diff()) {
+        for (final FilmlistUrlData datenUrlFilmliste : daten.loadFilmlist.getDownloadUrlsFilmlisten_diff()) {
             datenUrlFilmliste.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_ART_NR] = FilmlistUrlData.SERVER_ART_DIFF;
             xmlSchreibenDaten(FilmlistUrlData.FILMLIST_UPDATE_SERVER,
                     FilmlistUrlData.FILMLIST_UPDATE_SERVER_COLUMN_NAMES,

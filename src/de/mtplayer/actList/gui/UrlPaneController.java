@@ -62,7 +62,7 @@ public class UrlPaneController extends AnchorPane {
     private void makeLoadManuel() {
         final ListView<String> lv = new ListView<>();
         GridPane.setVgrow(lv, Priority.ALWAYS);
-        daten.loadFilmList.updateDownloadUrlsFilmlisten();
+        daten.loadFilmlist.updateDownloadUrlsFilmlisten();
         lv.setOnMouseClicked(a -> {
             String str = lv.getSelectionModel().getSelectedItem();
             if (str != null && !str.isEmpty()) {
@@ -72,8 +72,8 @@ public class UrlPaneController extends AnchorPane {
 
         final Button btnGetUrls = new Button();
         btnGetUrls.setOnAction(event -> {
-            daten.loadFilmList.updateDownloadUrlsFilmlisten();
-            ArrayList<String> al = daten.loadFilmList.getDownloadUrlsFilmlisten_akt().getUrls();
+            daten.loadFilmlist.updateDownloadUrlsFilmlisten();
+            ArrayList<String> al = daten.loadFilmlist.getDownloadUrlsFilmlisten_akt().getUrls();
             PLog.sysLog(al.size() + " URL’s eingetragen");
             lv.getItems().clear();
             lv.getItems().addAll(al);

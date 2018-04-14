@@ -68,26 +68,26 @@ public class ProgStart {
 
             final Daten daten = Daten.getInstance();
 
-            new ReadFilmlist().readFilmListe(ProgInfos.getFilmListFile(),
-                    daten.filmList, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+            new ReadFilmlist().readFilmlist(ProgInfos.getFilmlistFile(),
+                    daten.filmlist, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
 
             ArrayList<String> list = new ArrayList<>();
             list.add(PLog.LILNE3);
             list.add("Liste Filme gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            list.add("  erstellt am: " + daten.filmList.genDate());
-            list.add("  Anzahl Filme: " + daten.filmList.size());
+            list.add("  erstellt am: " + daten.filmlist.genDate());
+            list.add("  Anzahl Filme: " + daten.filmlist.size());
             list.add(PLog.LILNE3);
             PLog.sysLog(list);
 
-//            if (daten.filmList.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
+//            if (daten.filmlist.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
 //                PLog.sysLog("Filmliste zu alt, neue Filmliste laden");
-//                daten.loadFilmList.loadFilmlist("", false);
+//                daten.loadFilmlist.loadFilmlist("", false);
 //
 //            } else {
 //                // beim Neuladen wird es dann erst gemacht
-//                daten.loadFilmList.notifyStart(new ListenerFilmListLoadEvent("", "", 0, 0, 0, false/* Fehler */));
-//                daten.loadFilmList.afterFilmlistLoad();
-//                daten.loadFilmList.notifyFertig(new ListenerFilmListLoadEvent("", "", 0, 0, 0, false/* Fehler */));
+//                daten.loadFilmlist.notifyStart(new ListenerFilmlistLoadEvent("", "", 0, 0, 0, false/* Fehler */));
+//                daten.loadFilmlist.afterFilmlistLoad();
+//                daten.loadFilmlist.notifyFertig(new ListenerFilmlistLoadEvent("", "", 0, 0, 0, false/* Fehler */));
 //            }
         }
 

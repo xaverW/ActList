@@ -64,7 +64,7 @@ public class SenderPaneController extends AnchorPane {
     private void makeLoadManuel() {
         final ListView<CheckBox> lv = new ListView<>();
         GridPane.setVgrow(lv, Priority.ALWAYS);
-        daten.loadFilmList.updateDownloadUrlsFilmlisten();
+        daten.loadFilmlist.updateDownloadUrlsFilmlisten();
 
         ArrayList aListSender = new ArrayList(Arrays.asList(propSender.getValue().split(",")));
         ArrayList<CheckBox> aListCb = new ArrayList<>();

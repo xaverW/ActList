@@ -73,9 +73,9 @@ public class GuiPack extends AnchorPane {
         Button btnLoad = new Button("Filmliste jetzt laden");
         btnLoad.setOnAction(event -> {
             String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), Const.JSON_DATEI_FILME);
-            daten.loadFilmList.readWriteFilmlist(Config.SYSTEM_LOAD_FILME_MANUELL.get(),
+            daten.loadFilmlist.readWriteFilmlist(Config.SYSTEM_LOAD_FILME_MANUELL.get(),
                     fileDest,
-                    daten.filmList, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+                    daten.filmlist, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
         });
 
         HBox hBoxLoad = new HBox();

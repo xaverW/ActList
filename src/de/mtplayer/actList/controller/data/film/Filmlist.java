@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SuppressWarnings("serial")
-public class FilmList extends SimpleListProperty<Film> {
+public class Filmlist extends SimpleListProperty<Film> {
 
     public int nr = 1;
     public String[] metaDaten = new String[]{"", "", "", "", ""};
@@ -38,7 +38,7 @@ public class FilmList extends SimpleListProperty<Film> {
     public String[] sender = {""};
     public String[][] themenPerSender = {{""}};
 
-    public FilmList() {
+    public Filmlist() {
         super(FXCollections.observableArrayList());
     }
 
@@ -61,7 +61,7 @@ public class FilmList extends SimpleListProperty<Film> {
         }
     }
 
-    public synchronized void updateListe(FilmList listeEinsortieren,
+    public synchronized void updateListe(Filmlist listeEinsortieren,
                                          boolean index /* Vergleich über Index, sonst nur URL */,
                                          boolean ersetzen) {
         // in eine vorhandene Liste soll eine andere Filmliste einsortiert werden
@@ -131,8 +131,8 @@ public class FilmList extends SimpleListProperty<Film> {
         }
     }
 
-    public synchronized void setMeta(FilmList filmList) {
-        System.arraycopy(filmList.metaDaten, 0, metaDaten, 0, FilmListXml.MAX_ELEM);
+    public synchronized void setMeta(Filmlist filmlist) {
+        System.arraycopy(filmlist.metaDaten, 0, metaDaten, 0, FilmlistXml.MAX_ELEM);
     }
 
     public synchronized String genDate() {
@@ -140,11 +140,11 @@ public class FilmList extends SimpleListProperty<Film> {
         // in der Form "dd.MM.yyyy, HH:mm"
         String ret;
         String date;
-        if (metaDaten[FilmListXml.FILMLISTE_DATUM_GMT_NR].isEmpty()) {
+        if (metaDaten[FilmlistXml.FILMLISTE_DATUM_GMT_NR].isEmpty()) {
             // noch eine alte Filmliste
-            ret = metaDaten[FilmListXml.FILMLISTE_DATUM_NR];
+            ret = metaDaten[FilmlistXml.FILMLISTE_DATUM_NR];
         } else {
-            date = metaDaten[FilmListXml.FILMLISTE_DATUM_GMT_NR];
+            date = metaDaten[FilmlistXml.FILMLISTE_DATUM_GMT_NR];
             final SimpleDateFormat sdf_ = new SimpleDateFormat(DATUM_ZEIT_FORMAT);
             sdf_.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
             Date filmDate = null;
@@ -153,7 +153,7 @@ public class FilmList extends SimpleListProperty<Film> {
             } catch (final ParseException ignored) {
             }
             if (filmDate == null) {
-                ret = metaDaten[FilmListXml.FILMLISTE_DATUM_GMT_NR];
+                ret = metaDaten[FilmlistXml.FILMLISTE_DATUM_GMT_NR];
             } else {
                 final FastDateFormat formatter = FastDateFormat.getInstance(DATUM_ZEIT_FORMAT);
                 ret = formatter.format(filmDate);
@@ -187,11 +187,11 @@ public class FilmList extends SimpleListProperty<Film> {
      */
     public Date getAgeAsDate() {
         String date;
-        if (!metaDaten[FilmListXml.FILMLISTE_DATUM_GMT_NR].isEmpty()) {
-            date = metaDaten[FilmListXml.FILMLISTE_DATUM_GMT_NR];
+        if (!metaDaten[FilmlistXml.FILMLISTE_DATUM_GMT_NR].isEmpty()) {
+            date = metaDaten[FilmlistXml.FILMLISTE_DATUM_GMT_NR];
             sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
         } else {
-            date = metaDaten[FilmListXml.FILMLISTE_DATUM_NR];
+            date = metaDaten[FilmlistXml.FILMLISTE_DATUM_NR];
         }
         if (date.isEmpty()) {
             // dann ist die Filmliste noch nicht geladen

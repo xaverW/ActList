@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 @SuppressWarnings("serial")
-public class FilmListUrlList extends LinkedList<FilmlistUrlData> {
+public class FilmlistUrlList extends LinkedList<FilmlistUrlData> {
     // ist die Liste mit den URLs zum Download einer Filmliste
     public boolean addWithCheck(FilmlistUrlData filmliste) {
         for (FilmlistUrlData datenUrlFilmliste : this) {

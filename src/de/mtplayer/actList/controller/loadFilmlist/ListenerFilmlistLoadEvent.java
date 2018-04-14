@@ -16,7 +16,7 @@
 
 package de.mtplayer.actList.controller.loadFilmlist;
 
-public class ListenerFilmListLoadEvent {
+public class ListenerFilmlistLoadEvent {
 
     private String senderUrl = "";
     private String text = "";
@@ -25,7 +25,7 @@ public class ListenerFilmListLoadEvent {
     private boolean fehler = false;
     private int count = 0;
 
-    public ListenerFilmListLoadEvent(String ssender, String ttext, int mmax, double pprogress, int ccount, boolean ffehler) {
+    public ListenerFilmlistLoadEvent(String ssender, String ttext, int mmax, double pprogress, int ccount, boolean ffehler) {
         senderUrl = ssender;
         text = ttext;
         max = mmax;

@@ -18,8 +18,8 @@
 package de.mtplayer.actList.controller.config;
 
 import de.mtplayer.actList.ActListController;
-import de.mtplayer.actList.controller.data.film.FilmList;
-import de.mtplayer.actList.controller.loadFilmlist.LoadFilmList;
+import de.mtplayer.actList.controller.data.film.Filmlist;
+import de.mtplayer.actList.controller.loadFilmlist.LoadFilmlist;
 import de.mtplayer.actList.gui.tools.Listener;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -39,19 +39,19 @@ public class Daten {
     public static String configDir = ""; // Verzeichnis zum Speichern der Programmeinstellungen
 
     // zentrale Klassen
-    public LoadFilmList loadFilmList; // erledigt das updaten der Filmliste
+    public LoadFilmlist loadFilmlist; // erledigt das updaten der Filmliste
 
     // Gui
     public Stage primaryStage = null;
     public ActListController actListController = null;
 
     // Programmdaten
-    public FilmList filmList = null; // ist die komplette Filmliste
+    public Filmlist filmlist = null; // ist die komplette Filmliste
 
 
     private Daten() {
-        filmList = new FilmList();
-        loadFilmList = new LoadFilmList(this);
+        filmlist = new Filmlist();
+        loadFilmlist = new LoadFilmlist(this);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae ->
                 Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName())));

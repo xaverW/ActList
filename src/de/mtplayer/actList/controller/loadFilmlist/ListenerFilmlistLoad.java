@@ -18,22 +18,22 @@ package de.mtplayer.actList.controller.loadFilmlist;
 
 import java.util.EventListener;
 
-public class ListenerFilmListLoad implements EventListener {
+public class ListenerFilmlistLoad implements EventListener {
 
     public static final double PROGRESS_MAX = 1.0;
 
-    ListenerFilmListLoadEvent event;
+    ListenerFilmlistLoadEvent event;
 
-    public void start(ListenerFilmListLoadEvent e) {
+    public void start(ListenerFilmlistLoadEvent e) {
     }
 
-    public void progress(ListenerFilmListLoadEvent e) {
+    public void progress(ListenerFilmlistLoadEvent e) {
     }
 
-    public void fertig(ListenerFilmListLoadEvent e) {
+    public void fertig(ListenerFilmlistLoadEvent e) {
     }
 
-    public void fertigOnlyOne(ListenerFilmListLoadEvent e) {
+    public void fertigOnlyOne(ListenerFilmlistLoadEvent e) {
         // dient dem Melden des ersten Mal Laden der Filmliste beim ProgStart
     }
 }

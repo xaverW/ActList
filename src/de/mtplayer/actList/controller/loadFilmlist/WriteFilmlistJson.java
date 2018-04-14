@@ -21,9 +21,9 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.data.film.Film;
-import de.mtplayer.actList.controller.data.film.FilmList;
-import de.mtplayer.actList.controller.data.film.FilmListXml;
 import de.mtplayer.actList.controller.data.film.FilmXml;
+import de.mtplayer.actList.controller.data.film.Filmlist;
+import de.mtplayer.actList.controller.data.film.FilmlistXml;
 import de.p2tools.p2Lib.tools.log.PLog;
 import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZOutputStream;
@@ -67,11 +67,11 @@ public class WriteFilmlistJson {
      * Write film data and compress with LZMA2.
      *
      * @param datei    file path
-     * @param filmList film data
+     * @param filmlist film data
      */
-    public void filmlisteSchreibenJsonCompressed(String datei, FilmList filmList) {
+    public void filmlisteSchreibenJsonCompressed(String datei, Filmlist filmlist) {
         final String tempFile = datei + "_temp";
-        filmlisteSchreibenJson(tempFile, filmList);
+        filmlisteSchreibenJson(tempFile, filmlist);
 
         try {
             PLog.sysLog("Komprimiere Datei: " + datei);
@@ -93,9 +93,9 @@ public class WriteFilmlistJson {
         }
     }
 
-    public void filmlisteSchreibenJson(String datei, FilmList filmList) {
+    public void filmlisteSchreibenJson(String datei, Filmlist filmlist) {
         try {
-            PLog.sysLog("Filme schreiben (" + filmList.size() + " Filme) :");
+            PLog.sysLog("Filme schreiben (" + filmlist.size() + " Filme) :");
 
             PLog.sysLog("   --> Start Schreiben nach: " + datei);
             String sender = "", thema = "";
@@ -105,19 +105,19 @@ public class WriteFilmlistJson {
 
                 jg.writeStartObject();
                 // Infos zur Filmliste
-                jg.writeArrayFieldStart(FilmListXml.FILMLISTE);
-                for (int i = 0; i < FilmListXml.MAX_ELEM; ++i) {
-                    jg.writeString(filmList.metaDaten[i]);
+                jg.writeArrayFieldStart(FilmlistXml.FILMLISTE);
+                for (int i = 0; i < FilmlistXml.MAX_ELEM; ++i) {
+                    jg.writeString(filmlist.metaDaten[i]);
                 }
                 jg.writeEndArray();
                 // Infos der Felder in der Filmliste
-                jg.writeArrayFieldStart(FilmListXml.FILMLISTE);
+                jg.writeArrayFieldStart(FilmlistXml.FILMLISTE);
                 for (int i = 0; i < FilmXml.JSON_NAMES.length; ++i) {
                     jg.writeString(FilmXml.COLUMN_NAMES[FilmXml.JSON_NAMES[i]]);
                 }
                 jg.writeEndArray();
                 //Filme schreiben
-                for (Film datenFilm : filmList) {
+                for (Film datenFilm : filmlist) {
 
                     jg.writeArrayFieldStart(FilmXml.TAG_JSON_LIST);
                     for (int i = 0; i < FilmXml.JSON_NAMES.length; ++i) {

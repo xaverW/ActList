@@ -83,7 +83,7 @@ public class ProgInfos {
      *
      * @return Den Pfad als String
      */
-    public static String getFilmListFile() {
+    public static String getFilmlistFile() {
         return ProgInfos.getSettingsDirectory_String() + File.separator + Const.JSON_DATEI_FILME;
     }
 

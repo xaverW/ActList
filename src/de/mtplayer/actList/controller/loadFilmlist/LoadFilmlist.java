@@ -20,7 +20,7 @@ import de.mtplayer.actList.controller.ProgSave;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.data.film.FilmList;
+import de.mtplayer.actList.controller.data.film.Filmlist;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.mLib.tools.StringFormatters;
 import de.p2tools.p2Lib.tools.log.Duration;
@@ -33,14 +33,14 @@ import javax.swing.event.EventListenerList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LoadFilmList {
+public class LoadFilmlist {
 
     //    private final HashSet<String> hashSet = new HashSet<>();
-    private final FilmList diffListe;
+    private final Filmlist diffListe;
 
     // private
     private final Daten daten;
-    private final ImportFilmList importFilmliste;
+    private final ImportFilmlist importFilmliste;
     private final ReadWriteFilmlist readWriteFilmlist;
     private final EventListenerList listeners = new EventListenerList();
     private BooleanProperty propListSearching = new SimpleBooleanProperty(false);
@@ -49,42 +49,42 @@ public class LoadFilmList {
     private static final AtomicBoolean stop = new AtomicBoolean(false); // damit kannn das Laden
     // gestoppt werden
 
-    public LoadFilmList(Daten daten) {
+    public LoadFilmlist(Daten daten) {
         this.daten = daten;
-        diffListe = new FilmList();
-        importFilmliste = new ImportFilmList();
-        importFilmliste.addAdListener(new ListenerFilmListLoad() {
+        diffListe = new Filmlist();
+        importFilmliste = new ImportFilmlist();
+        importFilmliste.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public synchronized void start(ListenerFilmListLoadEvent event) {
+            public synchronized void start(ListenerFilmlistLoadEvent event) {
                 notifyStart(event);
             }
 
             @Override
-            public synchronized void progress(ListenerFilmListLoadEvent event) {
+            public synchronized void progress(ListenerFilmlistLoadEvent event) {
                 notifyProgress(event);
             }
 
             @Override
-            public synchronized void fertig(ListenerFilmListLoadEvent event) {
+            public synchronized void fertig(ListenerFilmlistLoadEvent event) {
                 // Ergebnisliste listeFilme eintragen -> Feierabend!
                 Duration.staticPing("Filme laden, ende");
                 undEnde(event);
             }
         });
         readWriteFilmlist = new ReadWriteFilmlist();
-        readWriteFilmlist.addAdListener(new ListenerFilmListLoad() {
+        readWriteFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public synchronized void start(ListenerFilmListLoadEvent event) {
+            public synchronized void start(ListenerFilmlistLoadEvent event) {
                 notifyStart(event);
             }
 
             @Override
-            public synchronized void progress(ListenerFilmListLoadEvent event) {
+            public synchronized void progress(ListenerFilmlistLoadEvent event) {
                 notifyProgress(event);
             }
 
             @Override
-            public synchronized void fertig(ListenerFilmListLoadEvent event) {
+            public synchronized void fertig(ListenerFilmlistLoadEvent event) {
                 // Ergebnisliste listeFilme eintragen -> Feierabend!
                 Duration.staticPing("Filme laden, ende");
                 undEnde(event);
@@ -108,7 +108,7 @@ public class LoadFilmList {
 //        loadFilmlist(dateiUrl, false);
 //    }
 
-    public void readWriteFilmlist(String source, String dest, final FilmList filmList, int days) {
+    public void readWriteFilmlist(String source, String dest, final Filmlist filmlist, int days) {
         // damit wird die Filmliste geladen UND sofort gespeichert
 
         Duration.staticPing("Filme laden, start");
@@ -117,7 +117,7 @@ public class LoadFilmList {
             // nicht doppelt starten
             setPropListSearching(true);
 
-            if (!readWriteFilmlist.readWriteFilmList(source, dest, filmList, days)) {
+            if (!readWriteFilmlist.readWriteFilmlist(source, dest, filmlist, days)) {
                 // konnte dann nicht richtig gestartet werden
                 setPropListSearching(false);
             }
@@ -125,16 +125,16 @@ public class LoadFilmList {
     }
 
     public void afterFilmlistLoad() {
-        notifyProgress(new ListenerFilmListLoadEvent("", "Themen suchen",
-                (int) ListenerFilmListLoad.PROGRESS_MAX, ListenerFilmListLoad.PROGRESS_MAX, 0, false/* Fehler */));
+        notifyProgress(new ListenerFilmlistLoadEvent("", "Themen suchen",
+                (int) ListenerFilmlistLoad.PROGRESS_MAX, ListenerFilmlistLoad.PROGRESS_MAX, 0, false/* Fehler */));
         PLog.sysLog("Themen suchen");
-        daten.filmList.themenLaden();
+        daten.filmlist.themenLaden();
     }
 
     // #######################################
     // #######################################
-    public void addAdListener(ListenerFilmListLoad listener) {
-        listeners.add(ListenerFilmListLoad.class, listener);
+    public void addAdListener(ListenerFilmlistLoad listener) {
+        listeners.add(ListenerFilmlistLoad.class, listener);
     }
 
     public synchronized void setStop(boolean set) {
@@ -146,21 +146,21 @@ public class LoadFilmList {
     }
 
     public void updateDownloadUrlsFilmlisten() {
-        importFilmliste.searchFilmListUrls.updateURLsFilmlisten(true);
-        importFilmliste.searchFilmListUrls.updateURLsFilmlisten(false);
+        importFilmliste.searchFilmlistUrls.updateURLsFilmlisten(true);
+        importFilmliste.searchFilmlistUrls.updateURLsFilmlisten(false);
     }
 
-    public FilmListUrlList getDownloadUrlsFilmlisten_akt() {
-        return importFilmliste.searchFilmListUrls.filmListUrlList_akt;
+    public FilmlistUrlList getDownloadUrlsFilmlisten_akt() {
+        return importFilmliste.searchFilmlistUrls.filmlistUrlList_akt;
     }
 
-    public FilmListUrlList getDownloadUrlsFilmlisten_diff() {
-        return importFilmliste.searchFilmListUrls.filmListUrlList_diff;
+    public FilmlistUrlList getDownloadUrlsFilmlisten_diff() {
+        return importFilmliste.searchFilmlistUrls.filmlistUrlList_diff;
     }
 
     // #######################################
     // #######################################
-    private void undEnde(ListenerFilmListLoadEvent event) {
+    private void undEnde(ListenerFilmlistLoadEvent event) {
         // Abos eintragen in der gesamten Liste vor Blacklist da das nur beim Ändern der Filmliste oder
         // beim Ändern von Abos gemacht wird
 
@@ -172,14 +172,14 @@ public class LoadFilmList {
             PLog.sysLog("  Liste Diff erstellt am: " + diffListe.genDate());
             PLog.sysLog("  Anzahl Filme: " + diffListe.size());
 
-            daten.filmList.updateListe(diffListe, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
-            daten.filmList.metaDaten = diffListe.metaDaten;
-            daten.filmList.sort(); // jetzt sollte alles passen
+            daten.filmlist.updateListe(diffListe, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
+            daten.filmlist.metaDaten = diffListe.metaDaten;
+            daten.filmlist.sort(); // jetzt sollte alles passen
             diffListe.clear();
         } else {
             PLog.sysLog("Liste Kompl. gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            PLog.sysLog("  Liste Kompl erstellt am: " + daten.filmList.genDate());
-            PLog.sysLog("  Anzahl Filme: " + daten.filmList.size());
+            PLog.sysLog("  Liste Kompl erstellt am: " + daten.filmlist.genDate());
+            PLog.sysLog("  Anzahl Filme: " + daten.filmlist.size());
         }
 
         if (event.isFehler()) {
@@ -188,17 +188,17 @@ public class LoadFilmList {
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));
 
             // dann die alte Liste wieder laden
-            daten.filmList.clear();
+            daten.filmlist.clear();
             setStop(false);
-            new ReadFilmlist().readFilmListe(ProgInfos.getFilmListFile(),
-                    daten.filmList, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+            new ReadFilmlist().readFilmlist(ProgInfos.getFilmlistFile(),
+                    daten.filmlist, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
             PLog.sysLog("");
         } else {
             new ProgSave().filmlisteSpeichern();
         }
         PLog.sysLog("");
-        PLog.sysLog("Jetzige Liste erstellt am: " + daten.filmList.genDate());
-        PLog.sysLog("  Anzahl Filme: " + daten.filmList.size());
+        PLog.sysLog("Jetzige Liste erstellt am: " + daten.filmlist.genDate());
+        PLog.sysLog("  Anzahl Filme: " + daten.filmlist.size());
         PLog.sysLog("");
 
         afterFilmlistLoad();
@@ -207,15 +207,15 @@ public class LoadFilmList {
         notifyFertig(event);
     }
 
-//    private void fillHash(FilmList filmList) {
-//        hashSet.addAll(filmList.stream().map(Film::getUrlHistory).collect(Collectors.toList()));
+//    private void fillHash(Filmlist filmlist) {
+//        hashSet.addAll(filmlist.stream().map(Film::getUrlHistory).collect(Collectors.toList()));
 //    }
 
-    public void notifyStart(ListenerFilmListLoadEvent event) {
-        final ListenerFilmListLoadEvent e = event;
+    public void notifyStart(ListenerFilmlistLoadEvent event) {
+        final ListenerFilmlistLoadEvent e = event;
         try {
             Platform.runLater(() -> {
-                for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
+                for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
                     l.start(e);
                 }
 
@@ -225,10 +225,10 @@ public class LoadFilmList {
         }
     }
 
-    public void notifyProgress(ListenerFilmListLoadEvent event) {
+    public void notifyProgress(ListenerFilmlistLoadEvent event) {
         try {
             Platform.runLater(() -> {
-                for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
+                for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
                     l.progress(event);
                 }
 
@@ -238,13 +238,13 @@ public class LoadFilmList {
         }
     }
 
-    public void notifyFertig(ListenerFilmListLoadEvent event) {
+    public void notifyFertig(ListenerFilmlistLoadEvent event) {
         try {
             Platform.runLater(() -> {
-                for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
+                for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
                     l.fertig(event);
                 }
-                for (final ListenerFilmListLoad l : listeners.getListeners(ListenerFilmListLoad.class)) {
+                for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
                     if (!onlyOne) {
                         l.fertigOnlyOne(event);
                     }

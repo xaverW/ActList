@@ -18,8 +18,8 @@ package de.mtplayer.actList.gui;
 
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.data.Icons;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmListLoad;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmListLoadEvent;
+import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoad;
+import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.geometry.Insets;
@@ -118,9 +118,9 @@ public class StatusBarController extends AnchorPane {
                 "    -fx-text-fill: white;" +
                 "    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);";
 
-        daten.loadFilmList.addAdListener(new ListenerFilmListLoad() {
+        daten.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public void start(ListenerFilmListLoadEvent event) {
+            public void start(ListenerFilmlistLoadEvent event) {
                 loadList = true;
                 countFoundFilms = -1;
                 maxFilms = -1;
@@ -128,14 +128,14 @@ public class StatusBarController extends AnchorPane {
             }
 
             @Override
-            public void progress(ListenerFilmListLoadEvent event) {
+            public void progress(ListenerFilmlistLoadEvent event) {
                 countFoundFilms = event.getCount();
                 maxFilms = event.getMax();
                 updateProgressBar(event);
             }
 
             @Override
-            public void fertig(ListenerFilmListLoadEvent event) {
+            public void fertig(ListenerFilmlistLoadEvent event) {
                 stopTimer = false;
                 loadList = false;
                 countFoundFilms = event.getCount();
@@ -155,7 +155,7 @@ public class StatusBarController extends AnchorPane {
                 }
             }
         });
-        btnStop.setOnAction(a -> daten.loadFilmList.setStop(true));
+        btnStop.setOnAction(a -> daten.loadFilmlist.setStop(true));
     }
 
 
@@ -170,7 +170,7 @@ public class StatusBarController extends AnchorPane {
         setTextForRightDisplay();
     }
 
-    private void updateProgressBar(ListenerFilmListLoadEvent event) {
+    private void updateProgressBar(ListenerFilmlistLoadEvent event) {
         stopTimer = true;
         progress.setProgress(event.getProgress());
         lblProgress.setText(event.getText());
@@ -204,10 +204,10 @@ public class StatusBarController extends AnchorPane {
     private void setTextForRightDisplay() {
         // Text rechts: alter/neuladenIn anzeigen
         String strText = "Filmliste erstellt: ";
-        strText += daten.filmList.genDate();
+        strText += daten.filmlist.genDate();
         strText += " Uhr  ";
 
-        final int sekunden = daten.filmList.getAge();
+        final int sekunden = daten.filmlist.getAge();
 
         if (sekunden != 0) {
             strText += "||  Alter: ";

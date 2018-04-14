@@ -71,10 +71,10 @@ public class IoXmlLesen implements AutoCloseable {
                                         filmlistUrlData.arr)) {
                                     switch (filmlistUrlData.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_ART_NR]) {
                                         case FilmlistUrlData.SERVER_ART_AKT:
-                                            daten.loadFilmList.getDownloadUrlsFilmlisten_akt().addWithCheck(filmlistUrlData);
+                                            daten.loadFilmlist.getDownloadUrlsFilmlisten_akt().addWithCheck(filmlistUrlData);
                                             break;
                                         case FilmlistUrlData.SERVER_ART_DIFF:
-                                            daten.loadFilmList.getDownloadUrlsFilmlisten_diff().addWithCheck(filmlistUrlData);
+                                            daten.loadFilmlist.getDownloadUrlsFilmlisten_diff().addWithCheck(filmlistUrlData);
                                             break;
                                     }
                                 }
@@ -94,8 +94,8 @@ public class IoXmlLesen implements AutoCloseable {
                 } catch (final Exception ignored) {
                 }
             }
-            daten.loadFilmList.getDownloadUrlsFilmlisten_akt().sort();
-            daten.loadFilmList.getDownloadUrlsFilmlisten_diff().sort();
+            daten.loadFilmlist.getDownloadUrlsFilmlisten_akt().sort();
+            daten.loadFilmlist.getDownloadUrlsFilmlisten_diff().sort();
             Config.loadSystemParameter();
         }
 
