@@ -117,7 +117,7 @@ public class LoadFilmList {
             // nicht doppelt starten
             setPropListSearching(true);
 
-            if (!readWriteFilmlist.readWriteFilmListe(source, dest, filmList, days)) {
+            if (!readWriteFilmlist.readWriteFilmList(source, dest, filmList, days)) {
                 // konnte dann nicht richtig gestartet werden
                 setPropListSearching(false);
             }

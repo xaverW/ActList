@@ -45,7 +45,9 @@ public class ProgStart {
     // #########################################################
     public void loadDataProgStart() {
         // Gui startet ein wenig flüssiger
-        new Thread(new loadFilmlistProgStart_()).start();
+        Thread th = new Thread(new loadFilmlistProgStart_());
+        th.setName("loadDataProgStart");
+        th.start();
     }
 
     public static void startMsg() {

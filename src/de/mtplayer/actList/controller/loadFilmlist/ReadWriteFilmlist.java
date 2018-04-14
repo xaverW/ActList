@@ -61,7 +61,7 @@ public class ReadWriteFilmlist {
         listeners.add(ListenerFilmListLoad.class, listener);
     }
 
-    public boolean readWriteFilmListe(String source, String dest, final FilmList filmList, int days) {
+    public boolean readWriteFilmList(String source, String dest, final FilmList filmList, int days) {
         this.dest = dest;
 
         if (dest.isEmpty()) {
@@ -84,9 +84,11 @@ public class ReadWriteFilmlist {
 
 
         Daten.getInstance().loadFilmList.setStop(false);
-        new Thread(() -> {
+        Thread th = new Thread(() -> {
             readWrite(source, filmList, days);
-        }).start();
+        });
+        th.setName("readWriteFilmList");
+        th.start();
         return true;
     }
 

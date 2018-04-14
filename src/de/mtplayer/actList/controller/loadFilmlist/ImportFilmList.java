@@ -58,9 +58,11 @@ public class ImportFilmList {
     // #########################################################
     // Filmeliste importieren, URL automatisch wählen
     // #########################################################
-    public void filmeImportierenAuto(FilmList filmList, FilmList filmListDiff, int days) {
+    public void filmImportAuto(FilmList filmList, FilmList filmListDiff, int days) {
         Daten.getInstance().loadFilmList.setStop(false);
-        new Thread(new FilmeImportierenAutoThread(filmList, filmListDiff, days)).start();
+        Thread th = new Thread(new FilmeImportierenAutoThread(filmList, filmListDiff, days));
+        th.setName("filmImportAuto");
+        th.start();
     }
 
     public enum STATE {
@@ -163,9 +165,11 @@ public class ImportFilmList {
     // #######################################
     // Filmeliste importieren, mit fester URL/Pfad
     // #######################################
-    public void filmeImportierenDatei(String pfad, FilmList filmList, int days) {
+    public void filmImportFile(String pfad, FilmList filmList, int days) {
         Daten.getInstance().loadFilmList.setStop(false);
-        new Thread(new FilmeImportierenDateiThread(pfad, filmList, days)).start();
+        Thread th = new Thread(new FilmeImportierenDateiThread(pfad, filmList, days));
+        th.setName("filmImportFile");
+        th.start();
 
     }
 
