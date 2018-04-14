@@ -20,7 +20,7 @@ import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.loadFilmlist.FilmlistUrlData;
+import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlData;
 import de.p2tools.p2Lib.tools.log.PLog;
 
 import javax.xml.stream.XMLOutputFactory;

@@ -20,9 +20,14 @@ import de.mtplayer.actList.controller.ProgSave;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.data.film.Filmlist;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.mLib.tools.StringFormatters;
+import de.mtplayer.mtp.controller.data.film.Filmlist;
+import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlList;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ImportNewFilmlist;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ReadFilmlist;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
@@ -40,11 +45,10 @@ public class LoadFilmlist {
 
     // private
     private final Daten daten;
-    private final ImportFilmlist importFilmliste;
+    private final ImportNewFilmlist importFilmliste;
     private final ReadWriteFilmlist readWriteFilmlist;
     private final EventListenerList listeners = new EventListenerList();
     private BooleanProperty propListSearching = new SimpleBooleanProperty(false);
-    private boolean onlyOne = false;
 
     private static final AtomicBoolean stop = new AtomicBoolean(false); // damit kannn das Laden
     // gestoppt werden
@@ -52,7 +56,7 @@ public class LoadFilmlist {
     public LoadFilmlist(Daten daten) {
         this.daten = daten;
         diffListe = new Filmlist();
-        importFilmliste = new ImportFilmlist();
+        importFilmliste = new ImportNewFilmlist();
         importFilmliste.addAdListener(new ListenerFilmlistLoad() {
             @Override
             public synchronized void start(ListenerFilmlistLoadEvent event) {
@@ -126,7 +130,7 @@ public class LoadFilmlist {
 
     public void afterFilmlistLoad() {
         notifyProgress(new ListenerFilmlistLoadEvent("", "Themen suchen",
-                (int) ListenerFilmlistLoad.PROGRESS_MAX, ListenerFilmlistLoad.PROGRESS_MAX, 0, false/* Fehler */));
+                ListenerFilmlistLoad.PROGRESS_MAX, 0, false/* Fehler */));
         PLog.sysLog("Themen suchen");
         daten.filmlist.themenLaden();
     }
@@ -146,16 +150,16 @@ public class LoadFilmlist {
     }
 
     public void updateDownloadUrlsFilmlisten() {
-        importFilmliste.searchFilmlistUrls.updateURLsFilmlisten(true);
-        importFilmliste.searchFilmlistUrls.updateURLsFilmlisten(false);
+        importFilmliste.searchFilmListUrls.updateURLsFilmlisten(true);
+        importFilmliste.searchFilmListUrls.updateURLsFilmlisten(false);
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_akt() {
-        return importFilmliste.searchFilmlistUrls.filmlistUrlList_akt;
+        return importFilmliste.searchFilmListUrls.filmlistUrlList_akt;
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_diff() {
-        return importFilmliste.searchFilmlistUrls.filmlistUrlList_diff;
+        return importFilmliste.searchFilmListUrls.filmlistUrlList_diff;
     }
 
     // #######################################
@@ -182,7 +186,7 @@ public class LoadFilmlist {
             PLog.sysLog("  Anzahl Filme: " + daten.filmlist.size());
         }
 
-        if (event.isFehler()) {
+        if (event.fehler) {
             PLog.sysLog("");
             PLog.sysLog("Filmliste laden war fehlerhaft, alte Liste wird wieder geladen");
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));
@@ -244,12 +248,6 @@ public class LoadFilmlist {
                 for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
                     l.fertig(event);
                 }
-                for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
-                    if (!onlyOne) {
-                        l.fertigOnlyOne(event);
-                    }
-                }
-                onlyOne = true;
             });
 
         } catch (final Exception ex) {
@@ -257,11 +255,4 @@ public class LoadFilmlist {
         }
     }
 
-    public BooleanProperty getIstAmLaufen() {
-        return propListSearching;
-    }
-
-    public void setIstAmLaufen(BooleanProperty istAmLaufen) {
-        this.propListSearching = istAmLaufen;
-    }
 }

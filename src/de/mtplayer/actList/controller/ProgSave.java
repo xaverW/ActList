@@ -18,7 +18,7 @@ package de.mtplayer.actList.controller;
 
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.loadFilmlist.WriteFilmlistJson;
+import de.mtplayer.mtp.controller.filmlist.writeFilmlist.WriteFilmlistJson;
 
 public class ProgSave {
     final Daten daten;
@@ -28,7 +28,7 @@ public class ProgSave {
     }
 
     public void filmlisteSpeichern() {
-        new WriteFilmlistJson().filmlisteSchreibenJson(ProgInfos.getFilmlistFile(), daten.filmlist);
+        new WriteFilmlistJson().write(ProgInfos.getFilmlistFile(), daten.filmlist);
     }
 
     public void allesSpeichern() {

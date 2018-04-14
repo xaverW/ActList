@@ -19,8 +19,8 @@ package de.mtplayer.actList.controller;
 
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.controller.loadFilmlist.FilmlistUrlData;
 import de.mtplayer.mLib.tools.MLConfigs;
+import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlData;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
 

@@ -22,14 +22,17 @@ import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.data.film.Film;
-import de.mtplayer.actList.controller.data.film.FilmXml;
-import de.mtplayer.actList.controller.data.film.Filmlist;
-import de.mtplayer.actList.controller.data.film.FilmlistXml;
 import de.mtplayer.mLib.tools.InputStreamProgressMonitor;
 import de.mtplayer.mLib.tools.MLAlert;
 import de.mtplayer.mLib.tools.MLHttpClient;
 import de.mtplayer.mLib.tools.ProgressMonitorInputStream;
+import de.mtplayer.mtp.controller.data.film.Film;
+import de.mtplayer.mtp.controller.data.film.FilmXml;
+import de.mtplayer.mtp.controller.data.film.Filmlist;
+import de.mtplayer.mtp.controller.data.film.FilmlistXml;
+import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
 import okhttp3.Request;
@@ -105,7 +108,7 @@ public class ReadWriteFilmlist {
             checkDays(days);
 
             if (source.isEmpty() || !source.startsWith("http")) {
-                source = new SearchFilmlistUrls().suchenAkt(new ArrayList<>());
+                source = new SearchFilmListUrls().searchCompleteListUrl(new ArrayList<>());
             }
             if (source.isEmpty()) {
                 return;

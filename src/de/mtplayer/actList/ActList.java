@@ -21,12 +21,12 @@ import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoad;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.mtplayer.actList.gui.tools.GuiSize;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.actList.res.GetIcon;
 import de.mtplayer.mLib.tools.Functions;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.tools.log.Duration;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -152,9 +152,6 @@ public class ActList extends Application {
                 new ProgSave().allesSpeichern(); // damit nichts verlorengeht
             }
 
-            @Override
-            public void fertigOnlyOne(ListenerFilmlistLoadEvent event) {
-            }
         });
 
     }

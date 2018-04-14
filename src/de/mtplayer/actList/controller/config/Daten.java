@@ -18,9 +18,9 @@
 package de.mtplayer.actList.controller.config;
 
 import de.mtplayer.actList.ActListController;
-import de.mtplayer.actList.controller.data.film.Filmlist;
 import de.mtplayer.actList.controller.loadFilmlist.LoadFilmlist;
 import de.mtplayer.actList.gui.tools.Listener;
+import de.mtplayer.mtp.controller.data.film.Filmlist;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -46,7 +46,7 @@ public class Daten {
     public ActListController actListController = null;
 
     // Programmdaten
-    public Filmlist filmlist = null; // ist die komplette Filmliste
+    public Filmlist filmlist; // ist die komplette Filmliste
 
 
     private Daten() {

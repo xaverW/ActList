@@ -18,9 +18,9 @@ package de.mtplayer.actList.gui;
 
 import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.data.Icons;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoad;
-import de.mtplayer.actList.controller.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.mtplayer.actList.gui.tools.Listener;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -129,8 +129,8 @@ public class StatusBarController extends AnchorPane {
 
             @Override
             public void progress(ListenerFilmlistLoadEvent event) {
-                countFoundFilms = event.getCount();
-                maxFilms = event.getMax();
+                countFoundFilms = event.count;
+                maxFilms = (int) event.max;
                 updateProgressBar(event);
             }
 
@@ -138,8 +138,8 @@ public class StatusBarController extends AnchorPane {
             public void fertig(ListenerFilmlistLoadEvent event) {
                 stopTimer = false;
                 loadList = false;
-                countFoundFilms = event.getCount();
-                maxFilms = event.getMax();
+                countFoundFilms = event.count;
+                maxFilms = (int) event.max;
                 setStatusbar();
             }
         });
@@ -172,15 +172,15 @@ public class StatusBarController extends AnchorPane {
 
     private void updateProgressBar(ListenerFilmlistLoadEvent event) {
         stopTimer = true;
-        progress.setProgress(event.getProgress());
-        lblProgress.setText(event.getText());
+        progress.setProgress(event.progress);
+        lblProgress.setText(event.text);
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY);
-        String count = numberFormat.format(event.getCount());
-        String max = numberFormat.format(event.getMax());
+        String count = numberFormat.format(event.count);
+        String max = numberFormat.format((int) event.max);
 
-        if (event.getCount() >= 0) {
-            if (event.getCount() != event.getMax()) {
+        if (event.count >= 0) {
+            if (event.count != (int) event.max) {
                 lblLeftLoad.setText("Filme gefunden: " + count + " von insgesamt: " + max);
             } else {
                 lblLeftLoad.setText("Filme gefunden: " + count);
