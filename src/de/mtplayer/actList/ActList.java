@@ -21,12 +21,11 @@ import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.Config;
 import de.mtplayer.actList.controller.config.Const;
 import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.gui.tools.GuiSize;
-import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.actList.res.GetIcon;
 import de.mtplayer.mLib.tools.Functions;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.p2tools.p2Lib.guiTools.GuiSize;
 import de.p2tools.p2Lib.tools.log.Duration;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -43,8 +42,6 @@ public class ActList extends Application {
     private static final int ICON_HEIGHT = 58;
 
     private static final String LOG_TEXT_PROGRAMMSTART = "***Programmstart***";
-    private static final String TITLE_TEXT_PROGRAMMVERSION_IST_AKTUELL = "Programmversion ist aktuell";
-    private static final String TITLE_TEXT_EIN_PROGRAMMUPDATE_IST_VERFUEGBAR = "Ein Programmupdate ist verfügbar";
 
     protected Daten daten;
     ProgStart progStart;
@@ -73,8 +70,8 @@ public class ActList extends Application {
             root = new ActListController();
             daten.actListController = root;
             scene = new Scene(root,
-                    GuiSize.getWidth(Config.SYSTEM_GROESSE_GUI),
-                    GuiSize.getHeight(Config.SYSTEM_GROESSE_GUI));
+                    GuiSize.getWidth(Config.SYSTEM_GROESSE_GUI.getStringProperty()),
+                    GuiSize.getHeight(Config.SYSTEM_GROESSE_GUI.getStringProperty()));
 
             String css = this.getClass().getResource(Const.CSS_FILE).toExternalForm();
             scene.getStylesheets().add(css);
@@ -85,7 +82,7 @@ public class ActList extends Application {
                 new ProgQuitt().beenden(true, false);
             });
 
-            GuiSize.setPos(Config.SYSTEM_GROESSE_GUI, primaryStage);
+            GuiSize.setPos(Config.SYSTEM_GROESSE_GUI.getStringProperty(), primaryStage);
             primaryStage.show();
 
         } catch (final Exception e) {
@@ -103,8 +100,6 @@ public class ActList extends Application {
         setOrgTitel();
         initProg();
 
-        addListener();
-
         Duration.staticPing("Gui steht!");
         progStart.loadDataProgStart();
     }
@@ -115,27 +110,6 @@ public class ActList extends Application {
         progStart.allesLaden();
     }
 
-    private void addListener() {
-        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_ORG_TITEL, ActList.class.getSimpleName()) {
-            @Override
-            public void ping() {
-                setOrgTitel();
-            }
-        });
-        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_PROGRAMM_AKTUELL, ActList.class.getSimpleName()) {
-            @Override
-            public void ping() {
-                primaryStage.setTitle(TITLE_TEXT_PROGRAMMVERSION_IST_AKTUELL);
-            }
-        });
-        Listener.addListener(new Listener(Listener.EREIGNIS_GUI_UPDATE_VERFUEGBAR, ActList.class.getSimpleName()) {
-            @Override
-            public void ping() {
-                primaryStage.setTitle(TITLE_TEXT_EIN_PROGRAMMUPDATE_IST_VERFUEGBAR);
-            }
-        });
-    }
-
     private void setOrgTitel() {
         primaryStage.setTitle(Const.PROGRAMMNAME + " " + Functions.getProgVersion());
     }
@@ -143,15 +117,9 @@ public class ActList extends Application {
     private void initProg() {
         daten.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public void start(ListenerFilmlistLoadEvent event) {
-
-            }
-
-            @Override
             public void fertig(ListenerFilmlistLoadEvent event) {
                 new ProgSave().allesSpeichern(); // damit nichts verlorengeht
             }
-
         });
 
     }

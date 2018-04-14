@@ -16,26 +16,13 @@
 
 package de.mtplayer.actList.gui.tools;
 
-import de.p2tools.p2Lib.tools.log.PLog;
-import javafx.application.Platform;
+public class Listener extends de.mtplayer.mtp.gui.tools.Listener {
 
-import java.util.ArrayList;
-import java.util.EventListener;
-
-
-public class Listener implements EventListener {
-
-    static int count = 0;
-
+    static int count = 1000; // sicherer Abstand zu MTPlayer
     public static final int EREIGNIS_TIMER = count++;
-    public static final int EREIGNIS_GUI_ORG_TITEL = count++;
-    public static final int EREIGNIS_GUI_PROGRAMM_AKTUELL = count++;
-    public static final int EREIGNIS_GUI_UPDATE_VERFUEGBAR = count++;
 
-
-    public int[] event = {-1};
-    public String eventClass = "";
-    private static final ArrayList<Listener> listeners = new ArrayList<>();
+    public Listener() {
+    }
 
     public Listener(int event, String eventClass) {
         this.event = new int[]{event};
@@ -46,48 +33,4 @@ public class Listener implements EventListener {
         this.event = event;
         this.eventClass = eventClass;
     }
-
-    public void ping() {
-    }
-
-    public static synchronized void addListener(Listener listener) {
-        PLog.sysLog("Anz. Listener: " + listeners.size());
-        listeners.add(listener);
-    }
-
-    public static synchronized void removeListener(Listener listener) {
-        listeners.remove(listener);
-    }
-
-    public static synchronized void notify(int eventNotify, String eventClass) {
-
-        listeners.stream().forEach(listener -> {
-
-            for (final int event : listener.event) {
-
-                if (event == eventNotify && !listener.eventClass.equals(eventClass)) {
-                    // um einen Kreislauf zu verhindern
-                    try {
-                        //System.out.println("Ping: " + ereignis);
-                        listener.pingen();
-                    } catch (final Exception ex) {
-                        PLog.errorLog(512021043, ex);
-                    }
-                }
-
-            }
-
-
-        });
-
-    }
-
-    private void pingen() {
-        try {
-            Platform.runLater(this::ping);
-        } catch (final Exception ex) {
-            PLog.errorLog(698989743, ex);
-        }
-    }
-
 }
