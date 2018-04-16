@@ -41,9 +41,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LoadFilmlist {
 
     private final Daten daten;
-    private final Filmlist diffListe;
+    private final Filmlist diffList;
 
-    private final ImportNewFilmlist importFilmliste;
+    private final ImportNewFilmlist importFilmlist;
     private final ReadWriteFilmlist readWriteFilmlist;
 
     private BooleanProperty propListSearching = new SimpleBooleanProperty(false);
@@ -52,9 +52,9 @@ public class LoadFilmlist {
 
     public LoadFilmlist(Daten daten) {
         this.daten = daten;
-        diffListe = new Filmlist();
-        importFilmliste = new ImportNewFilmlist();
-        importFilmliste.addAdListener(new ListenerFilmlistLoad() {
+        diffList = new Filmlist();
+        importFilmlist = new ImportNewFilmlist();
+        importFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
             public synchronized void start(ListenerFilmlistLoadEvent event) {
                 notifyProgress.notifyEvent(NotifyProgress.NOTIFY.START, event);
@@ -118,16 +118,16 @@ public class LoadFilmlist {
     }
 
     public void updateDownloadUrlsFilmlisten() {
-        importFilmliste.searchFilmListUrls.updateURLsFilmlisten(true);
-        importFilmliste.searchFilmListUrls.updateURLsFilmlisten(false);
+        importFilmlist.searchFilmListUrls.updateURLsFilmlisten(true);
+        importFilmlist.searchFilmListUrls.updateURLsFilmlisten(false);
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_akt() {
-        return importFilmliste.searchFilmListUrls.filmlistUrlList_akt;
+        return importFilmlist.searchFilmListUrls.filmlistUrlList_akt;
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_diff() {
-        return importFilmliste.searchFilmListUrls.filmlistUrlList_diff;
+        return importFilmlist.searchFilmListUrls.filmlistUrlList_diff;
     }
 
     public void readWriteFilmlist(String source, String dest, final Filmlist filmlist, int days) {
@@ -153,15 +153,15 @@ public class LoadFilmlist {
         PLog.sysLog("");
 
         // wenn nur ein Update
-        if (!diffListe.isEmpty()) {
+        if (!diffList.isEmpty()) {
             PLog.sysLog("Liste Diff gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            PLog.sysLog("  Liste Diff erstellt am: " + diffListe.genDate());
-            PLog.sysLog("  Anzahl Filme: " + diffListe.size());
+            PLog.sysLog("  Liste Diff erstellt am: " + diffList.genDate());
+            PLog.sysLog("  Anzahl Filme: " + diffList.size());
 
-            daten.filmlist.updateListe(diffListe, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
-            daten.filmlist.metaDaten = diffListe.metaDaten;
+            daten.filmlist.updateListe(diffList, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
+            daten.filmlist.metaDaten = diffList.metaDaten;
             daten.filmlist.sort(); // jetzt sollte alles passen
-            diffListe.clear();
+            diffList.clear();
         } else {
             PLog.sysLog("Liste Kompl. gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
             PLog.sysLog("  Liste Kompl erstellt am: " + daten.filmlist.genDate());
@@ -191,7 +191,7 @@ public class LoadFilmlist {
                 ListenerFilmlistLoad.PROGRESS_MAX, 0, false/* Fehler */));
         PLog.sysLog("Themen suchen");
         daten.filmlist.themenLaden();
-        
+
         setPropListSearching(false);
         notifyProgress.notifyEvent(NotifyProgress.NOTIFY.FINISHED, event);
     }
