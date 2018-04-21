@@ -21,6 +21,7 @@ import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.actList.gui.tools.HelpText;
+import de.p2tools.p2Lib.guiTools.PButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.geometry.HPos;
@@ -69,10 +70,8 @@ public class FilmPaneController extends AnchorPane {
     private void makeConfig() {
         initDays();
 
-        final Button btnHelpDays = new Button("");
-        btnHelpDays.setGraphic(new Icons().ICON_BUTTON_HELP);
-        btnHelpDays.setOnAction(a -> new MTAlert().showHelpAlert("nur Filme der letzten Tage laden",
-                HelpText.LOAD_FILM_ONLY_DAYS));
+        final Button btnHelpDays = new PButton().helpButton("nur Filme der letzten Tage laden",
+                HelpText.LOAD_FILM_ONLY_DAYS);
 
 
         VBox vBox = new VBox();

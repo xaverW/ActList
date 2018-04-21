@@ -21,6 +21,7 @@ import de.mtplayer.actList.controller.config.Daten;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.actList.gui.tools.HelpText;
+import de.p2tools.p2Lib.guiTools.PButton;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -80,10 +81,8 @@ public class UrlPaneController extends AnchorPane {
         });
         btnGetUrls.setGraphic(new Icons().ICON_BUTTON_RESET);
 
-        final Button btnHelpUrl = new Button("");
-        btnHelpUrl.setGraphic(new Icons().ICON_BUTTON_HELP);
-        btnHelpUrl.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
-                HelpText.LOAD_FILMLIST_URL));
+        final Button btnHelpUrl = new PButton().helpButton("Filmliste laden",
+                HelpText.LOAD_FILMLIST_URL);
 
         VBox vBox = new VBox();
         vBox.setSpacing(10);
@@ -92,10 +91,8 @@ public class UrlPaneController extends AnchorPane {
 
         txtUrl.textProperty().bindBidirectional(propUrl);
 
-        final Button btnHelp = new Button("");
-        btnHelp.setGraphic(new Icons().ICON_BUTTON_HELP);
-        btnHelp.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
-                HelpText.LOAD_FILMLIST_MANUEL));
+        final Button btnHelp = new PButton().helpButton("Filmliste laden",
+                HelpText.LOAD_FILMLIST_MANUEL);
 
         Label lblTxt = new Label("URL’s:");
         GridPane.setValignment(lblTxt, VPos.TOP);
