@@ -16,12 +16,11 @@
 
 package de.mtplayer.actList.gui;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.controller.data.Icons;
-import de.mtplayer.actList.gui.dialog.MTAlert;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgConst;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.gui.tools.HelpText;
+import de.p2tools.p2Lib.guiTools.PButton;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -34,14 +33,14 @@ import java.util.Arrays;
 
 public class SenderPaneController extends AnchorPane {
 
-    private final Daten daten;
+    private final ProgData progData;
     private final GridPane gridPane = new GridPane();
 
-    StringProperty propSender = Config.SYSTEM_LOAD_NOT_SENDER.getStringProperty();
+    StringProperty propSender = ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty();
 
 
     public SenderPaneController() {
-        daten = Daten.getInstance();
+        progData = ProgData.getInstance();
 
         final ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToHeight(true);
@@ -64,12 +63,12 @@ public class SenderPaneController extends AnchorPane {
     private void makeLoadManuel() {
         final ListView<CheckBox> lv = new ListView<>();
         GridPane.setVgrow(lv, Priority.ALWAYS);
-        daten.loadFilmlist.updateDownloadUrlsFilmlisten();
+        progData.loadFilmlist.updateDownloadUrlsFilmlisten();
 
         ArrayList aListSender = new ArrayList(Arrays.asList(propSender.getValue().split(",")));
         ArrayList<CheckBox> aListCb = new ArrayList<>();
 
-        for (String s : Const.SENDER) {
+        for (String s : ProgConst.SENDER) {
             final CheckBox cb = new CheckBox(s);
             aListCb.add(cb);
 
@@ -80,10 +79,8 @@ public class SenderPaneController extends AnchorPane {
             });
         }
 
-        final Button btnHelp = new Button("");
-        btnHelp.setGraphic(new Icons().ICON_BUTTON_HELP);
-        btnHelp.setOnAction(a -> new MTAlert().showHelpAlert("Filmliste laden",
-                HelpText.LOAD_FILMLIST_SENDER));
+        final Button btnHelp = new PButton().helpButton("Filmliste laden",
+                HelpText.LOAD_FILMLIST_SENDER);
 
         gridPane.add(new Label("Sender nicht laden"), 0, 0);
         gridPane.add(lv, 0, 1);

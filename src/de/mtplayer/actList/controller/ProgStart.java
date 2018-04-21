@@ -16,9 +16,9 @@
 
 package de.mtplayer.actList.controller;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgConst;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.mLib.MLInit;
 import de.mtplayer.mLib.tools.StringFormatters;
@@ -34,10 +34,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ProgStart {
-    Daten daten;
+    ProgData progData;
 
-    public ProgStart(Daten daten) {
-        this.daten = daten;
+    public ProgStart(ProgData progData) {
+        this.progData = progData;
     }
 
     // #########################################################
@@ -57,7 +57,7 @@ public class ProgStart {
         list.add("Programmpfad: " + ProgInfos.getPathJar());
         list.add("Verzeichnis Einstellungen: " + ProgInfos.getSettingsDirectory_String());
 
-        LogMsg.startMsg(Const.PROGRAMMNAME, list);
+        LogMsg.startMsg(ProgConst.PROGRAMMNAME, list);
     }
 
     private class loadFilmlistProgStart_ implements Runnable {
@@ -66,67 +66,50 @@ public class ProgStart {
         public synchronized void run() {
             Duration.staticPing("Programmstart Daten laden");
 
-            final Daten daten = Daten.getInstance();
+            final ProgData progData = ProgData.getInstance();
 
             new ReadFilmlist().readFilmlist(ProgInfos.getFilmlistFile(),
-                    daten.filmlist, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+                    progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
 
             ArrayList<String> list = new ArrayList<>();
             list.add(PLog.LILNE3);
             list.add("Liste Filme gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            list.add("  erstellt am: " + daten.filmlist.genDate());
-            list.add("  Anzahl Filme: " + daten.filmlist.size());
+            list.add("  erstellt am: " + progData.filmlist.genDate());
+            list.add("  Anzahl Filme: " + progData.filmlist.size());
             list.add(PLog.LILNE3);
             PLog.sysLog(list);
-
-//            if (daten.filmlist.isTooOld() && Config.SYSTEM_LOAD_FILME_START.getBool()) {
-//                PLog.sysLog("Filmliste zu alt, neue Filmliste laden");
-//                daten.loadFilmlist.loadFilmlist("", false);
-//
-//            } else {
-//                // beim Neuladen wird es dann erst gemacht
-//                daten.loadFilmlist.notifyStart(new ListenerFilmlistLoadEvent("", "", 0, 0, 0, false/* Fehler */));
-//                daten.loadFilmlist.afterFilmlistLoad();
-//                daten.loadFilmlist.notifyFertig(new ListenerFilmlistLoadEvent("", "", 0, 0, 0, false/* Fehler */));
-//            }
         }
 
     }
 
 
     /**
-     * Config beim  Programmstart laden
+     * ProgConfig beim  Programmstart laden
      *
      * @return
      */
-    public boolean allesLaden() {
+    public boolean startAll() {
         boolean load = load();
-        if (Daten.debug) {
+        if (ProgData.debug) {
             PLogger.setFileHandler(ProgInfos.getLogDirectory_String());
         }
 
         if (!load) {
             PLog.sysLog("Weder Konfig noch Backup konnte geladen werden!");
-            // teils geladene Reste entfernen
-            clearKonfig();
             return false;
         }
         PLog.sysLog("Konfig wurde gelesen!");
-        MLInit.initLib(Daten.debug, Const.PROGRAMMNAME, ProgInfos.getUserAgent());
+        MLInit.initLib(ProgData.debug, ProgConst.PROGRAMMNAME, ProgInfos.getUserAgent());
         return true;
     }
 
-    private void clearKonfig() {
-        Daten daten = Daten.getInstance();
-    }
-
     private boolean load() {
-        Daten daten = Daten.getInstance();
+        ProgData progData = ProgData.getInstance();
 
         boolean ret = false;
         final Path xmlFilePath = new ProgInfos().getXmlFilePath();
 
-        try (IoXmlLesen reader = new IoXmlLesen(daten)) {
+        try (IoReadXml reader = new IoReadXml(progData)) {
             if (Files.exists(xmlFilePath)) {
                 if (reader.readConfiguration(xmlFilePath)) {
                     return true;

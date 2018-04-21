@@ -16,23 +16,23 @@
 
 package de.mtplayer.actList.controller;
 
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.mtp.controller.filmlist.writeFilmlist.WriteFilmlistJson;
 
 public class ProgSave {
-    final Daten daten;
+    final ProgData progData;
 
     public ProgSave() {
-        daten = Daten.getInstance();
+        progData = ProgData.getInstance();
     }
 
-    public void filmlisteSpeichern() {
-        new WriteFilmlistJson().write(ProgInfos.getFilmlistFile(), daten.filmlist);
+    public void saveFilmlist() {
+        new WriteFilmlistJson().write(ProgInfos.getFilmlistFile(), progData.filmlist);
     }
 
-    public void allesSpeichern() {
-        try (IoXmlSchreiben writer = new IoXmlSchreiben(daten)) {
+    public void saveAll() {
+        try (IoWriteXml writer = new IoWriteXml(progData)) {
             writer.datenSchreiben();
         } catch (final Exception ex) {
             ex.printStackTrace();

@@ -16,9 +16,9 @@
 
 package de.mtplayer.actList.controller;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgConst;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlData;
 import de.p2tools.p2Lib.tools.log.PLog;
@@ -33,47 +33,47 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class IoXmlSchreiben implements AutoCloseable {
+public class IoWriteXml implements AutoCloseable {
 
     private XMLStreamWriter writer = null;
     private OutputStreamWriter out = null;
     private Path xmlFilePath = null;
     private OutputStream os = null;
-    private Daten daten = null;
+    private ProgData progData = null;
 
-    public IoXmlSchreiben(Daten daten) {
-        this.daten = daten;
+    public IoWriteXml(ProgData progData) {
+        this.progData = progData;
     }
 
     public synchronized void datenSchreiben() {
         xmlFilePath = new ProgInfos().getXmlFilePath();
         PLog.sysLog("Daten Schreiben nach: " + xmlFilePath.toString());
-        xmlDatenSchreiben();
+        xmlWriteData();
     }
 
-    private void xmlDatenSchreiben() {
+    private void xmlWriteData() {
         try {
-            xmlSchreibenStart();
+            xmlWriteStart();
 
             writer.writeCharacters("\n\n");
             writer.writeComment("Programmeinstellungen");
             writer.writeCharacters("\n");
-            xmlSchreibenConfig(Config.SYSTEM, Config.getAll());
+            xmlWriteConfig(ProgConfig.SYSTEM, ProgConfig.getAll());
             writer.writeCharacters("\n");
 
             writer.writeCharacters("\n\n");
             writer.writeComment("Update Filmliste");
             writer.writeCharacters("\n");
-            xmlSchreibenFilmUpdateServer();
+            xmlWriteFilmUpdateServer();
 
             writer.writeCharacters("\n\n");
-            xmlSchreibenEnde();
+            xmlWriteEnd();
         } catch (final Exception ex) {
             PLog.errorLog(656328109, ex);
         }
     }
 
-    private void xmlSchreibenStart() throws IOException, XMLStreamException {
+    private void xmlWriteStart() throws IOException, XMLStreamException {
         PLog.sysLog("Start Schreiben nach: " + xmlFilePath.toAbsolutePath());
         os = Files.newOutputStream(xmlFilePath);
         out = new OutputStreamWriter(os, StandardCharsets.UTF_8);
@@ -82,19 +82,19 @@ public class IoXmlSchreiben implements AutoCloseable {
         writer = outFactory.createXMLStreamWriter(out);
         writer.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
         writer.writeCharacters("\n");// neue Zeile
-        writer.writeStartElement(Const.XML_START);
+        writer.writeStartElement(ProgConst.XML_START);
         writer.writeCharacters("\n");// neue Zeile
     }
 
-    private void xmlSchreibenFilmUpdateServer() throws XMLStreamException {
+    private void xmlWriteFilmUpdateServer() throws XMLStreamException {
         // FilmUpdate schreiben
         writer.writeCharacters("\n");
         writer.writeComment("Akt-Filmliste");
         writer.writeCharacters("\n");
 
-        for (final FilmlistUrlData datenUrlFilmliste : daten.loadFilmlist.getDownloadUrlsFilmlisten_akt()) {
+        for (final FilmlistUrlData datenUrlFilmliste : progData.loadFilmlist.getDownloadUrlsFilmlisten_akt()) {
             datenUrlFilmliste.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_ART_NR] = FilmlistUrlData.SERVER_ART_AKT;
-            xmlSchreibenDaten(FilmlistUrlData.FILMLIST_UPDATE_SERVER,
+            xmlWriteData(FilmlistUrlData.FILMLIST_UPDATE_SERVER,
                     FilmlistUrlData.FILMLIST_UPDATE_SERVER_COLUMN_NAMES,
                     datenUrlFilmliste.arr,
                     false);
@@ -103,16 +103,16 @@ public class IoXmlSchreiben implements AutoCloseable {
         writer.writeCharacters("\n");
         writer.writeComment("Diff-Filmliste");
         writer.writeCharacters("\n");
-        for (final FilmlistUrlData datenUrlFilmliste : daten.loadFilmlist.getDownloadUrlsFilmlisten_diff()) {
+        for (final FilmlistUrlData datenUrlFilmliste : progData.loadFilmlist.getDownloadUrlsFilmlisten_diff()) {
             datenUrlFilmliste.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_ART_NR] = FilmlistUrlData.SERVER_ART_DIFF;
-            xmlSchreibenDaten(FilmlistUrlData.FILMLIST_UPDATE_SERVER,
+            xmlWriteData(FilmlistUrlData.FILMLIST_UPDATE_SERVER,
                     FilmlistUrlData.FILMLIST_UPDATE_SERVER_COLUMN_NAMES,
                     datenUrlFilmliste.arr,
                     false);
         }
     }
 
-    private void xmlSchreibenDaten(String xmlName, String[] xmlSpalten, String[] datenArray, boolean newLine) {
+    private void xmlWriteData(String xmlName, String[] xmlSpalten, String[] datenArray, boolean newLine) {
         final int xmlMax = datenArray.length;
         try {
             writer.writeStartElement(xmlName);
@@ -139,15 +139,12 @@ public class IoXmlSchreiben implements AutoCloseable {
         }
     }
 
-    private void xmlSchreibenConfig(String xmlName, String[][] xmlSpalten) {
+    private void xmlWriteConfig(String xmlName, String[][] xmlSpalten) {
         try {
             writer.writeStartElement(xmlName);
             writer.writeCharacters("\n"); // neue Zeile
 
             for (final String[] xmlSpalte : xmlSpalten) {
-//                if (!Config.find(xmlSpalte[0])) {
-//                    continue; // nur Configs schreiben die es noch gibt
-//                }
                 writer.writeCharacters("\t"); // Tab
                 writer.writeStartElement(xmlSpalte[0]);
                 writer.writeCharacters(xmlSpalte[1]);
@@ -161,7 +158,7 @@ public class IoXmlSchreiben implements AutoCloseable {
         }
     }
 
-    private void xmlSchreibenEnde() throws Exception {
+    private void xmlWriteEnd() throws Exception {
         writer.writeEndElement();
         writer.writeEndDocument();
         writer.flush();

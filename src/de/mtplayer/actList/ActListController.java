@@ -16,7 +16,7 @@
 
 package de.mtplayer.actList;
 
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.gui.GuiPack;
 import de.mtplayer.actList.gui.StatusBarController;
 import javafx.geometry.Insets;
@@ -35,11 +35,11 @@ public class ActListController extends StackPane {
     private StatusBarController statusBarController;
     private GuiPack guiPack;
 
-    private final Daten daten;
+    private final ProgData progData;
 
 
     public ActListController() {
-        daten = Daten.getInstance();
+        progData = ProgData.getInstance();
         init();
     }
 
@@ -49,7 +49,7 @@ public class ActListController extends StackPane {
             guiPack.pack();
             stackPaneCont.getChildren().addAll(guiPack);
 
-            statusBarController = new StatusBarController(daten);
+            statusBarController = new StatusBarController(progData);
             VBox.setVgrow(statusBarController, Priority.NEVER);
 
             borderPane.setCenter(stackPaneCont);

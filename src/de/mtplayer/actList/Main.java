@@ -15,7 +15,7 @@
  */
 package de.mtplayer.actList;
 
-import de.mtplayer.actList.controller.config.Const;
+import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.mLib.tools.SystemInfo;
 import de.p2tools.p2Lib.guiTools.LinuxJavaFx;
 import de.p2tools.p2Lib.tools.net.Proxy;
@@ -56,7 +56,7 @@ public class Main {
         Platform.setImplicitExit(false);
 
         if (SystemInfo.isUnix()) {
-            LinuxJavaFx.setupX11WindowManagerClassName(Const.PROGRAMMNAME);
+            LinuxJavaFx.setupX11WindowManagerClassName(ProgConst.PROGRAMMNAME);
         }
 
         Application.launch(ActList.class, args);

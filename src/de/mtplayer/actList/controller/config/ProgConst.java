@@ -16,7 +16,7 @@
 
 package de.mtplayer.actList.controller.config;
 
-public class Const {
+public class ProgConst {
 
     public static final String PROGRAMMNAME = "ActList";
     public static final String CONFIG_FILE = "mtplayer.xml";
@@ -24,14 +24,8 @@ public class Const {
 
     public static final String FORMAT_ZIP = ".zip";
     public static final String FORMAT_XZ = ".xz";
-    public static final int ALTER_FILMLISTE_SEKUNDEN_FUER_AUTOUPDATE = 4 * 60 * 60; // beim Start des Programms wir die Liste geladen wenn sie älter ist als ..
-    public static final String TIME_MAX_AGE_FOR_DIFF = "09"; // Uhrzeit ab der die Diffliste alle Änderungen abdeckt, die Filmliste darf also nicht vor xx erstellt worden sein
     public static final int MAX_PFADE_DIALOG_DOWNLOAD = 15;
     public static final String DIR_FILMLIST_SEPARATOR = "<>";
-
-    // MediathekView URLs
-    public static final String ADRESSE_FILMLISTEN_SERVER_DIFF = "http://res.mediathekview.de/diff.xml";
-    public static final String ADRESSE_FILMLISTEN_SERVER_AKT = "http://res.mediathekview.de/akt.xml";
 
 
     // Dateien/Verzeichnisse

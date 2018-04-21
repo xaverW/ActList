@@ -16,10 +16,9 @@
 
 package de.mtplayer.actList.gui;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.data.Icons;
-import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.actList.gui.tools.HelpText;
 import de.p2tools.p2Lib.guiTools.PButton;
 import de.p2tools.p2Lib.tools.log.PLog;
@@ -33,14 +32,14 @@ import java.util.ArrayList;
 
 public class UrlPaneController extends AnchorPane {
 
-    private final Daten daten;
+    private final ProgData progData;
     private final GridPane gridPane = new GridPane();
     private final TextField txtUrl = new TextField("");
 
-    StringProperty propUrl = Config.SYSTEM_LOAD_FILME_MANUELL.getStringProperty();
+    StringProperty propUrl = ProgConfig.SYSTEM_LOAD_FILME_MANUELL.getStringProperty();
 
     public UrlPaneController() {
-        daten = Daten.getInstance();
+        progData = ProgData.getInstance();
 
         final ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToHeight(true);
@@ -63,7 +62,7 @@ public class UrlPaneController extends AnchorPane {
     private void makeLoadManuel() {
         final ListView<String> lv = new ListView<>();
         GridPane.setVgrow(lv, Priority.ALWAYS);
-        daten.loadFilmlist.updateDownloadUrlsFilmlisten();
+        progData.loadFilmlist.updateDownloadUrlsFilmlisten();
         lv.setOnMouseClicked(a -> {
             String str = lv.getSelectionModel().getSelectedItem();
             if (str != null && !str.isEmpty()) {
@@ -73,8 +72,8 @@ public class UrlPaneController extends AnchorPane {
 
         final Button btnGetUrls = new Button();
         btnGetUrls.setOnAction(event -> {
-            daten.loadFilmlist.updateDownloadUrlsFilmlisten();
-            ArrayList<String> al = daten.loadFilmlist.getDownloadUrlsFilmlisten_akt().getUrls();
+            progData.loadFilmlist.updateDownloadUrlsFilmlisten();
+            ArrayList<String> al = progData.loadFilmlist.getDownloadUrlsFilmlisten_akt().getUrls();
             PLog.sysLog(al.size() + " URL’s eingetragen");
             lv.getItems().clear();
             lv.getItems().addAll(al);

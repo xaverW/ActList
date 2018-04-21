@@ -16,10 +16,8 @@
 
 package de.mtplayer.actList.gui;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Daten;
-import de.mtplayer.actList.controller.data.Icons;
-import de.mtplayer.actList.gui.dialog.MTAlert;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.gui.tools.HelpText;
 import de.p2tools.p2Lib.guiTools.PButton;
 import javafx.beans.property.BooleanProperty;
@@ -36,18 +34,18 @@ import javafx.scene.layout.*;
 public class FilmPaneController extends AnchorPane {
 
     private final int FILTER_DAYS_MAX = 150;
-    private final Daten daten;
+    private final ProgData progData;
     private final ScrollPane scrollPane = new ScrollPane();
     private final GridPane gridPane = new GridPane();
 
     private final Slider slDays = new Slider();
     private final Label lblDays = new Label("");
 
-    IntegerProperty propDay = Config.SYSTEM_ANZ_TAGE_FILMLISTE.getIntegerProperty();
-    BooleanProperty propLoad = Config.SYSTEM_LOAD_FILME_START.getBooleanProperty();
+    IntegerProperty propDay = ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getIntegerProperty();
+    BooleanProperty propLoad = ProgConfig.SYSTEM_LOAD_FILME_START.getBooleanProperty();
 
     public FilmPaneController() {
-        daten = Daten.getInstance();
+        progData = ProgData.getInstance();
 
         final ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToHeight(true);

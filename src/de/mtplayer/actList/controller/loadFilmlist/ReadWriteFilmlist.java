@@ -18,9 +18,9 @@
 package de.mtplayer.actList.controller.loadFilmlist;
 
 import com.fasterxml.jackson.core.*;
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgConst;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
 import de.mtplayer.mLib.tools.InputStreamProgressMonitor;
 import de.mtplayer.mLib.tools.MLAlert;
@@ -86,7 +86,7 @@ public class ReadWriteFilmlist {
         }
 
 
-        Daten.getInstance().loadFilmlist.setStop(false);
+        ProgData.getInstance().loadFilmlist.setStop(false);
         Thread th = new Thread(() -> {
             readWrite(source, filmlist, days);
         });
@@ -116,7 +116,7 @@ public class ReadWriteFilmlist {
 
             processFromWeb(new URL(source), filmlist);
 
-            if (Daten.getInstance().loadFilmlist.getStop()) {
+            if (ProgData.getInstance().loadFilmlist.getStop()) {
                 list.add("Filme lesen --> Abbruch");
                 filmlist.clear();
             }
@@ -130,9 +130,9 @@ public class ReadWriteFilmlist {
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {
-        if (source.endsWith(Const.FORMAT_XZ)) {
+        if (source.endsWith(ProgConst.FORMAT_XZ)) {
             in = new XZInputStream(in);
-        } else if (source.endsWith(Const.FORMAT_ZIP)) {
+        } else if (source.endsWith(ProgConst.FORMAT_ZIP)) {
             final ZipInputStream zipInputStream = new ZipInputStream(in);
             zipInputStream.getNextEntry();
             in = zipInputStream;
@@ -144,7 +144,7 @@ public class ReadWriteFilmlist {
         JsonToken jsonToken;
         String sender = "", thema = "";
         final Film film = new Film();
-        ArrayList aListSender = new ArrayList(Arrays.asList(Config.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
+        ArrayList aListSender = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
 
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             throw new IllegalStateException("Expected data to start with an Object");
@@ -175,7 +175,7 @@ public class ReadWriteFilmlist {
         // jetzt ist das Datum der Filmliste gesetzt und kann geschrieben werden
         startWrite(jg, filmlist);
 
-        while (!Daten.getInstance().loadFilmlist.getStop() && (jsonToken = jp.nextToken()) != null) {
+        while (!ProgData.getInstance().loadFilmlist.getStop() && (jsonToken = jp.nextToken()) != null) {
             if (jsonToken == JsonToken.END_OBJECT) {
                 break;
             }
@@ -204,9 +204,6 @@ public class ReadWriteFilmlist {
                     film.initDate();
                     if (checkDate(film)) {
                         ++countFoundFilms;
-//                        if (countFoundFilms > 1000 && countFoundFilms / 1000 == 0) {
-//                            System.out.println("Write: " + countFoundFilms);
-//                        }
                         writeFilm(jg, film);
                     }
                 }
@@ -278,7 +275,6 @@ public class ReadWriteFilmlist {
                 final int iProgress = (int) (bytesRead * 100/* zum Runden */ / size);
                 if (iProgress != oldProgress) {
                     oldProgress = iProgress;
-//                    System.out.println("Progress " + iProgress + " " + countFoundFilms);
                     notifyProgress(source.toString(), 1.0 * iProgress / 100, max);
                 }
             }

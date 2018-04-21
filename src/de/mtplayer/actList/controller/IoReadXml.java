@@ -17,8 +17,8 @@
 
 package de.mtplayer.actList.controller;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.mLib.tools.MLConfigs;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlData;
 import de.p2tools.p2Lib.tools.log.Duration;
@@ -33,13 +33,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class IoXmlLesen implements AutoCloseable {
+public class IoReadXml implements AutoCloseable {
 
     private XMLInputFactory inFactory = null;
-    private Daten daten = null;
+    private ProgData progData = null;
 
-    public IoXmlLesen(Daten daten) {
-        this.daten = daten;
+    public IoReadXml(ProgData progData) {
+        this.progData = progData;
 
         inFactory = XMLInputFactory.newInstance();
         inFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
@@ -58,9 +58,9 @@ public class IoXmlLesen implements AutoCloseable {
                     final int event = parser.next();
                     if (event == XMLStreamConstants.START_ELEMENT) {
                         switch (parser.getLocalName()) {
-                            case Config.SYSTEM:
+                            case ProgConfig.SYSTEM:
                                 // System
-                                getConfig(parser, Config.SYSTEM);
+                                getConfig(parser, ProgConfig.SYSTEM);
                                 break;
                             case FilmlistUrlData.FILMLIST_UPDATE_SERVER:
                                 // Urls Filmlisten
@@ -71,10 +71,10 @@ public class IoXmlLesen implements AutoCloseable {
                                         filmlistUrlData.arr)) {
                                     switch (filmlistUrlData.arr[FilmlistUrlData.FILMLIST_UPDATE_SERVER_ART_NR]) {
                                         case FilmlistUrlData.SERVER_ART_AKT:
-                                            daten.loadFilmlist.getDownloadUrlsFilmlisten_akt().addWithCheck(filmlistUrlData);
+                                            progData.loadFilmlist.getDownloadUrlsFilmlisten_akt().addWithCheck(filmlistUrlData);
                                             break;
                                         case FilmlistUrlData.SERVER_ART_DIFF:
-                                            daten.loadFilmlist.getDownloadUrlsFilmlisten_diff().addWithCheck(filmlistUrlData);
+                                            progData.loadFilmlist.getDownloadUrlsFilmlisten_diff().addWithCheck(filmlistUrlData);
                                             break;
                                     }
                                 }
@@ -94,9 +94,9 @@ public class IoXmlLesen implements AutoCloseable {
                 } catch (final Exception ignored) {
                 }
             }
-            daten.loadFilmlist.getDownloadUrlsFilmlisten_akt().sort();
-            daten.loadFilmlist.getDownloadUrlsFilmlisten_diff().sort();
-            Config.loadSystemParameter();
+            progData.loadFilmlist.getDownloadUrlsFilmlisten_akt().sort();
+            progData.loadFilmlist.getDownloadUrlsFilmlisten_diff().sort();
+            ProgConfig.loadSystemParameter();
         }
 
         Duration.counterStop("Konfig lesen");
@@ -150,7 +150,7 @@ public class IoXmlLesen implements AutoCloseable {
                 if (event == XMLStreamConstants.START_ELEMENT) {
                     final String s = parser.getLocalName();
                     final String n = parser.getElementText();
-                    MLConfigs mlConfigs = Config.get(s);
+                    MLConfigs mlConfigs = ProgConfig.get(s);
                     if (mlConfigs != null) {
                         mlConfigs.setValue(n);
                     }

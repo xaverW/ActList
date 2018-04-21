@@ -17,9 +17,9 @@
 
 package de.mtplayer.actList.gui;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgConst;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.mLib.tools.DirFileChooser;
 import de.mtplayer.mLib.tools.FileUtils;
@@ -34,17 +34,17 @@ import java.util.ArrayList;
 
 public class GuiPack extends AnchorPane {
 
-    Daten daten;
+    ProgData progData;
     private final FilmPaneController filmPaneController;
     private final UrlPaneController urlPaneController;
     private final SenderPaneController senderPaneController;
 
     private final ComboBox<String> cbPath = new ComboBox<>();
-    private final String[] storedPath = Config.SYSTEM_DEST_PATH.get().split(Const.DIR_FILMLIST_SEPARATOR);
+    private final String[] storedPath = ProgConfig.SYSTEM_DEST_PATH.get().split(ProgConst.DIR_FILMLIST_SEPARATOR);
     private final Button btnDest = new Button("");
 
     public GuiPack() {
-        daten = Daten.getInstance();
+        progData = ProgData.getInstance();
         filmPaneController = new FilmPaneController();
         urlPaneController = new UrlPaneController();
         senderPaneController = new SenderPaneController();
@@ -72,10 +72,10 @@ public class GuiPack extends AnchorPane {
 
         Button btnLoad = new Button("Filmliste jetzt laden");
         btnLoad.setOnAction(event -> {
-            String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), Const.JSON_DATEI_FILME);
-            daten.loadFilmlist.readWriteFilmlist(Config.SYSTEM_LOAD_FILME_MANUELL.get(),
+            String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
+            progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILME_MANUELL.get(),
                     fileDest,
-                    daten.filmlist, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+                    progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
         });
 
         HBox hBoxLoad = new HBox();
@@ -108,7 +108,7 @@ public class GuiPack extends AnchorPane {
     private void initPath() {
         btnDest.setGraphic(new Icons().ICON_BUTTON_FILE_OPEN);
         btnDest.setText("");
-        btnDest.setOnAction(event -> DirFileChooser.DirChooser(Daten.getInstance().primaryStage, cbPath));
+        btnDest.setOnAction(event -> DirFileChooser.DirChooser(ProgData.getInstance().primaryStage, cbPath));
 
         cbPath.setEditable(true);
         cbPath.getItems().addAll(storedPath);
@@ -137,13 +137,13 @@ public class GuiPack extends AnchorPane {
         String s = "";
         if (!pfade2.isEmpty()) {
             s = pfade2.get(0);
-            for (int i = 1; i < Const.MAX_PFADE_DIALOG_DOWNLOAD && i < pfade2.size(); ++i) {
+            for (int i = 1; i < ProgConst.MAX_PFADE_DIALOG_DOWNLOAD && i < pfade2.size(); ++i) {
                 if (!pfade2.get(i).isEmpty()) {
-                    s += Const.DIR_FILMLIST_SEPARATOR + pfade2.get(i);
+                    s += ProgConst.DIR_FILMLIST_SEPARATOR + pfade2.get(i);
                 }
             }
         }
 
-        Config.SYSTEM_DEST_PATH.setValue(s);
+        ProgConfig.SYSTEM_DEST_PATH.setValue(s);
     }
 }

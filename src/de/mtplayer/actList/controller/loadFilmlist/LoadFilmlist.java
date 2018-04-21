@@ -17,10 +17,9 @@
 package de.mtplayer.actList.controller.loadFilmlist;
 
 import de.mtplayer.actList.controller.ProgSave;
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.gui.dialog.MTAlert;
 import de.mtplayer.mLib.tools.StringFormatters;
 import de.mtplayer.mtp.controller.data.film.Filmlist;
 import de.mtplayer.mtp.controller.filmlist.NotifyProgress;
@@ -29,6 +28,7 @@ import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ImportNewFilmlist;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ReadFilmlist;
+import de.mtplayer.mtp.gui.dialog.MTAlert;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LoadFilmlist {
 
-    private final Daten daten;
+    private final ProgData progData;
     private final Filmlist diffList;
 
     private final ImportNewFilmlist importFilmlist;
@@ -50,8 +50,8 @@ public class LoadFilmlist {
     private final NotifyProgress notifyProgress = new NotifyProgress();
     private static final AtomicBoolean stop = new AtomicBoolean(false); // damit kannn das Laden gestoppt werden
 
-    public LoadFilmlist(Daten daten) {
-        this.daten = daten;
+    public LoadFilmlist(ProgData progData) {
+        this.progData = progData;
         diffList = new Filmlist();
         importFilmlist = new ImportNewFilmlist();
         importFilmlist.addAdListener(new ListenerFilmlistLoad() {
@@ -69,7 +69,7 @@ public class LoadFilmlist {
             public synchronized void fertig(ListenerFilmlistLoadEvent event) {
                 // Ergebnisliste listeFilme eintragen -> Feierabend!
                 Duration.staticPing("Filme laden, ende");
-                undEnde(event);
+                andEnd(event);
             }
         });
         readWriteFilmlist = new ReadWriteFilmlist();
@@ -88,7 +88,7 @@ public class LoadFilmlist {
             public synchronized void fertig(ListenerFilmlistLoadEvent event) {
                 // Ergebnisliste listeFilme eintragen -> Feierabend!
                 Duration.staticPing("Filme laden, ende");
-                undEnde(event);
+                andEnd(event);
             }
         });
     }
@@ -146,7 +146,7 @@ public class LoadFilmlist {
         }
     }
 
-    private void undEnde(ListenerFilmlistLoadEvent event) {
+    private void andEnd(ListenerFilmlistLoadEvent event) {
         // Abos eintragen in der gesamten Liste vor Blacklist da das nur beim Ändern der Filmliste oder
         // beim Ändern von Abos gemacht wird
 
@@ -158,14 +158,14 @@ public class LoadFilmlist {
             PLog.sysLog("  Liste Diff erstellt am: " + diffList.genDate());
             PLog.sysLog("  Anzahl Filme: " + diffList.size());
 
-            daten.filmlist.updateListe(diffList, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
-            daten.filmlist.metaDaten = diffList.metaDaten;
-            daten.filmlist.sort(); // jetzt sollte alles passen
+            progData.filmlist.updateListe(diffList, true/* Vergleich über Index, sonst nur URL */, true /* ersetzen */);
+            progData.filmlist.metaDaten = diffList.metaDaten;
+            progData.filmlist.sort(); // jetzt sollte alles passen
             diffList.clear();
         } else {
             PLog.sysLog("Liste Kompl. gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            PLog.sysLog("  Liste Kompl erstellt am: " + daten.filmlist.genDate());
-            PLog.sysLog("  Anzahl Filme: " + daten.filmlist.size());
+            PLog.sysLog("  Liste Kompl erstellt am: " + progData.filmlist.genDate());
+            PLog.sysLog("  Anzahl Filme: " + progData.filmlist.size());
         }
 
         if (event.fehler) {
@@ -174,23 +174,23 @@ public class LoadFilmlist {
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));
 
             // dann die alte Liste wieder laden
-            daten.filmlist.clear();
+            progData.filmlist.clear();
             setStop(false);
             new ReadFilmlist().readFilmlist(ProgInfos.getFilmlistFile(),
-                    daten.filmlist, Config.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+                    progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
             PLog.sysLog("");
         } else {
-            new ProgSave().filmlisteSpeichern();
+            new ProgSave().saveFilmlist();
         }
         PLog.sysLog("");
-        PLog.sysLog("Jetzige Liste erstellt am: " + daten.filmlist.genDate());
-        PLog.sysLog("  Anzahl Filme: " + daten.filmlist.size());
+        PLog.sysLog("Jetzige Liste erstellt am: " + progData.filmlist.genDate());
+        PLog.sysLog("  Anzahl Filme: " + progData.filmlist.size());
         PLog.sysLog("");
 
         notifyProgress.notifyEvent(NotifyProgress.NOTIFY.PROGRESS, new ListenerFilmlistLoadEvent("", "Themen suchen",
                 ListenerFilmlistLoad.PROGRESS_MAX, 0, false/* Fehler */));
         PLog.sysLog("Themen suchen");
-        daten.filmlist.themenLaden();
+        progData.filmlist.themenLaden();
 
         setPropListSearching(false);
         notifyProgress.notifyEvent(NotifyProgress.NOTIFY.FINISHED, event);

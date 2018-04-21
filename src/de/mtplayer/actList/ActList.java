@@ -18,14 +18,15 @@ package de.mtplayer.actList;
 import de.mtplayer.actList.controller.ProgQuitt;
 import de.mtplayer.actList.controller.ProgSave;
 import de.mtplayer.actList.controller.ProgStart;
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Const;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgConst;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.res.GetIcon;
 import de.mtplayer.mLib.tools.Functions;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.guiTools.GuiSize;
+import de.p2tools.p2Lib.guiTools.PButton;
 import de.p2tools.p2Lib.tools.log.Duration;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -43,7 +44,7 @@ public class ActList extends Application {
 
     private static final String LOG_TEXT_PROGRAMMSTART = "***Programmstart***";
 
-    protected Daten daten;
+    protected ProgData progData;
     ProgStart progStart;
     Scene scene = null;
 
@@ -56,33 +57,44 @@ public class ActList extends Application {
         this.primaryStage = primaryStage;
 
         Duration.counterStart(LOG_TEXT_PROGRAMMSTART);
-        daten = Daten.getInstance();
-        daten.primaryStage = primaryStage;
-        progStart = new ProgStart(daten);
+        progData = ProgData.getInstance();
+        progData.primaryStage = primaryStage;
+        progStart = new ProgStart(progData);
 
+        initP2();
         loadData();
         initRootLayout();
         losGehts();
     }
 
+    private void initP2() {
+        PButton.setHlpImage(GetIcon.getImage("button-help.png", 16, 16));
+    }
+
+    private void loadData() {
+        Duration.staticPing("Start");
+        ProgConfig.loadSystemParameter();
+        progStart.startAll();
+    }
+
     private void initRootLayout() {
         try {
             root = new ActListController();
-            daten.actListController = root;
+            progData.actListController = root;
             scene = new Scene(root,
-                    GuiSize.getWidth(Config.SYSTEM_GROESSE_GUI.getStringProperty()),
-                    GuiSize.getHeight(Config.SYSTEM_GROESSE_GUI.getStringProperty()));
+                    GuiSize.getWidth(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty()),
+                    GuiSize.getHeight(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty()));
 
-            String css = this.getClass().getResource(Const.CSS_FILE).toExternalForm();
+            String css = this.getClass().getResource(ProgConst.CSS_FILE).toExternalForm();
             scene.getStylesheets().add(css);
 
             primaryStage.setScene(scene);
             primaryStage.setOnCloseRequest(e -> {
                 e.consume();
-                new ProgQuitt().beenden(true, false);
+                new ProgQuitt().quitt();
             });
 
-            GuiSize.setPos(Config.SYSTEM_GROESSE_GUI.getStringProperty(), primaryStage);
+            GuiSize.setPos(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty(), primaryStage);
             primaryStage.show();
 
         } catch (final Exception e) {
@@ -104,21 +116,15 @@ public class ActList extends Application {
         progStart.loadDataProgStart();
     }
 
-    private void loadData() {
-        Duration.staticPing("Start");
-        Config.loadSystemParameter();
-        progStart.allesLaden();
-    }
-
     private void setOrgTitel() {
-        primaryStage.setTitle(Const.PROGRAMMNAME + " " + Functions.getProgVersion());
+        primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());
     }
 
     private void initProg() {
-        daten.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
+        progData.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
             public void fertig(ListenerFilmlistLoadEvent event) {
-                new ProgSave().allesSpeichern(); // damit nichts verlorengeht
+                new ProgSave().saveAll(); // damit nichts verlorengeht
             }
         });
 

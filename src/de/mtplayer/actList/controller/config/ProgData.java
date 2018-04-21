@@ -28,9 +28,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
-public class Daten {
+public class ProgData {
 
-    private static Daten instance;
+    private static ProgData instance;
 
     // flags
     public static boolean debug = false; // Debugmodus
@@ -49,26 +49,26 @@ public class Daten {
     public Filmlist filmlist; // ist die komplette Filmliste
 
 
-    private Daten() {
+    private ProgData() {
         filmlist = new Filmlist();
         loadFilmlist = new LoadFilmlist(this);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae ->
-                Listener.notify(Listener.EREIGNIS_TIMER, Daten.class.getName())));
+                Listener.notify(Listener.EREIGNIS_TIMER, ProgData.class.getName())));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.setDelay(Duration.seconds(5));
         timeline.play();
     }
 
-    public synchronized static final Daten getInstance(String dir) {
+    public synchronized static final ProgData getInstance(String dir) {
         if (!dir.isEmpty()) {
             configDir = dir;
         }
         return getInstance();
     }
 
-    public synchronized static final Daten getInstance() {
-        return instance == null ? instance = new Daten() : instance;
+    public synchronized static final ProgData getInstance() {
+        return instance == null ? instance = new ProgData() : instance;
     }
 
 }

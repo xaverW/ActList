@@ -16,50 +16,34 @@
 
 package de.mtplayer.actList.controller;
 
-import de.mtplayer.actList.controller.config.Config;
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgConfig;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.p2tools.p2Lib.guiTools.GuiSize;
 import de.p2tools.p2Lib.tools.log.LogMsg;
 import javafx.application.Platform;
 
 public class ProgQuitt {
-    final Daten daten;
+    final ProgData progData;
 
     public ProgQuitt() {
-        daten = Daten.getInstance();
-    }
-
-    private void writeWindowSizes() {
-        // Hauptfenster
-        GuiSize.getSizeScene(Config.SYSTEM_GROESSE_GUI.getStringProperty(), daten.primaryStage);
+        progData = ProgData.getInstance();
     }
 
     /**
      * Quit the MTPlayer application
-     *
-     * @param showOptionTerminate show options dialog when downloads are running
-     * @param shutDown            try to shutdown the computer if requested
      */
-    public void beenden(boolean showOptionTerminate, boolean shutDown) {
-        if (beenden_(showOptionTerminate, shutDown)) {
+    public void quitt() {
 
-            // dann jetzt beenden -> Thüss
-            Platform.runLater(() -> {
-                Platform.exit();
-                System.exit(0);
-            });
-
-        }
-    }
-
-    private boolean beenden_(boolean showOptionTerminate, boolean shutDown) {
-        writeWindowSizes();
-
-        new ProgSave().allesSpeichern();
-
+        GuiSize.getSizeScene(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty(), progData.primaryStage);
+        new ProgSave().saveAll();
         LogMsg.endMsg();
 
-        return true;
+        // dann jetzt beenden -> Thüss
+        Platform.runLater(() -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
     }
 
 }

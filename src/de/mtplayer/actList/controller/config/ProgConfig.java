@@ -20,13 +20,12 @@ package de.mtplayer.actList.controller.config;
 import de.mtplayer.mLib.tools.MLConfig;
 import de.mtplayer.mLib.tools.MLConfigs;
 
-public class Config extends MLConfig {
+public class ProgConfig extends MLConfig {
 
     public static final String SYSTEM = "system";
 
     // Fenstereinstellungen
     public static MLConfigs SYSTEM_GROESSE_GUI = addNewKey("Groesse-Gui", "1000:900");
-    public static MLConfigs SYSTEM_GROESSE_DIALOG_FILMINFO = addNewKey("Groesse-Filminfo", "600:800");
 
     // Einstellungen Filmliste
     public static MLConfigs SYSTEM_LOAD_FILME_START = addNewKey("system-load-filme-start", Boolean.TRUE.toString());

@@ -61,11 +61,11 @@ public class ProgInfos {
     }
 
     public static String pathProgramIcons() {
-        return getPathJar() + Const.VERZEICHNIS_PROGRAMM_ICONS;
+        return getPathJar() + ProgConst.VERZEICHNIS_PROGRAMM_ICONS;
     }
 
     public static String pathSenderIcons() {
-        return getPathJar() + Const.VERZEICHNIS_SENDER_ICONS;
+        return getPathJar() + ProgConst.VERZEICHNIS_SENDER_ICONS;
     }
 
 
@@ -75,7 +75,7 @@ public class ProgInfos {
      * @return Path object to mtplayer.xml file
      */
     public static Path getXmlFilePath() {
-        return ProgInfos.getSettingsDirectory().resolve(Const.CONFIG_FILE);
+        return ProgInfos.getSettingsDirectory().resolve(ProgConst.CONFIG_FILE);
     }
 
     /**
@@ -84,7 +84,7 @@ public class ProgInfos {
      * @return Den Pfad als String
      */
     public static String getFilmlistFile() {
-        return ProgInfos.getSettingsDirectory_String() + File.separator + Const.JSON_DATEI_FILME;
+        return ProgInfos.getSettingsDirectory_String() + File.separator + ProgConst.JSON_DATEI_FILME;
     }
 
     /**
@@ -96,10 +96,10 @@ public class ProgInfos {
      */
     public static Path getSettingsDirectory() throws IllegalStateException {
         final Path baseDirectoryPath;
-        if (Daten.configDir == null || Daten.configDir.isEmpty()) {
-            baseDirectoryPath = Paths.get(System.getProperty("user.home"), Const.VERZEICHNIS_EINSTELLUNGEN);
+        if (ProgData.configDir == null || ProgData.configDir.isEmpty()) {
+            baseDirectoryPath = Paths.get(System.getProperty("user.home"), ProgConst.VERZEICHNIS_EINSTELLUNGEN);
         } else {
-            baseDirectoryPath = Paths.get(Daten.configDir);
+            baseDirectoryPath = Paths.get(ProgData.configDir);
         }
 
         if (Files.notExists(baseDirectoryPath)) {
@@ -121,19 +121,19 @@ public class ProgInfos {
 
     public static String getLogDirectory_String() {
         final String logDir;
-        if (Config.SYSTEM_LOG_DIR.get().isEmpty()) {
-            logDir = Paths.get(getSettingsDirectory_String(), Const.LOG_DIR).toString();
+        if (ProgConfig.SYSTEM_LOG_DIR.get().isEmpty()) {
+            logDir = Paths.get(getSettingsDirectory_String(), ProgConst.LOG_DIR).toString();
         } else {
-            logDir = Config.SYSTEM_LOG_DIR.get();
+            logDir = ProgConfig.SYSTEM_LOG_DIR.get();
         }
         return logDir;
     }
 
     public static String getDirectory_mtplayer_mv() {
-        final Path baseDirMtplayer = Paths.get(System.getProperty("user.home"), Const.DIR_MTPLAYER);
-        final Path baseDirMV = Paths.get(System.getProperty("user.home"), Const.DIR_MEDIATHEKVIEW);
+        final Path baseDirMtplayer = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MTPLAYER);
+        final Path baseDirMV = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MEDIATHEKVIEW);
 
-        return baseDirMtplayer.toString() + Const.DIR_FILMLIST_SEPARATOR + baseDirMV.toString();
+        return baseDirMtplayer.toString() + ProgConst.DIR_FILMLIST_SEPARATOR + baseDirMV.toString();
     }
 
 }

@@ -16,7 +16,7 @@
 
 package de.mtplayer.actList.gui;
 
-import de.mtplayer.actList.controller.config.Daten;
+import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
@@ -55,13 +55,13 @@ public class StatusBarController extends AnchorPane {
 
     private boolean loadList = false;
 
-    private final Daten daten;
+    private final ProgData progData;
     private boolean stopTimer = false;
     private int countFoundFilms = -1;
     private int maxFilms = -1;
 
-    public StatusBarController(Daten daten) {
-        this.daten = daten;
+    public StatusBarController(ProgData progData) {
+        this.progData = progData;
 
         getChildren().addAll(stackPane);
         AnchorPane.setLeftAnchor(stackPane, 0.0);
@@ -118,7 +118,7 @@ public class StatusBarController extends AnchorPane {
                 "    -fx-text-fill: white;" +
                 "    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);";
 
-        daten.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
+        progData.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
             public void start(ListenerFilmlistLoadEvent event) {
                 loadList = true;
@@ -155,7 +155,7 @@ public class StatusBarController extends AnchorPane {
                 }
             }
         });
-        btnStop.setOnAction(a -> daten.loadFilmlist.setStop(true));
+        btnStop.setOnAction(a -> progData.loadFilmlist.setStop(true));
     }
 
 
@@ -204,10 +204,10 @@ public class StatusBarController extends AnchorPane {
     private void setTextForRightDisplay() {
         // Text rechts: alter/neuladenIn anzeigen
         String strText = "Filmliste erstellt: ";
-        strText += daten.filmlist.genDate();
+        strText += progData.filmlist.genDate();
         strText += " Uhr  ";
 
-        final int sekunden = daten.filmlist.getAge();
+        final int sekunden = progData.filmlist.getAge();
 
         if (sekunden != 0) {
             strText += "||  Alter: ";
