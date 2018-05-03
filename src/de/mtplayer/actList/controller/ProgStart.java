@@ -20,9 +20,9 @@ import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
+import de.mtplayer.actList.controller.loadFilmlist.ReadFilmlistMeta;
 import de.mtplayer.mLib.MLInit;
 import de.mtplayer.mLib.tools.StringFormatters;
-import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ReadFilmlist;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.LogMsg;
 import de.p2tools.p2Lib.tools.log.PLog;
@@ -68,7 +68,7 @@ public class ProgStart {
 
             final ProgData progData = ProgData.getInstance();
 
-            new ReadFilmlist().readFilmlist(ProgInfos.getFilmlistFile(),
+            new ReadFilmlistMeta().readFilmlist(ProgInfos.getFilmlistFile(),
                     progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
 
             ArrayList<String> list = new ArrayList<>();
@@ -107,7 +107,7 @@ public class ProgStart {
         ProgData progData = ProgData.getInstance();
 
         boolean ret = false;
-        final Path xmlFilePath = new ProgInfos().getXmlFilePath();
+        final Path xmlFilePath = new ProgInfos().getSettingsFile();
 
         try (IoReadXml reader = new IoReadXml(progData)) {
             if (Files.exists(xmlFilePath)) {

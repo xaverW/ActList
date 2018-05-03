@@ -17,10 +17,10 @@
 package de.mtplayer.actList.controller.config;
 
 import de.mtplayer.actList.Main;
+import de.p2tools.p2Lib.configFile.SettingsDirectory;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
@@ -60,24 +60,6 @@ public class ProgInfos {
         return s;
     }
 
-    public static String pathProgramIcons() {
-        return getPathJar() + ProgConst.VERZEICHNIS_PROGRAMM_ICONS;
-    }
-
-    public static String pathSenderIcons() {
-        return getPathJar() + ProgConst.VERZEICHNIS_SENDER_ICONS;
-    }
-
-
-    /**
-     * Return the path to "mtplayer.xml"
-     *
-     * @return Path object to mtplayer.xml file
-     */
-    public static Path getXmlFilePath() {
-        return ProgInfos.getSettingsDirectory().resolve(ProgConst.CONFIG_FILE);
-    }
-
     /**
      * Liefert den Pfad zur Filmliste
      *
@@ -85,38 +67,6 @@ public class ProgInfos {
      */
     public static String getFilmlistFile() {
         return ProgInfos.getSettingsDirectory_String() + File.separator + ProgConst.JSON_DATEI_FILME;
-    }
-
-    /**
-     * Return the location of the settings directory. If it does not exist, create one.
-     *
-     * @return Path to the settings directory
-     * @throws IllegalStateException Will be thrown if settings directory don't exist and if there is
-     *                               an error on creating it.
-     */
-    public static Path getSettingsDirectory() throws IllegalStateException {
-        final Path baseDirectoryPath;
-        if (ProgData.configDir == null || ProgData.configDir.isEmpty()) {
-            baseDirectoryPath = Paths.get(System.getProperty("user.home"), ProgConst.VERZEICHNIS_EINSTELLUNGEN);
-        } else {
-            baseDirectoryPath = Paths.get(ProgData.configDir);
-        }
-
-        if (Files.notExists(baseDirectoryPath)) {
-            try {
-                Files.createDirectories(baseDirectoryPath);
-            } catch (final IOException ioException) {
-                System.out.println(ERROR_CANT_CREATE_FOLDER + " -> " + baseDirectoryPath.toString());
-                throw new IllegalStateException(
-                        ERROR_CANT_CREATE_FOLDER + " -> " + baseDirectoryPath.toString() + "\n" + ioException);
-            }
-        }
-
-        return baseDirectoryPath;
-    }
-
-    public static String getSettingsDirectory_String() {
-        return getSettingsDirectory().toString();
     }
 
     public static String getLogDirectory_String() {
@@ -129,9 +79,28 @@ public class ProgInfos {
         return logDir;
     }
 
+    public static Path getSettingsFile() {
+        return ProgInfos.getSettingsDirectory().resolve(ProgConst.CONFIG_FILE);
+    }
+
+    public static Path getSettingsDirectory() throws IllegalStateException {
+        return SettingsDirectory.getSettingsDirectory(ProgData.configDir,
+                ProgConst.CONFIG_DIRECTORY);
+    }
+
+    public static String getSettingsDirectory_String() {
+        return getSettingsDirectory().toString();
+    }
+
     public static String getDirectory_mtplayer_mv() {
-        final Path baseDirMtplayer = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MTPLAYER);
-        final Path baseDirMV = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MEDIATHEKVIEW);
+        Path baseDirMV = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MEDIATHEKVIEW);
+
+        Path baseDirMtplayer;
+        if (SystemUtils.IS_OS_WINDOWS) {
+            baseDirMtplayer = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MTPLAYER_WIN);
+        } else {
+            baseDirMtplayer = Paths.get(System.getProperty("user.home"), ProgConst.DIR_MTPLAYER_X);
+        }
 
         return baseDirMtplayer.toString() + ProgConst.DIR_FILMLIST_SEPARATOR + baseDirMV.toString();
     }

@@ -19,26 +19,25 @@ package de.mtplayer.actList.controller.config;
 public class ProgConst {
 
     public static final String PROGRAMMNAME = "ActList";
+
+    // config directory
     public static final String CONFIG_FILE = "mtplayer.xml";
+    public static final String CONFIG_DIRECTORY = "p2Actlist"; // im Homeverzeichnis
+    public static final String XML_START = "Mediathek";
+
     public static final String CSS_FILE = "/de/mtplayer/actList/actList.css";
+    public static final String LOG_DIR = "Log";
 
     public static final String FORMAT_ZIP = ".zip";
     public static final String FORMAT_XZ = ".xz";
     public static final int MAX_PFADE_DIALOG_DOWNLOAD = 15;
     public static final String DIR_FILMLIST_SEPARATOR = "<>";
 
-
     // Dateien/Verzeichnisse
-    public static final String DIR_MTPLAYER = ".mtplayer";
+    public static final String DIR_MTPLAYER_WIN = "p2Mtplayer";
+    public static final String DIR_MTPLAYER_X = ".p2Mtplayer";
     public static final String DIR_MEDIATHEKVIEW = ".mediathek3";
-
-    public static final String VERZEICHNIS_PROGRAMM_ICONS = "Icons/Programm"; // Unterverzeichnis im Programmverzeichnis
-    public static final String VERZEICHNIS_SENDER_ICONS = "Icons/Sender"; // Unterverzeichnis im Programmverzeichnis
-    public static final String VERZEICHNIS_EINSTELLUNGEN = ".actlist"; // im Homeverzeichnis
     public static final String JSON_DATEI_FILME = "filme.json";
-    public static final String LOG_DIR = "Log";
-
-    public static final String XML_START = "Mediathek";
 
     public static final String DREISAT = "3Sat";
     public static final String ARD = "ARD";
