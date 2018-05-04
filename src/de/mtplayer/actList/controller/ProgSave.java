@@ -17,8 +17,6 @@
 package de.mtplayer.actList.controller;
 
 import de.mtplayer.actList.controller.config.ProgData;
-import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.mtp.controller.filmlist.writeFilmlist.WriteFilmlistJson;
 
 public class ProgSave {
     final ProgData progData;
@@ -27,9 +25,9 @@ public class ProgSave {
         progData = ProgData.getInstance();
     }
 
-    public void saveFilmlist() {
-        new WriteFilmlistJson().write(ProgInfos.getFilmlistFile(), progData.filmlist);
-    }
+//    public void saveFilmlist() {
+//        new WriteFilmlistJson().write(ProgInfos.getFilmlistFile(), progData.filmlist);
+//    }
 
     public void saveAll() {
         try (IoWriteXml writer = new IoWriteXml(progData)) {

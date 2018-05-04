@@ -16,14 +16,10 @@
 
 package de.mtplayer.actList.controller;
 
-import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.actList.controller.loadFilmlist.ReadFilmlistMeta;
 import de.mtplayer.mLib.MLInit;
-import de.mtplayer.mLib.tools.StringFormatters;
-import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.LogMsg;
 import de.p2tools.p2Lib.tools.log.PLog;
 import de.p2tools.p2Lib.tools.log.PLogger;
@@ -31,7 +27,6 @@ import de.p2tools.p2Lib.tools.log.PLogger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ProgStart {
     ProgData progData;
@@ -43,12 +38,12 @@ public class ProgStart {
     // #########################################################
     // Filmliste beim Programmstart!! laden
     // #########################################################
-    public void loadDataProgStart() {
-        // Gui startet ein wenig flüssiger
-        Thread th = new Thread(new loadFilmlistProgStart_());
-        th.setName("loadDataProgStart");
-        th.start();
-    }
+//    public void loadDataProgStart() {
+//        // Gui startet ein wenig flüssiger
+////        Thread th = new Thread(new loadFilmlistProgStart_());
+////        th.setName("loadDataProgStart");
+////        th.start();
+//    }
 
     public static void startMsg() {
 
@@ -60,27 +55,27 @@ public class ProgStart {
         LogMsg.startMsg(ProgConst.PROGRAMMNAME, list);
     }
 
-    private class loadFilmlistProgStart_ implements Runnable {
-
-        @Override
-        public synchronized void run() {
-            Duration.staticPing("Programmstart Daten laden");
-
-            final ProgData progData = ProgData.getInstance();
-
-            new ReadFilmlistMeta().readFilmlist(ProgInfos.getFilmlistFile(),
-                    progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
-
-            ArrayList<String> list = new ArrayList<>();
-            list.add(PLog.LILNE3);
-            list.add("Liste Filme gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-            list.add("  erstellt am: " + progData.filmlist.genDate());
-            list.add("  Anzahl Filme: " + progData.filmlist.size());
-            list.add(PLog.LILNE3);
-            PLog.sysLog(list);
-        }
-
-    }
+//    private class loadFilmlistProgStart_ implements Runnable {
+//
+//        @Override
+//        public synchronized void run() {
+//            Duration.staticPing("Programmstart Daten laden");
+//
+//            final ProgData progData = ProgData.getInstance();
+//
+////            new ReadFilmlistMeta().readFilmlist(ProgInfos.getFilmlistFile(),
+////                    progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+//
+////            ArrayList<String> list = new ArrayList<>();
+////            list.add(PLog.LILNE3);
+////            list.add("Liste Filme gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
+////            list.add("  erstellt am: " + progData.filmlist.genDate());
+////            list.add("  Anzahl Filme: " + progData.filmlist.size());
+////            list.add(PLog.LILNE3);
+////            PLog.sysLog(list);
+//        }
+//
+//    }
 
 
     /**

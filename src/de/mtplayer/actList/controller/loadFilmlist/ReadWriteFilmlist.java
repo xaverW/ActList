@@ -51,6 +51,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipInputStream;
 
+import static de.mtplayer.actList.controller.config.ProgConfig.*;
+
 public class ReadWriteFilmlist {
 
     private final EventListenerList listeners = new EventListenerList();
@@ -114,6 +116,7 @@ public class ReadWriteFilmlist {
                 return;
             }
 
+            // lesen und schreiben der Filmliste
             processFromWeb(new URL(source), filmlist);
 
             if (ProgData.getInstance().loadFilmlist.getStop()) {
@@ -124,20 +127,56 @@ public class ReadWriteFilmlist {
             ex.printStackTrace();
         }
 
+        SYSTEM_OLD_FILMLIST_SIZE.setValue(max);
+        SYSTEM_OLD_FILMLIST_USED.setValue(countFoundFilms);
+        SYSTEM_OLD_FILMLIST_DATE.setValue(filmlist.genDate());
+
         notifyFertig(source, filmlist, max);
         list.add("Filme lesen --> fertig");
         PLog.sysLog(list);
     }
 
-    private InputStream selectDecompressor(String source, InputStream in) throws Exception {
-        if (source.endsWith(ProgConst.FORMAT_XZ)) {
-            in = new XZInputStream(in);
-        } else if (source.endsWith(ProgConst.FORMAT_ZIP)) {
-            final ZipInputStream zipInputStream = new ZipInputStream(in);
-            zipInputStream.getNextEntry();
-            in = zipInputStream;
+    private void processFromWeb(URL source, Filmlist filmlist) {
+        final Request.Builder builder = new Request.Builder().url(source);
+        builder.addHeader("User-Agent", ProgInfos.getUserAgent());
+
+        // our progress monitor callback
+        final InputStreamProgressMonitor monitor = new InputStreamProgressMonitor() {
+            private int oldProgress = 0;
+
+            @Override
+            public void progress(long bytesRead, long size) {
+                final int iProgress = (int) (bytesRead * 100/* zum Runden */ / size);
+                if (iProgress != oldProgress) {
+                    oldProgress = iProgress;
+                    notifyProgress(source.toString(), 1.0 * iProgress / 100, max);
+                }
+            }
+        };
+
+        try (Response response = MLHttpClient.getInstance().getHttpClient().newCall(builder.build()).execute();
+             ResponseBody body = response.body()) {
+            if (response.isSuccessful()) {
+                try (InputStream input = new ProgressMonitorInputStream(body.byteStream(), body.contentLength(), monitor)) {
+                    try (InputStream is = selectDecompressor(source.toString(), input);
+                         JsonParser jp = new JsonFactory().createParser(is)) {
+                        try (FileOutputStream fos = new FileOutputStream(dest);
+                             JsonGenerator jg = getJsonGenerator(fos)) {
+
+                            readData(jp, jg, filmlist);
+                            endWrite(jg);
+
+                        }
+                    }
+                }
+            }
+        } catch (final Exception ex) {
+            PLog.errorLog(945123641, ex, "Filmliste: " + source);
+            Platform.runLater(() -> new MLAlert().showErrorAlert("Filmliste speichern",
+                    "Die Filmliste konnte nicht geladen werden: \n\n" +
+                            ex.getMessage()));
+            filmlist.clear();
         }
-        return in;
     }
 
     private void readData(JsonParser jp, JsonGenerator jg, Filmlist filmlist) throws IOException {
@@ -214,6 +253,17 @@ public class ReadWriteFilmlist {
 
     }
 
+    private InputStream selectDecompressor(String source, InputStream in) throws Exception {
+        if (source.endsWith(ProgConst.FORMAT_XZ)) {
+            in = new XZInputStream(in);
+        } else if (source.endsWith(ProgConst.FORMAT_ZIP)) {
+            final ZipInputStream zipInputStream = new ZipInputStream(in);
+            zipInputStream.getNextEntry();
+            in = zipInputStream;
+        }
+        return in;
+    }
+
     private void checkDays(long days) {
         if (days > 0) {
             milliseconds = System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(days, TimeUnit.DAYS);
@@ -254,55 +304,6 @@ public class ReadWriteFilmlist {
         jg.writeEndObject();
         PLog.sysLog("   --> geschrieben!");
 
-    }
-
-    /**
-     * Download a process a filmliste from the web.
-     *
-     * @param source   source url as string
-     * @param filmlist the list to read to
-     */
-    private void processFromWeb(URL source, Filmlist filmlist) {
-        final Request.Builder builder = new Request.Builder().url(source);
-        builder.addHeader("User-Agent", ProgInfos.getUserAgent());
-
-        // our progress monitor callback
-        final InputStreamProgressMonitor monitor = new InputStreamProgressMonitor() {
-            private int oldProgress = 0;
-
-            @Override
-            public void progress(long bytesRead, long size) {
-                final int iProgress = (int) (bytesRead * 100/* zum Runden */ / size);
-                if (iProgress != oldProgress) {
-                    oldProgress = iProgress;
-                    notifyProgress(source.toString(), 1.0 * iProgress / 100, max);
-                }
-            }
-        };
-
-        try (Response response = MLHttpClient.getInstance().getHttpClient().newCall(builder.build()).execute();
-             ResponseBody body = response.body()) {
-            if (response.isSuccessful()) {
-                try (InputStream input = new ProgressMonitorInputStream(body.byteStream(), body.contentLength(), monitor)) {
-                    try (InputStream is = selectDecompressor(source.toString(), input);
-                         JsonParser jp = new JsonFactory().createParser(is)) {
-                        try (FileOutputStream fos = new FileOutputStream(dest);
-                             JsonGenerator jg = getJsonGenerator(fos)) {
-
-                            readData(jp, jg, filmlist);
-                            endWrite(jg);
-
-                        }
-                    }
-                }
-            }
-        } catch (final Exception ex) {
-            PLog.errorLog(945123641, ex, "Filmliste: " + source);
-            Platform.runLater(() -> new MLAlert().showErrorAlert("Filmliste speichern",
-                    "Die Filmliste konnte nicht geladen werden: \n\n" +
-                            ex.getMessage()));
-            filmlist.clear();
-        }
     }
 
     private boolean checkDate(Film film) {

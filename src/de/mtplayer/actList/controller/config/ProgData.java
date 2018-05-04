@@ -20,7 +20,6 @@ package de.mtplayer.actList.controller.config;
 import de.mtplayer.actList.ActListController;
 import de.mtplayer.actList.controller.loadFilmlist.LoadFilmlist;
 import de.mtplayer.actList.gui.tools.Listener;
-import de.mtplayer.mtp.controller.data.film.Filmlist;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -46,11 +45,9 @@ public class ProgData {
     public ActListController actListController = null;
 
     // Programmdaten
-    public Filmlist filmlist; // ist die komplette Filmliste
 
 
     private ProgData() {
-        filmlist = new Filmlist();
         loadFilmlist = new LoadFilmlist(this);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae ->

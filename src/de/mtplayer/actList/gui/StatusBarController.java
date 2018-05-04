@@ -16,11 +16,13 @@
 
 package de.mtplayer.actList.gui;
 
+import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.p2tools.p2Lib.tools.PDate;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -33,7 +35,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
 
 public class StatusBarController extends AnchorPane {
 
@@ -46,8 +50,8 @@ public class StatusBarController extends AnchorPane {
     Button btnStop = new Button("");
 
     //nonePane
-    Label lblLeftNone = new Label();
-    Label lblRightNone = new Label();
+    Label lblLeft = new Label();
+    Label lblRight = new Label();
 
     AnchorPane loadPane = new AnchorPane();
     AnchorPane nonePane = new AnchorPane();
@@ -57,8 +61,14 @@ public class StatusBarController extends AnchorPane {
 
     private final ProgData progData;
     private boolean stopTimer = false;
-    private int countFoundFilms = -1;
+
+    private final static String DATUM_ZEIT_FORMAT = "dd.MM.yyyy, HH:mm";
+    final SimpleDateFormat sdf = new SimpleDateFormat(DATUM_ZEIT_FORMAT);
+
+    private PDate filmlistDate = new PDate();
+    private int foundFilms = -1;
     private int maxFilms = -1;
+
 
     public StatusBarController(ProgData progData) {
         this.progData = progData;
@@ -71,9 +81,9 @@ public class StatusBarController extends AnchorPane {
 
 
         HBox hBox = getHbox();
-        lblLeftNone.setMaxWidth(Double.MAX_VALUE);
-        HBox.setHgrow(lblLeftNone, Priority.ALWAYS);
-        hBox.getChildren().addAll(lblLeftNone, lblRightNone);
+        lblLeft.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(lblLeft, Priority.ALWAYS);
+        hBox.getChildren().addAll(lblLeft, lblRight);
         nonePane.getChildren().add(hBox);
         nonePane.setStyle("-fx-background-color: -fx-background ;");
 
@@ -106,30 +116,21 @@ public class StatusBarController extends AnchorPane {
         stackPane.getChildren().addAll(nonePane, loadPane);
         nonePane.toFront();
 
-        final String labelStyle = " -fx-background-color:" +
-                "        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%)," +
-                "        linear-gradient(#020b02, #3a3a3a)," +
-                "        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%)," +
-                "        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%)," +
-                "        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);" +
-                "    -fx-background-radius: 5;" +
-                "    -fx-padding: 5 10 5 10;" +
-                "    -fx-font-weight: bold;" +
-                "    -fx-text-fill: white;" +
-                "    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);";
+        sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
+        setGenTimeFilmlist();
 
         progData.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
             public void start(ListenerFilmlistLoadEvent event) {
                 loadList = true;
-                countFoundFilms = -1;
+                foundFilms = -1;
                 maxFilms = -1;
                 setStatusbar();
             }
 
             @Override
             public void progress(ListenerFilmlistLoadEvent event) {
-                countFoundFilms = event.count;
+                foundFilms = event.count;
                 maxFilms = (int) event.max;
                 updateProgressBar(event);
             }
@@ -138,8 +139,9 @@ public class StatusBarController extends AnchorPane {
             public void fertig(ListenerFilmlistLoadEvent event) {
                 stopTimer = false;
                 loadList = false;
-                countFoundFilms = event.count;
+                foundFilms = event.count;
                 maxFilms = (int) event.max;
+                setGenTimeFilmlist();
                 setStatusbar();
             }
         });
@@ -158,6 +160,17 @@ public class StatusBarController extends AnchorPane {
         btnStop.setOnAction(a -> progData.loadFilmlist.setStop(true));
     }
 
+    private void setGenTimeFilmlist() {
+        foundFilms = ProgConfig.SYSTEM_OLD_FILMLIST_USED.getInt();
+        maxFilms = ProgConfig.SYSTEM_OLD_FILMLIST_SIZE.getInt();
+
+        try {
+            final String filmDateStr = ProgConfig.SYSTEM_OLD_FILMLIST_DATE.get();
+            filmlistDate = new PDate(sdf.parse(filmDateStr).getTime());
+        } catch (Exception ex) {
+            filmlistDate = new PDate();
+        }
+    }
 
     private void setStatusbar() {
         if (loadList) {
@@ -166,8 +179,8 @@ public class StatusBarController extends AnchorPane {
         }
 
         nonePane.toFront();
-        setTextNone();
-        setTextForRightDisplay();
+        setTextLeft();
+        setTextRight();
     }
 
     private void updateProgressBar(ListenerFilmlistLoadEvent event) {
@@ -189,45 +202,48 @@ public class StatusBarController extends AnchorPane {
     }
 
 
-    private void setTextNone() {
+    private void setTextLeft() {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY);
-        String count = numberFormat.format(countFoundFilms);
+        String found = numberFormat.format(foundFilms);
         String max = numberFormat.format(maxFilms);
 
-        if (countFoundFilms >= 0 && maxFilms == countFoundFilms) {
-            lblLeftNone.setText("Anzahl Filme: " + count);
-        } else if (countFoundFilms >= 0) {
-            lblLeftNone.setText("Anzahl Filme: " + count + " von insgesamt: " + max);
+        if (foundFilms >= 0 && maxFilms == foundFilms) {
+            lblLeft.setText("Anzahl Filme: " + found);
+
+        } else if (foundFilms >= 0) {
+            lblLeft.setText("Anzahl Filme: " + found + " von insgesamt: " + max);
         }
     }
 
-    private void setTextForRightDisplay() {
-        // Text rechts: alter/neuladenIn anzeigen
-        String strText = "Filmliste erstellt: ";
-        strText += progData.filmlist.genDate();
-        strText += " Uhr  ";
-
-        final int sekunden = progData.filmlist.getAge();
-
-        if (sekunden != 0) {
-            strText += "||  Alter: ";
-            final int minuten = sekunden / 60;
-            String strSekunde = String.valueOf(sekunden % 60);
-            String strMinute = String.valueOf(minuten % 60);
-            String strStunde = String.valueOf(minuten / 60);
-            if (strSekunde.length() < 2) {
-                strSekunde = '0' + strSekunde;
-            }
-            if (strMinute.length() < 2) {
-                strMinute = '0' + strMinute;
-            }
-            if (strStunde.length() < 2) {
-                strStunde = '0' + strStunde;
-            }
-            strText += strStunde + ':' + strMinute + ':' + strSekunde + ' ';
+    private void setTextRight() {
+        if (filmlistDate.getTime() == 0) {
+            lblRight.setText("");
+            return;
         }
+
+        int filmlistAge = filmlistDate.diffInSeconds();
+
+        String strText = "Filmliste erstellt: ";
+        strText += filmlistDate.toString();
+        strText += " Uhr  ||  Alter: ";
+
+        final int minuten = filmlistAge / 60;
+        String strSekunde = String.valueOf(filmlistAge % 60);
+        String strMinute = String.valueOf(minuten % 60);
+        String strStunde = String.valueOf(minuten / 60);
+        if (strSekunde.length() < 2) {
+            strSekunde = '0' + strSekunde;
+        }
+        if (strMinute.length() < 2) {
+            strMinute = '0' + strMinute;
+        }
+        if (strStunde.length() < 2) {
+            strStunde = '0' + strStunde;
+        }
+        strText += strStunde + ':' + strMinute + ':' + strSekunde + ' ';
+
         // Infopanel setzen
-        lblRightNone.setText(strText);
+        lblRight.setText(strText);
     }
 
 

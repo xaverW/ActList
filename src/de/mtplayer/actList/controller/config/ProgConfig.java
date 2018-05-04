@@ -34,6 +34,9 @@ public class ProgConfig extends MLConfig {
     public static MLConfigs SYSTEM_ANZ_TAGE_FILMLISTE = addNewKey("system-anz-tage-filmilste", "0"); //es werden nur die x letzten Tage geladen
     public static MLConfigs SYSTEM_DEST_PATH = addNewKey("system-dest-path", ProgInfos.getDirectory_mtplayer_mv());
     public static MLConfigs SYSTEM_LOG_DIR = addNewKey("system-log-dir", "");
+    public static MLConfigs SYSTEM_OLD_FILMLIST_SIZE = addNewKey("system-old-filmlist-size", "");
+    public static MLConfigs SYSTEM_OLD_FILMLIST_USED = addNewKey("system-old-filmlist-used", "");
+    public static MLConfigs SYSTEM_OLD_FILMLIST_DATE = addNewKey("system-old-filmlist-date", "");
 
     public static void loadSystemParameter() {
         // auch wenn leer, sonst sind die Configs nicht geladen

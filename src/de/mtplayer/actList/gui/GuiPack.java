@@ -74,8 +74,7 @@ public class GuiPack extends AnchorPane {
         btnLoad.setOnAction(event -> {
             String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
             progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILME_MANUELL.get(),
-                    fileDest,
-                    progData.filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
+                    fileDest, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
         });
 
         HBox hBoxLoad = new HBox();
@@ -123,7 +122,6 @@ public class GuiPack extends AnchorPane {
         final ArrayList<String> pfade2 = new ArrayList<>();
         String sel = cbPath.getEditor().getText();
         if (sel != null && !sel.isEmpty()) {
-            System.out.println(sel);
             pfade2.add(sel);
         }
 

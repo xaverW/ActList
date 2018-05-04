@@ -113,7 +113,7 @@ public class ActList extends Application {
         initProg();
 
         Duration.staticPing("Gui steht!");
-        progStart.loadDataProgStart();
+//        progStart.loadDataProgStart();
     }
 
     private void setOrgTitel() {
