@@ -37,7 +37,6 @@ import javafx.scene.layout.StackPane;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 
 public class StatusBarController extends AnchorPane {
 
@@ -116,7 +115,6 @@ public class StatusBarController extends AnchorPane {
         stackPane.getChildren().addAll(nonePane, loadPane);
         nonePane.toFront();
 
-        sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
         setGenTimeFilmlist();
 
         progData.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
@@ -130,16 +128,16 @@ public class StatusBarController extends AnchorPane {
 
             @Override
             public void progress(ListenerFilmlistLoadEvent event) {
-                foundFilms = event.count;
+                foundFilms = event.countFoundFilms;
                 maxFilms = (int) event.max;
                 updateProgressBar(event);
             }
 
             @Override
-            public void fertig(ListenerFilmlistLoadEvent event) {
+            public void finished(ListenerFilmlistLoadEvent event) {
                 stopTimer = false;
                 loadList = false;
-                foundFilms = event.count;
+                foundFilms = event.countFoundFilms;
                 maxFilms = (int) event.max;
                 setGenTimeFilmlist();
                 setStatusbar();
@@ -161,12 +159,12 @@ public class StatusBarController extends AnchorPane {
     }
 
     private void setGenTimeFilmlist() {
-        foundFilms = ProgConfig.SYSTEM_OLD_FILMLIST_USED.getInt();
-        maxFilms = ProgConfig.SYSTEM_OLD_FILMLIST_SIZE.getInt();
+        foundFilms = ProgConfig.SYSTEM_FILMLIST_USED.getInt();
+        maxFilms = ProgConfig.SYSTEM_FILMLIST_SIZE.getInt();
 
         try {
-            final String filmDateStr = ProgConfig.SYSTEM_OLD_FILMLIST_DATE.get();
-            filmlistDate = new PDate(sdf.parse(filmDateStr).getTime());
+            final String filmDateStr = ProgConfig.SYSTEM_FILMLIST_DATE_LOCAL_TIME.get();
+            filmlistDate = filmDateStr.isEmpty() ? new PDate(0) : new PDate(sdf.parse(filmDateStr).getTime());
         } catch (Exception ex) {
             filmlistDate = new PDate();
         }
@@ -189,11 +187,11 @@ public class StatusBarController extends AnchorPane {
         lblProgress.setText(event.text);
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY);
-        String count = numberFormat.format(event.count);
+        String count = numberFormat.format(event.countFoundFilms);
         String max = numberFormat.format((int) event.max);
 
-        if (event.count >= 0) {
-            if (event.count != (int) event.max) {
+        if (event.countFoundFilms >= 0) {
+            if (event.countFoundFilms != (int) event.max) {
                 lblLeftLoad.setText("Filme gefunden: " + count + " von insgesamt: " + max);
             } else {
                 lblLeftLoad.setText("Filme gefunden: " + count);
@@ -224,7 +222,7 @@ public class StatusBarController extends AnchorPane {
         int filmlistAge = filmlistDate.diffInSeconds();
 
         String strText = "Filmliste erstellt: ";
-        strText += filmlistDate.toString();
+        strText += filmlistDate.getDateTime();
         strText += " Uhr  ||  Alter: ";
 
         final int minuten = filmlistAge / 60;

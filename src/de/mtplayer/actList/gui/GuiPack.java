@@ -23,12 +23,10 @@ import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.mLib.tools.DirFileChooser;
 import de.mtplayer.mLib.tools.FileUtils;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 
@@ -70,7 +68,10 @@ public class GuiPack extends AnchorPane {
         tab.setContent(urlPaneController);
         tabPane.getTabs().addAll(tab);
 
+
         Button btnLoad = new Button("Filmliste jetzt laden");
+        btnLoad.getStyleClass().add("btnFilmlist");
+        btnLoad.setPadding(new Insets(10));
         btnLoad.setOnAction(event -> {
             String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
             progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILME_MANUELL.get(),
@@ -78,28 +79,37 @@ public class GuiPack extends AnchorPane {
         });
 
         HBox hBoxLoad = new HBox();
-        hBoxLoad.setAlignment(Pos.TOP_RIGHT);
+        hBoxLoad.getStyleClass().add("dialog-title-border");
         hBoxLoad.getChildren().add(btnLoad);
+
 
         cbPath.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(cbPath, Priority.ALWAYS);
 
+        Label lblDest = new Label("Speicherziel:");
+        lblDest.setMinWidth(Region.USE_PREF_SIZE);
+
         HBox hBoxDest = new HBox();
         hBoxDest.setAlignment(Pos.CENTER_LEFT);
         hBoxDest.setSpacing(10);
-        hBoxDest.getChildren().addAll(new Label("Speicherziel:"), cbPath, btnDest);
+        hBoxDest.getChildren().addAll(lblDest, cbPath, btnDest);
 
-        VBox vBox = new VBox();
-        vBox.setSpacing(10);
-        vBox.setAlignment(Pos.TOP_CENTER);
-        vBox.getChildren().addAll(hBoxLoad, hBoxDest, tabPane);
 
-        getChildren().addAll(vBox);
+        VBox vBox = new VBox(10);
+        VBox.setVgrow(vBox, Priority.ALWAYS);
+        vBox.getStyleClass().add("dialog-border");
+        vBox.getChildren().addAll(hBoxDest, tabPane);
 
-        AnchorPane.setLeftAnchor(vBox, 10.0);
-        AnchorPane.setBottomAnchor(vBox, 10.0);
-        AnchorPane.setRightAnchor(vBox, 10.0);
-        AnchorPane.setTopAnchor(vBox, 10.0);
+
+        VBox vBoxAll = new VBox(10);
+        vBoxAll.getChildren().addAll(hBoxLoad, vBox);
+
+
+        getChildren().addAll(vBoxAll);
+        AnchorPane.setLeftAnchor(vBoxAll, 10.0);
+        AnchorPane.setBottomAnchor(vBoxAll, 10.0);
+        AnchorPane.setRightAnchor(vBoxAll, 10.0);
+        AnchorPane.setTopAnchor(vBoxAll, 10.0);
 
         initPath();
     }

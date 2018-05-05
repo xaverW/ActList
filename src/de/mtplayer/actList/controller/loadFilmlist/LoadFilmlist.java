@@ -16,17 +16,12 @@
 
 package de.mtplayer.actList.controller.loadFilmlist;
 
-import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgData;
-import de.mtplayer.actList.controller.config.ProgInfos;
-import de.mtplayer.mLib.tools.StringFormatters;
-import de.mtplayer.mtp.controller.data.film.Filmlist;
 import de.mtplayer.mtp.controller.filmlist.NotifyProgress;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlList;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
-import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ReadFilmlist;
 import de.mtplayer.mtp.gui.dialog.MTAlert;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
@@ -34,7 +29,6 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LoadFilmlist {
@@ -44,8 +38,6 @@ public class LoadFilmlist {
     private final SearchFilmListUrls searchFilmListUrls;
     private final ReadWriteFilmlist readWriteFilmlist;
 
-    private Filmlist filmlist = new Filmlist();
-
     private BooleanProperty propListSearching = new SimpleBooleanProperty(false);
     private final NotifyProgress notifyProgress = new NotifyProgress();
     private static final AtomicBoolean stop = new AtomicBoolean(false); // damit kannn das Laden gestoppt werden
@@ -53,6 +45,7 @@ public class LoadFilmlist {
     public LoadFilmlist(ProgData progData) {
         this.progData = progData;
         searchFilmListUrls = new SearchFilmListUrls();
+
         readWriteFilmlist = new ReadWriteFilmlist();
         readWriteFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
@@ -66,7 +59,7 @@ public class LoadFilmlist {
             }
 
             @Override
-            public synchronized void fertig(ListenerFilmlistLoadEvent event) {
+            public synchronized void finished(ListenerFilmlistLoadEvent event) {
                 // Ergebnisliste listeFilme eintragen -> Feierabend!
                 Duration.staticPing("Filme laden, ende");
                 andEnd(event);
@@ -120,8 +113,7 @@ public class LoadFilmlist {
             // nicht doppelt starten
             setPropListSearching(true);
 
-            filmlist = new Filmlist();
-            if (!readWriteFilmlist.readWriteFilmlist(source, dest, filmlist, days)) {
+            if (!readWriteFilmlist.readWriteFilmlist(source, dest, days)) {
                 // konnte dann nicht richtig gestartet werden
                 setPropListSearching(false);
             }
@@ -129,37 +121,11 @@ public class LoadFilmlist {
     }
 
     private void andEnd(ListenerFilmlistLoadEvent event) {
-        // Abos eintragen in der gesamten Liste vor Blacklist da das nur beim Ändern der Filmliste oder
-        // beim Ändern von Abos gemacht wird
-
-        PLog.sysLog("");
-
-        PLog.sysLog("Liste Kompl. gelesen am: " + StringFormatters.FORMATTER_ddMMyyyyHHmm.format(new Date()));
-        PLog.sysLog("  Liste Kompl erstellt am: " + filmlist.genDate());
-        PLog.sysLog("  Anzahl Filme: " + filmlist.size());
-
         if (event.fehler) {
             PLog.sysLog("");
             PLog.sysLog("Filmliste laden war fehlerhaft, alte Liste wird wieder geladen");
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));
-
-            // dann die alte Liste wieder laden
-            filmlist.clear();
-            setStop(false);
-            new ReadFilmlist().readFilmlist(ProgInfos.getFilmlistFile(),
-                    filmlist, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
-            PLog.sysLog("");
-//        } else {
-//            new ProgSave().saveFilmlist();
         }
-
-        PLog.sysLog("");
-        PLog.sysLog("Jetzige Liste erstellt am: " + filmlist.genDate());
-        PLog.sysLog("  Anzahl Filme: " + filmlist.size());
-        PLog.sysLog("");
-
-        notifyProgress.notifyEvent(NotifyProgress.NOTIFY.PROGRESS, new ListenerFilmlistLoadEvent("", "Themen suchen",
-                ListenerFilmlistLoad.PROGRESS_MAX, 0, false/* Fehler */));
 
         setPropListSearching(false);
         notifyProgress.notifyEvent(NotifyProgress.NOTIFY.FINISHED, event);

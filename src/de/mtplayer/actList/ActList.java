@@ -42,7 +42,7 @@ public class ActList extends Application {
     private static final int ICON_WIDTH = 58;
     private static final int ICON_HEIGHT = 58;
 
-    private static final String LOG_TEXT_PROGRAMMSTART = "***Programmstart***";
+    private static final String LOG_TEXT_PROGRAMMSTART = "Programmstart";
 
     protected ProgData progData;
     ProgStart progStart;
@@ -95,6 +95,9 @@ public class ActList extends Application {
             });
 
             GuiSize.setPos(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty(), primaryStage);
+
+            primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
+            primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());
             primaryStage.show();
 
         } catch (final Exception e) {
@@ -103,27 +106,17 @@ public class ActList extends Application {
     }
 
     public void losGehts() {
-        Duration.counterStop(LOG_TEXT_PROGRAMMSTART);
-        primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
 
         progStart.startMsg();
-
-        Duration.staticPing("Erster Start");
-        setOrgTitel();
         initProg();
 
-        Duration.staticPing("Gui steht!");
-//        progStart.loadDataProgStart();
-    }
-
-    private void setOrgTitel() {
-        primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());
+        Duration.counterStop(LOG_TEXT_PROGRAMMSTART);
     }
 
     private void initProg() {
         progData.loadFilmlist.addAdListener(new ListenerFilmlistLoad() {
             @Override
-            public void fertig(ListenerFilmlistLoadEvent event) {
+            public void finished(ListenerFilmlistLoadEvent event) {
                 new ProgSave().saveAll(); // damit nichts verlorengeht
             }
         });

@@ -25,7 +25,7 @@ import javafx.application.Platform;
 public class Main {
 
     /*
-     * Aufruf: java -jar mtplayer [Pfad zur Konfigdatei, sonst homeverzeichnis] [Schalter]
+     * Aufruf: java -jar ActList [Pfad zur Konfigdatei, sonst homeverzeichnis] [Schalter]
      *
      * Programmschalter:
      *

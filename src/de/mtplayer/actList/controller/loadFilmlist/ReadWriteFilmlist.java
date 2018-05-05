@@ -18,6 +18,7 @@
 package de.mtplayer.actList.controller.loadFilmlist;
 
 import com.fasterxml.jackson.core.*;
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.actList.controller.config.ProgData;
@@ -61,12 +62,13 @@ public class ReadWriteFilmlist {
     private String dest = "";
     private int max = 0;
     private int countFoundFilms = 0;
+    private String genDateLocalTime = "";
 
     public void addAdListener(ListenerFilmlistLoad listener) {
         listeners.add(ListenerFilmlistLoad.class, listener);
     }
 
-    public boolean readWriteFilmlist(String source, String dest, final Filmlist filmlist, int days) {
+    public boolean readWriteFilmlist(String source, String dest, int days) {
         this.dest = dest;
 
         if (dest.isEmpty()) {
@@ -87,21 +89,19 @@ public class ReadWriteFilmlist {
             return false;
         }
 
-
         ProgData.getInstance().loadFilmlist.setStop(false);
         Thread th = new Thread(() -> {
-            readWrite(source, filmlist, days);
+            readWrite(source, days);
         });
         th.setName("readWriteFilmlist");
         th.start();
         return true;
     }
 
-    private void readWrite(String source, final Filmlist filmlist, int days) {
+    private void readWrite(String source, int days) {
         ArrayList<String> list = new ArrayList<>();
         try {
             list.add("Liste Filme lesen von: " + source);
-            filmlist.clear();
 
             countFoundFilms = 0;
             max = 0;
@@ -117,26 +117,25 @@ public class ReadWriteFilmlist {
             }
 
             // lesen und schreiben der Filmliste
-            processFromWeb(new URL(source), filmlist);
+            processFromWeb(new URL(source));
 
             if (ProgData.getInstance().loadFilmlist.getStop()) {
                 list.add("Filme lesen --> Abbruch");
-                filmlist.clear();
             }
         } catch (final MalformedURLException ex) {
             ex.printStackTrace();
         }
 
-        SYSTEM_OLD_FILMLIST_SIZE.setValue(max);
-        SYSTEM_OLD_FILMLIST_USED.setValue(countFoundFilms);
-        SYSTEM_OLD_FILMLIST_DATE.setValue(filmlist.genDate());
+        SYSTEM_FILMLIST_SIZE.setValue(max);
+        SYSTEM_FILMLIST_USED.setValue(countFoundFilms);
+        SYSTEM_FILMLIST_DATE_LOCAL_TIME.setValue(genDateLocalTime);
 
-        notifyFertig(source, filmlist, max);
+        notifyFertig(source, max);
         list.add("Filme lesen --> fertig");
         PLog.sysLog(list);
     }
 
-    private void processFromWeb(URL source, Filmlist filmlist) {
+    private void processFromWeb(URL source) {
         final Request.Builder builder = new Request.Builder().url(source);
         builder.addHeader("User-Agent", ProgInfos.getUserAgent());
 
@@ -163,7 +162,7 @@ public class ReadWriteFilmlist {
                         try (FileOutputStream fos = new FileOutputStream(dest);
                              JsonGenerator jg = getJsonGenerator(fos)) {
 
-                            readData(jp, jg, filmlist);
+                            readData(jp, jg);
                             endWrite(jg);
 
                         }
@@ -175,15 +174,15 @@ public class ReadWriteFilmlist {
             Platform.runLater(() -> new MLAlert().showErrorAlert("Filmliste speichern",
                     "Die Filmliste konnte nicht geladen werden: \n\n" +
                             ex.getMessage()));
-            filmlist.clear();
         }
     }
 
-    private void readData(JsonParser jp, JsonGenerator jg, Filmlist filmlist) throws IOException {
+    private void readData(JsonParser jp, JsonGenerator jg) throws IOException {
         JsonToken jsonToken;
-        String sender = "", thema = "";
+        String sender = "", theme = "";
+        StringArray metaDaten = new StringArray();
         final Film film = new Film();
-        ArrayList aListSender = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
+        ArrayList listSender = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
 
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             throw new IllegalStateException("Expected data to start with an Object");
@@ -195,11 +194,12 @@ public class ReadWriteFilmlist {
             }
             if (jp.isExpectedStartArrayToken()) {
                 for (int k = 0; k < FilmlistXml.MAX_ELEM; ++k) {
-                    filmlist.metaDaten[k] = jp.nextTextValue();
+                    metaDaten.add(jp.nextTextValue());
                 }
                 break;
             }
         }
+
         while ((jsonToken = jp.nextToken()) != null) {
             if (jsonToken == JsonToken.END_OBJECT) {
                 break;
@@ -212,7 +212,8 @@ public class ReadWriteFilmlist {
         }
 
         // jetzt ist das Datum der Filmliste gesetzt und kann geschrieben werden
-        startWrite(jg, filmlist);
+        genDateLocalTime = Filmlist.genDate(metaDaten.getArray());
+        startWrite(jg, metaDaten);
 
         while (!ProgData.getInstance().loadFilmlist.getStop() && (jsonToken = jp.nextToken()) != null) {
             if (jsonToken == JsonToken.END_OBJECT) {
@@ -227,18 +228,17 @@ public class ReadWriteFilmlist {
                 if (film.arr[FilmXml.FILM_SENDER].isEmpty()) {
                     film.arr[FilmXml.FILM_SENDER] = sender;
                 } else if (!sender.equals(film.arr[FilmXml.FILM_SENDER])) {
-                    // spart ein paar Byte
                     sender = film.arr[FilmXml.FILM_SENDER];
                 }
 
                 if (film.arr[FilmXml.FILM_THEMA].isEmpty()) {
-                    film.arr[FilmXml.FILM_THEMA] = thema;
-                } else if (!thema.equals(film.arr[FilmXml.FILM_THEMA])) {
-                    thema = film.arr[FilmXml.FILM_THEMA];
+                    film.arr[FilmXml.FILM_THEMA] = theme;
+                } else if (!theme.equals(film.arr[FilmXml.FILM_THEMA])) {
+                    theme = film.arr[FilmXml.FILM_THEMA];
                 }
 
                 ++max;
-                if (aListSender.isEmpty() || !aListSender.contains(film.arr[FilmXml.FILM_SENDER])) {
+                if (listSender.isEmpty() || !listSender.contains(film.arr[FilmXml.FILM_SENDER])) {
                     // Filme wieder schreiben
                     film.initDate();
                     if (checkDate(film)) {
@@ -282,14 +282,14 @@ public class ReadWriteFilmlist {
     }
 
 
-    private void startWrite(JsonGenerator jg, Filmlist filmlist) throws IOException {
-        PLog.sysLog("Filme schreiben (" + filmlist.size() + " Filme) :");
-        PLog.sysLog("   --> Start Schreiben nach: " + dest);
+    private void startWrite(JsonGenerator jg, StringArray metaDaten) throws IOException {
+        PLog.sysLog("Filmeliste laden und schreiben");
+        PLog.sysLog("   --> Schreiben nach: " + dest);
         jg.writeStartObject();
         // Infos zur Filmliste
         jg.writeArrayFieldStart(FilmlistXml.FILMLISTE);
-        for (int i = 0; i < FilmlistXml.MAX_ELEM; ++i) {
-            jg.writeString(filmlist.metaDaten[i]);
+        for (int i = 0; i < metaDaten.getSize(); ++i) {
+            jg.writeString(metaDaten.get(i));
         }
         jg.writeEndArray();
         // Infos der Felder in der Filmliste
@@ -337,19 +337,19 @@ public class ReadWriteFilmlist {
         }
     }
 
-    private void notifyFertig(String url, Filmlist liste, int max) {
+    private void notifyFertig(String url, int max) {
         ArrayList<String> list = new ArrayList<>();
         list.add(PLog.LILNE3);
-        list.add("Liste Filme gelesen am: " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
-        list.add("  erstellt am: " + liste.genDate());
-        list.add("  Anzahl Filme: " + liste.size());
+        list.add("Liste Filme gelesen am  : " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));
+        list.add("  erstellt am           : " + genDateLocalTime);
+        list.add("  Anzahl Filme gesamt   : " + max);
+        list.add("  Anzahl Filme gefunden : " + countFoundFilms);
         for (final ListenerFilmlistLoad l : listeners.getListeners(ListenerFilmlistLoad.class)) {
-            l.fertig(new ListenerFilmlistLoadEvent(url, "", max, progress, countFoundFilms, false));
+            l.finished(new ListenerFilmlistLoadEvent(url, "", max, progress, countFoundFilms, false));
         }
         list.add(PLog.LILNE3);
         PLog.sysLog(list);
     }
-
 
     protected JsonGenerator getJsonGenerator(OutputStream os) throws IOException {
         JsonFactory jsonF = new JsonFactory();
