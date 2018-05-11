@@ -7,7 +7,7 @@ Das Programm ActList ermöglicht die Nutzung von MediathekView oder MTPlayer auf
 
 *Filmliste Film für Film ===> laden -> filtern -> speichern [ ja/nein ]*
 
-Das Programm kommt so mit sehr wenig Speicher zurecht. Die Filmliste speichert man ins Konfigverzeichnis (~/.mediathek3 oder ~/.mtplayer) und kann dann MediathekView oder MTPlayer starten und mit aktueller und gefilterter Filmliste arbeiten.
+Das Programm kommt so mit sehr wenig Speicher zurecht. Die Filmliste speichert man ins Konfigverzeichnis (~/.mediathek3 oder ~/.p2Mtplayer) und kann dann MediathekView oder MTPlayer starten und mit aktueller und gefilterter Filmliste arbeiten.
 
 <br />
 
