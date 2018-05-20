@@ -25,6 +25,7 @@ import de.mtplayer.actList.res.GetIcon;
 import de.mtplayer.mLib.tools.Functions;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.p2tools.p2Lib.PInit;
 import de.p2tools.p2Lib.guiTools.GuiSize;
 import de.p2tools.p2Lib.guiTools.PButton;
 import de.p2tools.p2Lib.tools.log.Duration;
@@ -99,6 +100,8 @@ public class ActList extends Application {
             primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
             primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());
             primaryStage.show();
+            PInit.initLib(primaryStage, ProgConst.PROGRAMMNAME, ProgConst.CSS_FILE, "", ProgData.debug);
+
 
         } catch (final Exception e) {
             e.printStackTrace();

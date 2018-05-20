@@ -34,6 +34,7 @@ import de.mtplayer.mtp.controller.data.film.FilmlistXml;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.p2tools.p2Lib.dialog.PAlert;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
 import okhttp3.Request;
@@ -63,6 +64,8 @@ public class ReadWriteFilmlist {
     private int max = 0;
     private int countFoundFilms = 0;
     private String genDateLocalTime = "";
+    private boolean wait = false;
+    private PAlert.BUTTON ret;
 
     public void addAdListener(ListenerFilmlistLoad listener) {
         listeners.add(ListenerFilmlistLoad.class, listener);
@@ -100,15 +103,13 @@ public class ReadWriteFilmlist {
 
     private void readWrite(String source, int days) {
         ArrayList<String> list = new ArrayList<>();
+        countFoundFilms = 0;
+        max = 0;
+        notifyStart(source, max); // für die Progressanzeige
+        list.add("Liste Filme lesen von: " + source);
+
         try {
-            list.add("Liste Filme lesen von: " + source);
-
-            countFoundFilms = 0;
-            max = 0;
-
-            notifyStart(source, max); // für die Progressanzeige
             checkDays(days);
-
             if (source.isEmpty() || !source.startsWith("http")) {
                 source = new SearchFilmListUrls().searchCompleteListUrl(new ArrayList<>());
             }
@@ -116,8 +117,12 @@ public class ReadWriteFilmlist {
                 return;
             }
 
-            // lesen und schreiben der Filmliste
-            processFromWeb(new URL(source));
+            if (startLoadProcess(source)) {
+                // dann wurde geladen
+                SYSTEM_FILMLIST_SIZE.setValue(max);
+                SYSTEM_FILMLIST_USED.setValue(countFoundFilms);
+                SYSTEM_FILMLIST_DATE_LOCAL_TIME.setValue(genDateLocalTime);
+            }
 
             if (ProgData.getInstance().loadFilmlist.getStop()) {
                 list.add("Filme lesen --> Abbruch");
@@ -126,16 +131,47 @@ public class ReadWriteFilmlist {
             ex.printStackTrace();
         }
 
-        SYSTEM_FILMLIST_SIZE.setValue(max);
-        SYSTEM_FILMLIST_USED.setValue(countFoundFilms);
-        SYSTEM_FILMLIST_DATE_LOCAL_TIME.setValue(genDateLocalTime);
-
         notifyFertig(source, max);
         list.add("Filme lesen --> fertig");
         PLog.sysLog(list);
     }
 
-    private void processFromWeb(URL source) {
+    private boolean startLoadProcess(String source) throws MalformedURLException {
+        // lesen und schreiben der Filmliste
+        if (processFromWeb(new URL(source), false)) {
+            // alles OK
+            return true;
+        }
+
+        // dann gabs noch keine aktuelle Filmliste
+        wait = true;
+        Platform.runLater(() -> {
+                    ret = PAlert.showAlert_yes_no("Filme laden", "Filmliste ist noch aktuell",
+                            "Es gibt noch keine aktuellere Filmliste, " +
+                                    "soll trotzdem eine neue " +
+                                    "Filmliste geladen werden?");
+                    wait = false;
+                }
+        );
+
+        while (wait) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if (ret.equals(PAlert.BUTTON.YES)) {
+            processFromWeb(new URL(source), true);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean processFromWeb(URL source, boolean loadActList) {
+        boolean ret = true;
         final Request.Builder builder = new Request.Builder().url(source);
         builder.addHeader("User-Agent", ProgInfos.getUserAgent());
 
@@ -156,16 +192,14 @@ public class ReadWriteFilmlist {
         try (Response response = MLHttpClient.getInstance().getHttpClient().newCall(builder.build()).execute();
              ResponseBody body = response.body()) {
             if (response.isSuccessful()) {
+
                 try (InputStream input = new ProgressMonitorInputStream(body.byteStream(), body.contentLength(), monitor)) {
+
                     try (InputStream is = selectDecompressor(source.toString(), input);
                          JsonParser jp = new JsonFactory().createParser(is)) {
-                        try (FileOutputStream fos = new FileOutputStream(dest);
-                             JsonGenerator jg = getJsonGenerator(fos)) {
 
-                            readData(jp, jg);
-                            endWrite(jg);
+                        ret = startReadingData(jp, loadActList);
 
-                        }
                     }
                 }
             }
@@ -175,14 +209,13 @@ public class ReadWriteFilmlist {
                     "Die Filmliste konnte nicht geladen werden: \n\n" +
                             ex.getMessage()));
         }
+
+        return ret;
     }
 
-    private void readData(JsonParser jp, JsonGenerator jg) throws IOException {
+    private boolean startReadingData(JsonParser jp, boolean loadActList) throws IOException {
         JsonToken jsonToken;
-        String sender = "", theme = "";
         StringArray metaDaten = new StringArray();
-        final Film film = new Film();
-        ArrayList listSender = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
 
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             throw new IllegalStateException("Expected data to start with an Object");
@@ -211,8 +244,42 @@ public class ReadWriteFilmlist {
             }
         }
 
+
         // jetzt ist das Datum der Filmliste gesetzt und kann geschrieben werden
         genDateLocalTime = Filmlist.genDate(metaDaten.getArray());
+        if (!loadActList && !checkDate()) {
+            return false;
+        }
+
+
+        // Filme lesen und schreiben
+        try (FileOutputStream fos = new FileOutputStream(dest);
+             JsonGenerator jg = getJsonGenerator(fos)) {
+            if (readingData(jp, jg, metaDaten)) {
+                // nur wenn geschrieben wird
+                endWrite(jg);
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkDate() {
+        if (SYSTEM_FILMLIST_DATE_LOCAL_TIME.get().equals(genDateLocalTime)) {
+            // dann gibts nur die gleiche Liste
+            PLog.sysLog("Gibt noch keine aktuellere Filmliste: " + genDateLocalTime);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean readingData(JsonParser jp, JsonGenerator jg, StringArray metaDaten) throws IOException {
+        JsonToken jsonToken;
+        String sender = "", theme = "";
+        final Film film = new Film();
+        ArrayList listSender = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
+
         startWrite(jg, metaDaten);
 
         while (!ProgData.getInstance().loadFilmlist.getStop() && (jsonToken = jp.nextToken()) != null) {
@@ -250,7 +317,7 @@ public class ReadWriteFilmlist {
             }
         }
 
-
+        return true;
     }
 
     private InputStream selectDecompressor(String source, InputStream in) throws Exception {
