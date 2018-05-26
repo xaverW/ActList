@@ -31,15 +31,15 @@ import javafx.scene.layout.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SenderPaneController extends AnchorPane {
+public class ChannelPaneController extends AnchorPane {
 
     private final ProgData progData;
     private final GridPane gridPane = new GridPane();
 
-    StringProperty propSender = ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty();
+    StringProperty propChannel = ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty();
 
 
-    public SenderPaneController() {
+    public ChannelPaneController() {
         progData = ProgData.getInstance();
 
         final ScrollPane scrollPane = new ScrollPane();
@@ -65,7 +65,7 @@ public class SenderPaneController extends AnchorPane {
         GridPane.setVgrow(lv, Priority.ALWAYS);
         progData.loadFilmlist.updateDownloadUrlsFilmlisten();
 
-        ArrayList aListSender = new ArrayList(Arrays.asList(propSender.getValue().split(",")));
+        ArrayList aListChannel = new ArrayList(Arrays.asList(propChannel.getValue().split(",")));
         ArrayList<CheckBox> aListCb = new ArrayList<>();
 
         for (String s : ProgConst.SENDER) {
@@ -73,7 +73,7 @@ public class SenderPaneController extends AnchorPane {
             aListCb.add(cb);
 
             lv.getItems().add(cb);
-            cb.setSelected(aListSender.contains(s));
+            cb.setSelected(aListChannel.contains(s));
             cb.setOnAction(a -> {
                 makeProp(aListCb);
             });
@@ -105,6 +105,6 @@ public class SenderPaneController extends AnchorPane {
             String s = cb.getText();
             str = str.isEmpty() ? s : str + "," + s;
         }
-        propSender.setValue(str);
+        propChannel.setValue(str);
     }
 }

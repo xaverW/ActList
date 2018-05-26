@@ -278,7 +278,7 @@ public class ReadWriteFilmlist {
         JsonToken jsonToken;
         String sender = "", theme = "";
         final Film film = new Film();
-        ArrayList listSender = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
+        ArrayList listChannel = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
 
         startWrite(jg, metaDaten);
 
@@ -292,20 +292,20 @@ public class ReadWriteFilmlist {
                     film.arr[FilmXml.JSON_NAMES[i]] = jp.nextTextValue();
                 }
 
-                if (film.arr[FilmXml.FILM_SENDER].isEmpty()) {
-                    film.arr[FilmXml.FILM_SENDER] = sender;
-                } else if (!sender.equals(film.arr[FilmXml.FILM_SENDER])) {
-                    sender = film.arr[FilmXml.FILM_SENDER];
+                if (film.arr[FilmXml.FILM_CHANNEL].isEmpty()) {
+                    film.arr[FilmXml.FILM_CHANNEL] = sender;
+                } else if (!sender.equals(film.arr[FilmXml.FILM_CHANNEL])) {
+                    sender = film.arr[FilmXml.FILM_CHANNEL];
                 }
 
-                if (film.arr[FilmXml.FILM_THEMA].isEmpty()) {
-                    film.arr[FilmXml.FILM_THEMA] = theme;
-                } else if (!theme.equals(film.arr[FilmXml.FILM_THEMA])) {
-                    theme = film.arr[FilmXml.FILM_THEMA];
+                if (film.arr[FilmXml.FILM_THEME].isEmpty()) {
+                    film.arr[FilmXml.FILM_THEME] = theme;
+                } else if (!theme.equals(film.arr[FilmXml.FILM_THEME])) {
+                    theme = film.arr[FilmXml.FILM_THEME];
                 }
 
                 ++max;
-                if (listSender.isEmpty() || !listSender.contains(film.arr[FilmXml.FILM_SENDER])) {
+                if (listChannel.isEmpty() || !listChannel.contains(film.arr[FilmXml.FILM_CHANNEL])) {
                     // Filme wieder schreiben
                     film.initDate();
                     if (checkDate(film)) {
