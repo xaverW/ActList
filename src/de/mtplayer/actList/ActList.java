@@ -15,7 +15,7 @@
  */
 package de.mtplayer.actList;
 
-import de.mtplayer.actList.controller.ProgQuitt;
+import de.mtplayer.actList.controller.ProgQuit;
 import de.mtplayer.actList.controller.ProgSave;
 import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.ProgConfig;
@@ -43,7 +43,7 @@ public class ActList extends Application {
     private static final int ICON_WIDTH = 58;
     private static final int ICON_HEIGHT = 58;
 
-    private static final String LOG_TEXT_PROGRAMMSTART = "Programmstart";
+    private static final String LOG_TEXT_PROGRAMSTART = "Programmstart";
 
     protected ProgData progData;
     ProgStart progStart;
@@ -57,7 +57,7 @@ public class ActList extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        Duration.counterStart(LOG_TEXT_PROGRAMMSTART);
+        Duration.counterStart(LOG_TEXT_PROGRAMSTART);
         progData = ProgData.getInstance();
         progData.primaryStage = primaryStage;
         progStart = new ProgStart(progData);
@@ -65,7 +65,7 @@ public class ActList extends Application {
         initP2();
         loadData();
         initRootLayout();
-        losGehts();
+        startProg();
     }
 
     private void initP2() {
@@ -83,8 +83,8 @@ public class ActList extends Application {
             root = new ActListController();
             progData.actListController = root;
             scene = new Scene(root,
-                    GuiSize.getWidth(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty()),
-                    GuiSize.getHeight(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty()));
+                    GuiSize.getWidth(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty()),
+                    GuiSize.getHeight(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty()));
 
             String css = this.getClass().getResource(ProgConst.CSS_FILE).toExternalForm();
             scene.getStylesheets().add(css);
@@ -92,10 +92,10 @@ public class ActList extends Application {
             primaryStage.setScene(scene);
             primaryStage.setOnCloseRequest(e -> {
                 e.consume();
-                new ProgQuitt().quitt();
+                new ProgQuit().quit();
             });
 
-            GuiSize.setPos(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty(), primaryStage);
+            GuiSize.setPos(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty(), primaryStage);
 
             primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
             primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());
@@ -108,12 +108,12 @@ public class ActList extends Application {
         }
     }
 
-    public void losGehts() {
+    private void startProg() {
 
         progStart.startMsg();
         initProg();
 
-        Duration.counterStop(LOG_TEXT_PROGRAMMSTART);
+        Duration.counterStop(LOG_TEXT_PROGRAMSTART);
     }
 
     private void initProg() {

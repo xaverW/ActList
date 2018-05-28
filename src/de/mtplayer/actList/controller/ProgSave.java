@@ -31,7 +31,7 @@ public class ProgSave {
 
     public void saveAll() {
         try (IoWriteXml writer = new IoWriteXml(progData)) {
-            writer.datenSchreiben();
+            writer.writeData();
         } catch (final Exception ex) {
             ex.printStackTrace();
         }

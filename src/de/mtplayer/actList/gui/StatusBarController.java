@@ -61,8 +61,8 @@ public class StatusBarController extends AnchorPane {
     private final ProgData progData;
     private boolean stopTimer = false;
 
-    private final static String DATUM_ZEIT_FORMAT = "dd.MM.yyyy, HH:mm";
-    final SimpleDateFormat sdf = new SimpleDateFormat(DATUM_ZEIT_FORMAT);
+    private final static String DATE_TIME_FORMAT = "dd.MM.yyyy, HH:mm";
+    final SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
 
     private PDate filmlistDate = new PDate();
     private int foundFilms = -1;
@@ -225,20 +225,20 @@ public class StatusBarController extends AnchorPane {
         strText += filmlistDate.getDateTime();
         strText += " Uhr  ||  Alter: ";
 
-        final int minuten = filmlistAge / 60;
-        String strSekunde = String.valueOf(filmlistAge % 60);
-        String strMinute = String.valueOf(minuten % 60);
-        String strStunde = String.valueOf(minuten / 60);
-        if (strSekunde.length() < 2) {
-            strSekunde = '0' + strSekunde;
+        final int minute = filmlistAge / 60;
+        String strSecond = String.valueOf(filmlistAge % 60);
+        String strMinute = String.valueOf(minute % 60);
+        String strHour = String.valueOf(minute / 60);
+        if (strSecond.length() < 2) {
+            strSecond = '0' + strSecond;
         }
         if (strMinute.length() < 2) {
             strMinute = '0' + strMinute;
         }
-        if (strStunde.length() < 2) {
-            strStunde = '0' + strStunde;
+        if (strHour.length() < 2) {
+            strHour = '0' + strHour;
         }
-        strText += strStunde + ':' + strMinute + ':' + strSekunde + ' ';
+        strText += strHour + ':' + strMinute + ':' + strSecond + ' ';
 
         // Infopanel setzen
         lblRight.setText(strText);

@@ -38,12 +38,12 @@ public class AppParameter {
         }
 
         printArguments(arguments);
-        ProgData.configDir = readPfadFromArguments(arguments);
+        ProgData.configDir = readPathFromArguments(arguments);
 
         try {
             final Options allowed = new Options();
             for (ProgParameter parameter : ProgParameter.values()) {
-                allowed.addOption(parameter.shortname, parameter.name, parameter.hasArgs, parameter.helpText);
+                allowed.addOption(parameter.shortName, parameter.name, parameter.hasArgs, parameter.helpText);
             }
 
             final CommandLineParser parser = new DefaultParser();
@@ -79,7 +79,7 @@ public class AppParameter {
         }
     }
 
-    private String readPfadFromArguments(final String[] arguments) {
+    private String readPathFromArguments(final String[] arguments) {
         String path = "";
 
         if (arguments == null || arguments.length == 0) {
@@ -121,14 +121,14 @@ public class AppParameter {
         PATH("p", "path", true, "path of configuration file"),
         DEBUG("d", "debug", false, "show debug info");
 
-        final String shortname;
+        final String shortName;
         final String name;
         final boolean hasArgs;
         final String helpText;
 
-        ProgParameter(final String shortname, final String name,
+        ProgParameter(final String shortName, final String name,
                       final boolean hasArgs, final String helpText) {
-            this.shortname = shortname;
+            this.shortName = shortName;
             this.name = name;
             this.hasArgs = hasArgs;
             this.helpText = helpText;

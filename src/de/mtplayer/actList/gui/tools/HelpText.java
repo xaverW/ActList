@@ -24,7 +24,7 @@ public class HelpText {
             "Eine kleinere Filmliste kann bei Rechnern mit wenig " +
             "Speicher hilfreich sein.";
 
-    public static final String LOAD_FILMLIST_MANUEL = "Die angegebene URL wird beim " +
+    public static final String LOAD_FILMLIST_MANUAL = "Die angegebene URL wird beim " +
             "Neuladen einer Filmliste verwendet. Ist nichts angegeben, wird die Filmliste auf herkömmliche " +
             "Art geladen und die URL dafür wird automatisch gewählt.";
 

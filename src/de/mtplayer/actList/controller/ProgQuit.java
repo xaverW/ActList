@@ -22,19 +22,19 @@ import de.p2tools.p2Lib.guiTools.GuiSize;
 import de.p2tools.p2Lib.tools.log.LogMsg;
 import javafx.application.Platform;
 
-public class ProgQuitt {
+public class ProgQuit {
     final ProgData progData;
 
-    public ProgQuitt() {
+    public ProgQuit() {
         progData = ProgData.getInstance();
     }
 
     /**
      * Quit the MTPlayer application
      */
-    public void quitt() {
+    public void quit() {
 
-        GuiSize.getSizeScene(ProgConfig.SYSTEM_GROESSE_GUI.getStringProperty(), progData.primaryStage);
+        GuiSize.getSizeScene(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty(), progData.primaryStage);
         new ProgSave().saveAll();
         LogMsg.endMsg();
 

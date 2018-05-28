@@ -42,7 +42,7 @@ public class FilmPaneController extends AnchorPane {
     private final Label lblDays = new Label("");
 
     IntegerProperty propDay = ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getIntegerProperty();
-    BooleanProperty propLoad = ProgConfig.SYSTEM_LOAD_FILME_START.getBooleanProperty();
+    BooleanProperty propLoad = ProgConfig.SYSTEM_LOAD_FILMS_START.getBooleanProperty();
 
     public FilmPaneController() {
         progData = ProgData.getInstance();

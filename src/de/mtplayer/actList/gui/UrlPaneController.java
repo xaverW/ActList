@@ -36,7 +36,7 @@ public class UrlPaneController extends AnchorPane {
     private final GridPane gridPane = new GridPane();
     private final TextField txtUrl = new TextField("");
 
-    StringProperty propUrl = ProgConfig.SYSTEM_LOAD_FILME_MANUELL.getStringProperty();
+    StringProperty propUrl = ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.getStringProperty();
 
     public UrlPaneController() {
         progData = ProgData.getInstance();
@@ -91,7 +91,7 @@ public class UrlPaneController extends AnchorPane {
         txtUrl.textProperty().bindBidirectional(propUrl);
 
         final Button btnHelp = new PButton().helpButton("Filmliste laden",
-                HelpText.LOAD_FILMLIST_MANUEL);
+                HelpText.LOAD_FILMLIST_MANUAL);
 
         Label lblTxt = new Label("URL’s:");
         GridPane.setValignment(lblTxt, VPos.TOP);

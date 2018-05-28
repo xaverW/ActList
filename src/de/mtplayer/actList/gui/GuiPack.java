@@ -74,7 +74,7 @@ public class GuiPack extends AnchorPane {
         btnLoad.setPadding(new Insets(10));
         btnLoad.setOnAction(event -> {
             String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
-            progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILME_MANUELL.get(),
+            progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
                     fileDest, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
         });
 
@@ -123,31 +123,31 @@ public class GuiPack extends AnchorPane {
         cbPath.getItems().addAll(storedPath);
 
         cbPath.getSelectionModel().selectFirst();
-        cbPath.getEditor().textProperty().addListener((observable, oldValue, newValue) -> saveComboPfad());
+        cbPath.getEditor().textProperty().addListener((observable, oldValue, newValue) -> saveComboPath());
     }
 
-    private void saveComboPfad() {
-        final ArrayList<String> pfade = new ArrayList<>(cbPath.getItems());
+    private void saveComboPath() {
+        final ArrayList<String> path = new ArrayList<>(cbPath.getItems());
 
-        final ArrayList<String> pfade2 = new ArrayList<>();
+        final ArrayList<String> path2 = new ArrayList<>();
         String sel = cbPath.getEditor().getText();
         if (sel != null && !sel.isEmpty()) {
-            pfade2.add(sel);
+            path2.add(sel);
         }
 
-        pfade.stream().forEach(s1 -> {
+        path.stream().forEach(s1 -> {
             // um doppelte auszusortieren
-            if (!pfade2.contains(s1)) {
-                pfade2.add(s1);
+            if (!path2.contains(s1)) {
+                path2.add(s1);
             }
         });
 
         String s = "";
-        if (!pfade2.isEmpty()) {
-            s = pfade2.get(0);
-            for (int i = 1; i < ProgConst.MAX_PFADE_DIALOG_DOWNLOAD && i < pfade2.size(); ++i) {
-                if (!pfade2.get(i).isEmpty()) {
-                    s += ProgConst.DIR_FILMLIST_SEPARATOR + pfade2.get(i);
+        if (!path2.isEmpty()) {
+            s = path2.get(0);
+            for (int i = 1; i < ProgConst.MAX_PATH_DIALOG_DOWNLOAD && i < path2.size(); ++i) {
+                if (!path2.get(i).isEmpty()) {
+                    s += ProgConst.DIR_FILMLIST_SEPARATOR + path2.get(i);
                 }
             }
         }

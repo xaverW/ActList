@@ -25,11 +25,11 @@ public class ProgConfig extends MLConfig {
     public static final String SYSTEM = "system";
 
     // Fenstereinstellungen
-    public static MLConfigs SYSTEM_GROESSE_GUI = addNewKey("Groesse-Gui", "1000:900");
+    public static MLConfigs SYSTEM_SIZE_GUI = addNewKey("size-gui", "1000:900");
 
     // Einstellungen Filmliste
-    public static MLConfigs SYSTEM_LOAD_FILME_START = addNewKey("system-load-filme-start", Boolean.TRUE.toString());
-    public static MLConfigs SYSTEM_LOAD_FILME_MANUELL = addNewKey("system-load-filme-manuell", "");
+    public static MLConfigs SYSTEM_LOAD_FILMS_START = addNewKey("system-load-filme-start", Boolean.TRUE.toString());
+    public static MLConfigs SYSTEM_LOAD_FILMS_MANUAL = addNewKey("system-load-filme-manuell", "");
     public static MLConfigs SYSTEM_LOAD_NOT_SENDER = addNewKey("system-load-not-sender", "");
     public static MLConfigs SYSTEM_ANZ_TAGE_FILMLISTE = addNewKey("system-anz-tage-filmilste", "0"); //es werden nur die x letzten Tage geladen
     public static MLConfigs SYSTEM_DEST_PATH = addNewKey("system-dest-path", ProgInfos.getDirectory_mtplayer_mv());

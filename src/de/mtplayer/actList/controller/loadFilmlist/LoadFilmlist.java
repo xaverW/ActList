@@ -92,8 +92,8 @@ public class LoadFilmlist {
     }
 
     public void updateDownloadUrlsFilmlisten() {
-        searchFilmListUrls.updateURLsFilmlisten(true);
-        searchFilmListUrls.updateURLsFilmlisten(false);
+        searchFilmListUrls.updateURLsFilmlists(true);
+        searchFilmListUrls.updateURLsFilmlists(false);
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_akt() {
@@ -121,7 +121,7 @@ public class LoadFilmlist {
     }
 
     private void andEnd(ListenerFilmlistLoadEvent event) {
-        if (event.fehler) {
+        if (event.error) {
             PLog.sysLog("");
             PLog.sysLog("Filmliste laden war fehlerhaft, alte Liste wird wieder geladen");
             Platform.runLater(() -> new MTAlert().showErrorAlert("Filmliste laden", "Das Laden der Filmliste hat nicht geklappt!"));

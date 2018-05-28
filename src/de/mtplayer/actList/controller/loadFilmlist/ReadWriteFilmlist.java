@@ -131,7 +131,7 @@ public class ReadWriteFilmlist {
             ex.printStackTrace();
         }
 
-        notifyFertig(source, max);
+        notifyFinished(source, max);
         list.add("Filme lesen --> fertig");
         PLog.sysLog(list);
     }
@@ -191,8 +191,8 @@ public class ReadWriteFilmlist {
 
         try (Response response = MLHttpClient.getInstance().getHttpClient().newCall(builder.build()).execute();
              ResponseBody body = response.body()) {
-            if (response.isSuccessful()) {
 
+            if (response.isSuccessful() && body != null) {
                 try (InputStream input = new ProgressMonitorInputStream(body.byteStream(), body.contentLength(), monitor)) {
 
                     try (InputStream is = selectDecompressor(source.toString(), input);
@@ -215,7 +215,7 @@ public class ReadWriteFilmlist {
 
     private boolean startReadingData(JsonParser jp, boolean loadActList) throws IOException {
         JsonToken jsonToken;
-        StringArray metaDaten = new StringArray();
+        StringArray metaData = new StringArray();
 
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             throw new IllegalStateException("Expected data to start with an Object");
@@ -227,7 +227,7 @@ public class ReadWriteFilmlist {
             }
             if (jp.isExpectedStartArrayToken()) {
                 for (int k = 0; k < FilmlistXml.MAX_ELEM; ++k) {
-                    metaDaten.add(jp.nextTextValue());
+                    metaData.add(jp.nextTextValue());
                 }
                 break;
             }
@@ -246,7 +246,7 @@ public class ReadWriteFilmlist {
 
 
         // jetzt ist das Datum der Filmliste gesetzt und kann geschrieben werden
-        genDateLocalTime = Filmlist.genDate(metaDaten.getArray());
+        genDateLocalTime = Filmlist.genDate(metaData.getArray());
         if (!loadActList && !checkDate()) {
             return false;
         }
@@ -255,7 +255,7 @@ public class ReadWriteFilmlist {
         // Filme lesen und schreiben
         try (FileOutputStream fos = new FileOutputStream(dest);
              JsonGenerator jg = getJsonGenerator(fos)) {
-            if (readingData(jp, jg, metaDaten)) {
+            if (readingData(jp, jg, metaData)) {
                 // nur wenn geschrieben wird
                 endWrite(jg);
             }
@@ -274,13 +274,13 @@ public class ReadWriteFilmlist {
         return true;
     }
 
-    private boolean readingData(JsonParser jp, JsonGenerator jg, StringArray metaDaten) throws IOException {
+    private boolean readingData(JsonParser jp, JsonGenerator jg, StringArray metaData) throws IOException {
         JsonToken jsonToken;
         String sender = "", theme = "";
         final Film film = new Film();
         ArrayList listChannel = new ArrayList(Arrays.asList(ProgConfig.SYSTEM_LOAD_NOT_SENDER.getStringProperty().getValue().split(",")));
 
-        startWrite(jg, metaDaten);
+        startWrite(jg, metaData);
 
         while (!ProgData.getInstance().loadFilmlist.getStop() && (jsonToken = jp.nextToken()) != null) {
             if (jsonToken == JsonToken.END_OBJECT) {
@@ -349,18 +349,18 @@ public class ReadWriteFilmlist {
     }
 
 
-    private void startWrite(JsonGenerator jg, StringArray metaDaten) throws IOException {
+    private void startWrite(JsonGenerator jg, StringArray metaData) throws IOException {
         PLog.sysLog("Filmeliste laden und schreiben");
         PLog.sysLog("   --> Schreiben nach: " + dest);
         jg.writeStartObject();
         // Infos zur Filmliste
-        jg.writeArrayFieldStart(FilmlistXml.FILMLISTE);
-        for (int i = 0; i < metaDaten.getSize(); ++i) {
-            jg.writeString(metaDaten.get(i));
+        jg.writeArrayFieldStart(FilmlistXml.FILMLIST);
+        for (int i = 0; i < metaData.getSize(); ++i) {
+            jg.writeString(metaData.get(i));
         }
         jg.writeEndArray();
         // Infos der Felder in der Filmliste
-        jg.writeArrayFieldStart(FilmlistXml.FILMLISTE);
+        jg.writeArrayFieldStart(FilmlistXml.FILMLIST);
         for (int i = 0; i < FilmXml.JSON_NAMES.length; ++i) {
             jg.writeString(FilmXml.COLUMN_NAMES[FilmXml.JSON_NAMES[i]]);
         }
@@ -404,7 +404,7 @@ public class ReadWriteFilmlist {
         }
     }
 
-    private void notifyFertig(String url, int max) {
+    private void notifyFinished(String url, int max) {
         ArrayList<String> list = new ArrayList<>();
         list.add(PLog.LILNE3);
         list.add("Liste Filme gelesen am  : " + FastDateFormat.getInstance("dd.MM.yyyy, HH:mm").format(new Date()));

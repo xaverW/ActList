@@ -30,7 +30,7 @@ public class ProgConst {
 
     public static final String FORMAT_ZIP = ".zip";
     public static final String FORMAT_XZ = ".xz";
-    public static final int MAX_PFADE_DIALOG_DOWNLOAD = 15;
+    public static final int MAX_PATH_DIALOG_DOWNLOAD = 15;
     public static final String DIR_FILMLIST_SEPARATOR = "<>";
 
     // Dateien/Verzeichnisse
