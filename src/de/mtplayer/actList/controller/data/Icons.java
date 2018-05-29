@@ -23,9 +23,9 @@ import javafx.scene.image.ImageView;
 public class Icons {
 
     public final ImageView ICON_BUTTON_RESET = GetIcon.getImageView("button-reset.png", 16, 16);
-    public final ImageView ICON_BUTTON_HELP = GetIcon.getImageView("button-help.png", 16, 16);
     public final ImageView ICON_BUTTON_FILE_OPEN = GetIcon.getImageView("button-file-open.png", 16, 16);
-
     public final ImageView ICON_BUTTON_STOP = GetIcon.getImageView("button-stop.png", 16, 16);
+
+    public final ImageView ICON_BUTTON_HELP = GetIcon.getImageView("button-help.png", 16, 16);
 
 }
