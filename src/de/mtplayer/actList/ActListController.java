@@ -19,24 +19,16 @@ package de.mtplayer.actList;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.gui.GuiPack;
 import de.mtplayer.actList.gui.StatusBarController;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.MaskerPane;
 
-public class ActListController extends StackPane {
+public class ActListController extends BorderPane {
 
-    BorderPane borderPane = new BorderPane();
-    StackPane stackPaneCont = new StackPane();
-    private MaskerPane maskerPane = new MaskerPane();
     private StatusBarController statusBarController;
     private GuiPack guiPack;
 
     private final ProgData progData;
-
 
     public ActListController() {
         progData = ProgData.getInstance();
@@ -47,23 +39,14 @@ public class ActListController extends StackPane {
         try {
             guiPack = new GuiPack();
             guiPack.pack();
-            stackPaneCont.getChildren().addAll(guiPack);
 
             statusBarController = new StatusBarController(progData);
             VBox.setVgrow(statusBarController, Priority.NEVER);
 
-            borderPane.setCenter(stackPaneCont);
-            borderPane.setBottom(statusBarController);
+            setCenter(guiPack);
+            setBottom(statusBarController);
+//            setPadding(new Insets(0));
 
-            this.setPadding(new Insets(0));
-            this.getChildren().addAll(borderPane, maskerPane);
-
-            StackPane.setAlignment(maskerPane, Pos.CENTER);
-            maskerPane.setPadding(new Insets(3, 1, 1, 1));
-            maskerPane.toFront();
-            maskerPane.setVisible(false);
-
-            guiPack.toFront();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

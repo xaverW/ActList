@@ -307,9 +307,6 @@ public class ReadWriteFilmlist {
                 ++max;
                 if (listChannel.isEmpty() || !listChannel.contains(film.arr[FilmXml.FILM_CHANNEL])) {
                     // Filme wieder schreiben
-                    if (film.arr[FilmXml.FILM_DATE].isEmpty()) {
-                        System.out.println("");
-                    }
                     film.initDate();
                     if (checkDate(film)) {
                         ++countFoundFilms;

@@ -219,13 +219,13 @@ public class StatusBarController extends AnchorPane {
             return;
         }
 
-        int filmlistAge = filmlistDate.diffInSeconds();
+        long filmlistAge = filmlistDate.diffInSeconds();
 
         String strText = "Filmliste erstellt: ";
-        strText += filmlistDate.getDateTime();
+        strText += filmlistDate.getDateTime(PDate.FORMAT_dd_MM_yyyyKomma__HH_mm);
         strText += " Uhr  ||  Alter: ";
 
-        final int minute = filmlistAge / 60;
+        final long minute = filmlistAge / 60;
         String strSecond = String.valueOf(filmlistAge % 60);
         String strMinute = String.valueOf(minute % 60);
         String strHour = String.valueOf(minute / 60);
