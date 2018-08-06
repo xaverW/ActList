@@ -117,6 +117,7 @@ public class GuiPack extends AnchorPane {
     private void initPath() {
         btnDest.setGraphic(new Icons().ICON_BUTTON_FILE_OPEN);
         btnDest.setText("");
+        btnDest.setTooltip(new Tooltip("Einen Pfad zum Speichern der Filmliste auswählen."));
         btnDest.setOnAction(event -> DirFileChooser.DirChooser(ProgData.getInstance().primaryStage, cbPath));
 
         cbPath.setEditable(true);

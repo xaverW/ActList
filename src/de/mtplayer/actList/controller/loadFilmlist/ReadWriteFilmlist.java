@@ -18,7 +18,6 @@
 package de.mtplayer.actList.controller.loadFilmlist;
 
 import com.fasterxml.jackson.core.*;
-import com.sun.xml.internal.fastinfoset.util.StringArray;
 import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.actList.controller.config.ProgData;
@@ -34,6 +33,7 @@ import de.mtplayer.mtp.controller.data.film.FilmlistXml;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.p2tools.p2Lib.PConst;
 import de.p2tools.p2Lib.dialog.PAlert;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
@@ -206,7 +206,7 @@ public class ReadWriteFilmlist {
         } catch (final Exception ex) {
             PLog.errorLog(945123641, ex, "Filmliste: " + source);
             Platform.runLater(() -> new MLAlert().showErrorAlert("Filmliste speichern",
-                    "Die Filmliste konnte nicht geladen werden: \n\n" +
+                    "Die Filmliste konnte nicht geladen werden: " + PConst.LINE_SEPARATORx2 +
                             ex.getMessage()));
         }
 
@@ -215,7 +215,7 @@ public class ReadWriteFilmlist {
 
     private boolean startReadingData(JsonParser jp, boolean loadActList) throws IOException {
         JsonToken jsonToken;
-        StringArray metaData = new StringArray();
+        ArrayList<String> metaData = new ArrayList<>();
 
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             throw new IllegalStateException("Expected data to start with an Object");
@@ -246,7 +246,7 @@ public class ReadWriteFilmlist {
 
 
         // jetzt ist das Datum der Filmliste gesetzt und kann geschrieben werden
-        genDateLocalTime = Filmlist.genDate(metaData.getArray());
+        genDateLocalTime = Filmlist.genDate(metaData.toArray(new String[]{}));
         if (!loadActList && !checkDate()) {
             return false;
         }
@@ -274,7 +274,7 @@ public class ReadWriteFilmlist {
         return true;
     }
 
-    private boolean readingData(JsonParser jp, JsonGenerator jg, StringArray metaData) throws IOException {
+    private boolean readingData(JsonParser jp, JsonGenerator jg, ArrayList<String> metaData) throws IOException {
         JsonToken jsonToken;
         String sender = "", theme = "";
         final Film film = new Film();
@@ -349,13 +349,13 @@ public class ReadWriteFilmlist {
     }
 
 
-    private void startWrite(JsonGenerator jg, StringArray metaData) throws IOException {
+    private void startWrite(JsonGenerator jg, ArrayList<String> metaData) throws IOException {
         PLog.sysLog("Filmeliste laden und schreiben");
         PLog.sysLog("   --> Schreiben nach: " + dest);
         jg.writeStartObject();
         // Infos zur Filmliste
         jg.writeArrayFieldStart(FilmlistXml.FILMLIST);
-        for (int i = 0; i < metaData.getSize(); ++i) {
+        for (int i = 0; i < metaData.size(); ++i) {
             jg.writeString(metaData.get(i));
         }
         jg.writeEndArray();
