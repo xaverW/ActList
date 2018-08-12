@@ -26,7 +26,7 @@ import de.mtplayer.mLib.tools.Functions;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.PInit;
-import de.p2tools.p2Lib.guiTools.GuiSize;
+import de.p2tools.p2Lib.guiTools.PGuiSize;
 import de.p2tools.p2Lib.guiTools.PButton;
 import de.p2tools.p2Lib.tools.log.Duration;
 import javafx.application.Application;
@@ -83,8 +83,8 @@ public class ActList extends Application {
             root = new ActListController();
             progData.actListController = root;
             scene = new Scene(root,
-                    GuiSize.getWidth(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty()),
-                    GuiSize.getHeight(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty()));
+                    PGuiSize.getWidth(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty()),
+                    PGuiSize.getHeight(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty()));
 
             String css = this.getClass().getResource(ProgConst.CSS_FILE).toExternalForm();
             scene.getStylesheets().add(css);
@@ -95,7 +95,7 @@ public class ActList extends Application {
                 new ProgQuit().quit();
             });
 
-            GuiSize.setPos(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty(), primaryStage);
+            PGuiSize.setPos(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty(), primaryStage);
 
             primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
             primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());

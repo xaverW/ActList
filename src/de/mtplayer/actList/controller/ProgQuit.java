@@ -18,7 +18,7 @@ package de.mtplayer.actList.controller;
 
 import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgData;
-import de.p2tools.p2Lib.guiTools.GuiSize;
+import de.p2tools.p2Lib.guiTools.PGuiSize;
 import de.p2tools.p2Lib.tools.log.LogMsg;
 import javafx.application.Platform;
 
@@ -34,7 +34,7 @@ public class ProgQuit {
      */
     public void quit() {
 
-        GuiSize.getSizeScene(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty(), progData.primaryStage);
+        PGuiSize.getSizeScene(ProgConfig.SYSTEM_SIZE_GUI.getStringProperty(), progData.primaryStage);
         new ProgSave().saveAll();
         LogMsg.endMsg();
 

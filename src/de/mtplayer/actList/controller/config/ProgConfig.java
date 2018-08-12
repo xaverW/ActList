@@ -25,7 +25,7 @@ public class ProgConfig extends MLConfig {
     public static final String SYSTEM = "system";
 
     // Fenstereinstellungen
-    public static MLConfigs SYSTEM_SIZE_GUI = addNewKey("size-gui", "1000:900");
+    public static MLConfigs SYSTEM_SIZE_GUI = addNewKey("size-gui", "800:600");
 
     // Einstellungen Filmliste
     public static MLConfigs SYSTEM_LOAD_FILMS_START = addNewKey("system-load-filme-start", Boolean.TRUE.toString());

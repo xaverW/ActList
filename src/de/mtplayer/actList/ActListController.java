@@ -19,6 +19,7 @@ package de.mtplayer.actList;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.gui.GuiPack;
 import de.mtplayer.actList.gui.StatusBarController;
+import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -45,10 +46,9 @@ public class ActListController extends BorderPane {
 
             setCenter(guiPack);
             setBottom(statusBarController);
-//            setPadding(new Insets(0));
 
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            PLog.errorLog(915236547, ex);
         }
     }
 

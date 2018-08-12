@@ -2,6 +2,15 @@
 
 <br />
 
+**Release 3-0**
+
+* Das Programm läuft jetzt auf Java8, Java9, Java10
+* Beim Neuladen der Filmliste bekommt man einen Hinweis, wenn es noch keine neue Filmliste gibt.
+
+<br />
+<br />
+
+
 **Release 2-0**
 
 * Mit dem Schalter "-h" lassen sich die möglichen Startparameter abfragen
@@ -11,26 +20,26 @@ bei Windows: p2Actlist
 (der führende Punkt kann Probleme machen und wurde entfernt, der Ordner wird als versteckt angelegt)  
 bei Linux: .p2Actlist
 
+<br />
+<br />
 
-<br />
-<br />
 
 **Release 1-81**
 
 * Gab ein paar kleine Verbesserungen im Gui
 
+<br />
+<br />
 
-<br />
-<br />
 
 **Release 1-66**
 
 * Das ist die erste veröffentlichte Version von ActList
 
 
+<br />
+<br />
 
-<br />
-<br />
 
 **Links**
 
