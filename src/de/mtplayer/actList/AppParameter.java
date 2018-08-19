@@ -20,7 +20,7 @@ package de.mtplayer.actList;
 import de.mtplayer.actList.controller.ProgStart;
 import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.actList.controller.config.ProgData;
-import de.p2tools.p2Lib.tools.log.LogMsg;
+import de.p2tools.p2Lib.tools.log.LogMessage;
 import de.p2tools.p2Lib.tools.log.PLog;
 import org.apache.commons.cli.*;
 
@@ -57,7 +57,7 @@ public class AppParameter {
             if (hasOption(line, ProgParameter.VERSION)) {
                 EventQueue.invokeLater(() -> {
                     ProgStart.startMsg();
-                    LogMsg.endMsg();
+                    LogMessage.endMsg();
                     System.exit(0);
                 });
             }

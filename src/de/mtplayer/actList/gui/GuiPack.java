@@ -36,6 +36,7 @@ public class GuiPack extends AnchorPane {
     private final FilmPaneController filmPaneController;
     private final UrlPaneController urlPaneController;
     private final ChannelPaneController channelPaneController;
+    private final Button btnLoad = new Button("Filmliste jetzt laden");
 
     private final ComboBox<String> cbPath = new ComboBox<>();
     private final String[] storedPath = ProgConfig.SYSTEM_DEST_PATH.get().split(ProgConst.DIR_FILMLIST_SEPARATOR);
@@ -43,6 +44,7 @@ public class GuiPack extends AnchorPane {
 
     public GuiPack() {
         progData = ProgData.getInstance();
+        progData.guiPack = this;
         filmPaneController = new FilmPaneController();
         urlPaneController = new UrlPaneController();
         channelPaneController = new ChannelPaneController();
@@ -69,10 +71,12 @@ public class GuiPack extends AnchorPane {
         tabPane.getTabs().addAll(tab);
 
 
-        Button btnLoad = new Button("Filmliste jetzt laden");
         btnLoad.getStyleClass().add("btnFilmlist");
         btnLoad.setPadding(new Insets(10));
         btnLoad.setOnAction(event -> {
+            btnLoad.getStyleClass().clear();
+            btnLoad.getStyleClass().add("btnFilmlist");
+
             String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
             progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
                     fileDest, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
@@ -112,6 +116,10 @@ public class GuiPack extends AnchorPane {
         AnchorPane.setTopAnchor(vBoxAll, 10.0);
 
         initPath();
+    }
+
+    public void setButtonFilmlistUpdate() {
+        btnLoad.getStyleClass().add("btnFilmlist_");
     }
 
     private void initPath() {

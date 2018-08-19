@@ -19,6 +19,7 @@ package de.mtplayer.actList.controller.config;
 
 import de.mtplayer.actList.ActListController;
 import de.mtplayer.actList.controller.loadFilmlist.LoadFilmlist;
+import de.mtplayer.actList.gui.GuiPack;
 import de.mtplayer.actList.gui.tools.Listener;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -43,6 +44,7 @@ public class ProgData {
     // Gui
     public Stage primaryStage = null;
     public ActListController actListController = null;
+    public GuiPack guiPack = null;
 
     // Programmdaten
 

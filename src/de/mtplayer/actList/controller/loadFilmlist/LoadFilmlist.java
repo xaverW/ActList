@@ -16,12 +16,15 @@
 
 package de.mtplayer.actList.controller.loadFilmlist;
 
+import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgData;
+import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.mtp.controller.filmlist.NotifyProgress;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlList;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
+import de.mtplayer.mtp.controller.filmlist.loadFilmlist.SearchForFilmlistDate;
 import de.p2tools.p2Lib.dialog.PAlert;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
@@ -31,12 +34,15 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static de.mtplayer.actList.controller.config.ProgConfig.SYSTEM_FILMLIST_DATE_LOCAL_TIME;
+
 public class LoadFilmlist {
 
     private final ProgData progData;
 
     private final SearchFilmListUrls searchFilmListUrls;
     private final ReadWriteFilmlist readWriteFilmlist;
+    private final SearchForFilmlistDate searchForFilmlistDate;
 
     private BooleanProperty propListSearching = new SimpleBooleanProperty(false);
     private final NotifyProgress notifyProgress = new NotifyProgress();
@@ -65,6 +71,10 @@ public class LoadFilmlist {
                 andEnd(event);
             }
         });
+
+        searchForFilmlistDate = new SearchForFilmlistDate();
+        checkForFilmlistUpdate();
+
     }
 
     public boolean getPropListSearching() {
@@ -129,6 +139,27 @@ public class LoadFilmlist {
 
         setPropListSearching(false);
         notifyProgress.notifyEvent(NotifyProgress.NOTIFY.FINISHED, event);
+    }
+
+    private void checkForFilmlistUpdate() {
+        Listener.addListener(new Listener(Listener.EREIGNIS_TIMER, LoadFilmlist.class.getSimpleName()) {
+            public void ping() {
+                try {
+                    if (getPropListSearching()) {
+                        // dann laden wir gerade
+                        return;
+                    }
+                    if (searchForFilmlistDate.doCheck(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
+                            SYSTEM_FILMLIST_DATE_LOCAL_TIME.get())) {
+                        Platform.runLater(() ->
+                                ProgData.getInstance().guiPack.setButtonFilmlistUpdate()
+                        );
+                    }
+                } catch (final Exception ex) {
+                    PLog.errorLog(901202025, ex);
+                }
+            }
+        });
     }
 
 }

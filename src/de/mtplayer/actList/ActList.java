@@ -26,8 +26,8 @@ import de.mtplayer.mLib.tools.Functions;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.PInit;
-import de.p2tools.p2Lib.guiTools.PGuiSize;
 import de.p2tools.p2Lib.guiTools.PButton;
+import de.p2tools.p2Lib.guiTools.PGuiSize;
 import de.p2tools.p2Lib.tools.log.Duration;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -70,6 +70,7 @@ public class ActList extends Application {
 
     private void initP2() {
         PButton.setHlpImage(GetIcon.getImage("button-help.png", 16, 16));
+        PInit.initLib(primaryStage, ProgConst.PROGRAMMNAME, ProgConst.CSS_FILE, "", ProgData.debug);
     }
 
     private void loadData() {
