@@ -20,11 +20,11 @@ import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.gui.tools.Listener;
 import de.mtplayer.mtp.controller.filmlist.NotifyProgress;
+import de.mtplayer.mtp.controller.filmlist.checkFilmlistUpdate.SearchForFilmlistUpdate;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlList;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
-import de.mtplayer.mtp.controller.filmlist.loadFilmlist.SearchForFilmlistDate;
 import de.p2tools.p2Lib.dialog.PAlert;
 import de.p2tools.p2Lib.tools.log.Duration;
 import de.p2tools.p2Lib.tools.log.PLog;
@@ -42,7 +42,7 @@ public class LoadFilmlist {
 
     private final SearchFilmListUrls searchFilmListUrls;
     private final ReadWriteFilmlist readWriteFilmlist;
-    private final SearchForFilmlistDate searchForFilmlistDate;
+    private final SearchForFilmlistUpdate searchForFilmlistUpdate;
 
     private BooleanProperty propListSearching = new SimpleBooleanProperty(false);
     private final NotifyProgress notifyProgress = new NotifyProgress();
@@ -72,7 +72,7 @@ public class LoadFilmlist {
             }
         });
 
-        searchForFilmlistDate = new SearchForFilmlistDate();
+        searchForFilmlistUpdate = new SearchForFilmlistUpdate();
         checkForFilmlistUpdate();
 
     }
@@ -149,7 +149,7 @@ public class LoadFilmlist {
                         // dann laden wir gerade
                         return;
                     }
-                    if (searchForFilmlistDate.doCheck(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
+                    if (searchForFilmlistUpdate.doCheck(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
                             SYSTEM_FILMLIST_DATE_LOCAL_TIME.get())) {
                         Platform.runLater(() ->
                                 ProgData.getInstance().guiPack.setButtonFilmlistUpdate()
