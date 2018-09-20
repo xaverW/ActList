@@ -26,7 +26,7 @@ import de.mtplayer.mtp.controller.filmlist.filmlistUrls.SearchFilmListUrls;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoad;
 import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEvent;
 import de.p2tools.p2Lib.dialog.PAlert;
-import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PDuration;
 import de.p2tools.p2Lib.tools.log.PLog;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -67,7 +67,7 @@ public class LoadFilmlist {
             @Override
             public synchronized void finished(ListenerFilmlistLoadEvent event) {
                 // Ergebnisliste listeFilme eintragen -> Feierabend!
-                Duration.staticPing("Filme laden, ende");
+                PDuration.onlyPing("Filme laden, ende");
                 andEnd(event);
             }
         });
@@ -117,7 +117,7 @@ public class LoadFilmlist {
     public void readWriteFilmlist(String source, String dest, int days) {
         // damit wird die Filmliste geladen UND sofort gespeichert
 
-        Duration.staticPing("Filme laden, start");
+        PDuration.onlyPing("Filme laden, start");
 
         if (!getPropListSearching()) {
             // nicht doppelt starten

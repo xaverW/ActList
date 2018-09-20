@@ -59,7 +59,7 @@ public class ProgStart {
 //
 //        @Override
 //        public synchronized void run() {
-//            Duration.staticPing("Programmstart Daten laden");
+//            PDuration.onlyPing("Programmstart Daten laden");
 //
 //            final ProgData progData = ProgData.getInstance();
 //

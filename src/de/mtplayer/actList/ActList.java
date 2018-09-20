@@ -28,7 +28,7 @@ import de.mtplayer.mtp.controller.filmlist.loadFilmlist.ListenerFilmlistLoadEven
 import de.p2tools.p2Lib.PInit;
 import de.p2tools.p2Lib.guiTools.PButton;
 import de.p2tools.p2Lib.guiTools.PGuiSize;
-import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PDuration;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -57,7 +57,7 @@ public class ActList extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        Duration.counterStart(LOG_TEXT_PROGRAMSTART);
+        PDuration.counterStart(LOG_TEXT_PROGRAMSTART);
         progData = ProgData.getInstance();
         progData.primaryStage = primaryStage;
         progStart = new ProgStart(progData);
@@ -74,7 +74,7 @@ public class ActList extends Application {
     }
 
     private void loadData() {
-        Duration.staticPing("Start");
+        PDuration.onlyPing("Start");
         ProgConfig.loadSystemParameter();
         progStart.startAll();
     }
@@ -114,7 +114,7 @@ public class ActList extends Application {
         progStart.startMsg();
         initProg();
 
-        Duration.counterStop(LOG_TEXT_PROGRAMSTART);
+        PDuration.counterStop(LOG_TEXT_PROGRAMSTART);
     }
 
     private void initProg() {

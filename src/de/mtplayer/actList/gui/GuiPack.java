@@ -22,7 +22,7 @@ import de.mtplayer.actList.controller.config.ProgConst;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.actList.controller.data.Icons;
 import de.mtplayer.mLib.tools.DirFileChooser;
-import de.mtplayer.mLib.tools.FileUtils;
+import de.p2tools.p2Lib.tools.PFileUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -77,7 +77,7 @@ public class GuiPack extends AnchorPane {
             btnLoad.getStyleClass().clear();
             btnLoad.getStyleClass().add("btnFilmlist");
 
-            String fileDest = FileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
+            String fileDest = PFileUtils.concatPaths(cbPath.getEditor().getText(), ProgConst.JSON_DATEI_FILME);
             progData.loadFilmlist.readWriteFilmlist(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
                     fileDest, ProgConfig.SYSTEM_ANZ_TAGE_FILMLISTE.getInt());
         });

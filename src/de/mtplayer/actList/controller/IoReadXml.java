@@ -21,7 +21,7 @@ import de.mtplayer.actList.controller.config.ProgConfig;
 import de.mtplayer.actList.controller.config.ProgData;
 import de.mtplayer.mLib.tools.MLConfigs;
 import de.mtplayer.mtp.controller.filmlist.filmlistUrls.FilmlistUrlData;
-import de.p2tools.p2Lib.tools.log.Duration;
+import de.p2tools.p2Lib.tools.log.PDuration;
 import de.p2tools.p2Lib.tools.log.PLog;
 
 import javax.xml.stream.XMLInputFactory;
@@ -46,7 +46,7 @@ public class IoReadXml implements AutoCloseable {
     }
 
     public boolean readConfiguration(Path xmlFilePath) {
-        Duration.counterStart("Konfig lesen");
+        PDuration.counterStart("Konfig lesen");
         boolean ret = false;
 
         if (Files.exists(xmlFilePath)) {
@@ -99,7 +99,7 @@ public class IoReadXml implements AutoCloseable {
             ProgConfig.loadSystemParameter();
         }
 
-        Duration.counterStop("Konfig lesen");
+        PDuration.counterStop("Konfig lesen");
         return ret;
     }
 
