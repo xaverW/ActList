@@ -70,7 +70,8 @@ public class ActList extends Application {
 
     private void initP2() {
         PButton.setHlpImage(GetIcon.getImage("button-help.png", 16, 16));
-        PInit.initLib(primaryStage, ProgConst.PROGRAMMNAME, ProgConst.CSS_FILE, "", ProgData.debug);
+        PInit.initLib(primaryStage, ProgConst.PROGRAMMNAME, ProgConst.CSS_FILE, "",
+                ProgData.debug, ProgData.duration);
     }
 
     private void loadData() {
@@ -101,7 +102,8 @@ public class ActList extends Application {
             primaryStage.getIcons().add(GetIcon.getImage(ICON_NAME, ICON_PATH, ICON_WIDTH, ICON_HEIGHT));
             primaryStage.setTitle(ProgConst.PROGRAMMNAME + " " + Functions.getProgVersion());
             primaryStage.show();
-            PInit.initLib(primaryStage, ProgConst.PROGRAMMNAME, ProgConst.CSS_FILE, "", ProgData.debug);
+            PInit.initLib(primaryStage, ProgConst.PROGRAMMNAME, ProgConst.CSS_FILE, "",
+                    ProgData.debug, ProgData.duration);
 
 
         } catch (final Exception e) {

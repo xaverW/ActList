@@ -102,8 +102,7 @@ public class LoadFilmlist {
     }
 
     public void updateDownloadUrlsFilmlisten() {
-        searchFilmListUrls.updateURLsFilmlists(true);
-        searchFilmListUrls.updateURLsFilmlists(false);
+        searchFilmListUrls.updateURLsFilmlists();
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_akt() {
