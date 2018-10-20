@@ -111,7 +111,7 @@ public class ReadWriteFilmlist {
         try {
             checkDays(days);
             if (source.isEmpty() || !source.startsWith("http")) {
-                source = new SearchFilmListUrls().searchCompleteListUrl(new ArrayList<>());
+                source = new SearchFilmListUrls().getFilmlistUrlForCompleteList();
             }
             if (source.isEmpty()) {
                 return;

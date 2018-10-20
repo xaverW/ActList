@@ -94,8 +94,6 @@ public class IoReadXml implements AutoCloseable {
                 } catch (final Exception ignored) {
                 }
             }
-            progData.loadFilmlist.getDownloadUrlsFilmlisten_akt().sort();
-            progData.loadFilmlist.getDownloadUrlsFilmlisten_diff().sort();
             ProgConfig.loadSystemParameter();
         }
 

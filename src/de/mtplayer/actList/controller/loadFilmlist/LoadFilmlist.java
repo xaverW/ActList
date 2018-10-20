@@ -102,15 +102,15 @@ public class LoadFilmlist {
     }
 
     public void updateDownloadUrlsFilmlisten() {
-        searchFilmListUrls.updateURLsFilmlists();
+        searchFilmListUrls.updateDownloadUrlsForFilmlists();
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_akt() {
-        return searchFilmListUrls.filmlistUrlList_akt;
+        return searchFilmListUrls.getFilmlistUrlList_akt();
     }
 
     public FilmlistUrlList getDownloadUrlsFilmlisten_diff() {
-        return searchFilmListUrls.filmlistUrlList_diff;
+        return searchFilmListUrls.getFilmlistUrlList_diff();
     }
 
     public void readWriteFilmlist(String source, String dest, int days) {
@@ -148,12 +148,16 @@ public class LoadFilmlist {
                         // dann laden wir gerade
                         return;
                     }
-                    if (searchForFilmlistUpdate.doCheck(ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get(),
-                            SYSTEM_FILMLIST_DATE_LOCAL_TIME.get())) {
-                        Platform.runLater(() ->
-                                ProgData.getInstance().guiPack.setButtonFilmlistUpdate()
-                        );
+
+                    // URL direkt aus der Liste holen, sonst wird minütlich! die URL-Liste aktualisiert!!
+                    final String url = ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get().isEmpty() ?
+                            searchFilmListUrls.getFilmlistUrlList_akt().getRand(null) :
+                            ProgConfig.SYSTEM_LOAD_FILMS_MANUAL.get();
+
+                    if (searchForFilmlistUpdate.doCheck(url, SYSTEM_FILMLIST_DATE_LOCAL_TIME.get())) {
+                        Platform.runLater(() -> ProgData.getInstance().guiPack.setButtonFilmlistUpdate());
                     }
+
                 } catch (final Exception ex) {
                     PLog.errorLog(901202025, ex);
                 }
