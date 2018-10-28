@@ -142,7 +142,7 @@ public class LoadFilmlist {
 
     private void checkForFilmlistUpdate() {
         Listener.addListener(new Listener(Listener.EREIGNIS_TIMER, LoadFilmlist.class.getSimpleName()) {
-            public void ping() {
+            public void pingFx() {
                 try {
                     if (getPropListSearching()) {
                         // dann laden wir gerade

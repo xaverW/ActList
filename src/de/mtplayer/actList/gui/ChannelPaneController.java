@@ -63,7 +63,7 @@ public class ChannelPaneController extends AnchorPane {
     private void makeLoadManuel() {
         final ListView<CheckBox> lv = new ListView<>();
         GridPane.setVgrow(lv, Priority.ALWAYS);
-        progData.loadFilmlist.updateDownloadUrlsFilmlisten();
+//        progData.loadFilmlist.updateDownloadUrlsFilmlisten();
 
         ArrayList aListChannel = new ArrayList(Arrays.asList(propChannel.getValue().split(",")));
         ArrayList<CheckBox> aListCb = new ArrayList<>();
